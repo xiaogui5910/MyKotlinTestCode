@@ -5,15 +5,18 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.View
+import android.view.animation.DecelerateInterpolator
+import kotlin.math.log
 
 /**
- * description ：
+ * description ：橡皮筋动画view
  * author : chenchenggui
  * creation date: 2018/10/19
  */
-class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context,
+class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context,
         attrs, defStyleAttr) {
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
@@ -21,8 +24,15 @@ class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: 
     private var isBezierBackDone = false
     private var mWidth = 0
     private var mHeight = 0
+    /**
+     * 默认拉伸宽度，绘制矩形，超过后绘制曲线，默认值20dp
+     */
     private var pullWidth = 0
+    /**
+     * 默认最大拉伸距离，超过后无法继续拉伸，默认值80dp
+     */
     private var pullDelta = 0
+    var top = 0f
 
     private var start = 0L
     private var stop = 0L
@@ -30,16 +40,16 @@ class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: 
     private var bezierDelta = 0
         get() {
             bezierBackRatio = getBezierBackRatio()
-            return (bezierDelta * bezierBackRatio).toInt()
+            return (field * bezierBackRatio).toInt()
         }
 
     private fun getBezierBackRatio(): Float {
         if (System.currentTimeMillis() >= stop) return 1f
-        var ratio = (System.currentTimeMillis() - start) / bezierBackDur.toFloat()
+        val ratio = (System.currentTimeMillis() - start) / bezierBackDur.toFloat()
         return Math.min(1f, ratio)
     }
 
-    open var bezierBackDur = 0L
+    var bezierBackDur = 0L
 
     private var backPaint: Paint
     private var path: Path
@@ -66,7 +76,7 @@ class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: 
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var widthMSpec = widthMeasureSpec
-        var width = MeasureSpec.getSize(widthMeasureSpec)
+        val width = MeasureSpec.getSize(widthMeasureSpec)
         if (width > pullDelta + pullWidth) {
             widthMSpec = MeasureSpec.makeMeasureSpec(pullDelta + pullWidth, MeasureSpec.getMode
             (widthMeasureSpec))
@@ -90,6 +100,8 @@ class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: 
                         animStatus = AnimatorStatus.DRAG_LEFT
                     }
                 }
+                else -> {
+                }
             }
         }
     }
@@ -97,8 +109,8 @@ class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         when (animStatus) {
-            AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(), mHeight.toFloat(),
-                    backPaint)
+            AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(),
+                    mHeight.toFloat(), backPaint)
             AnimatorStatus.DRAG_LEFT -> drawDrag(canvas)
             AnimatorStatus.RELEASE -> drawBack(canvas, bezierDelta)
         }
@@ -130,22 +142,24 @@ class AnimView(context: Context, var attrs: AttributeSet? = null, defStyleAttr: 
     }
 
     private fun drawDrag(canvas: Canvas?) {
-        canvas?.drawRect((mWidth - pullWidth).toFloat(), 0f, mWidth.toFloat(), mHeight.toFloat(),
-                backPaint)
+        canvas?.drawRect((mWidth - pullWidth).toFloat(), top, mWidth.toFloat(), mHeight
+                .toFloat() - top, backPaint)
 
         with(path) {
             reset()
-            moveTo((mWidth - pullWidth).toFloat(), 0f)
-            quadTo(0f, (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(), mHeight.toFloat())
+            moveTo((mWidth - pullWidth).toFloat(), top)
+            quadTo(0f, (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(), mHeight.toFloat()
+                    - top)
         }
 
         canvas?.drawPath(path, backPaint)
     }
 
     fun releaseDrag() {
-        animStatus = AnimatorStatus.RELEASE
+        animStatus = AnimView.AnimatorStatus.RELEASE
         start = System.currentTimeMillis()
         stop = start + bezierBackDur
+        bezierDelta = mWidth - pullWidth
         isBezierBackDone = false
         requestLayout()
     }

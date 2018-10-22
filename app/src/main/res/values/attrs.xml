@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="PullToRefreshLayout">
-        <attr name="footerBgColor" format="color"/>
         <attr name="scanMoreText" format="string"/>
         <attr name="releaseScanMoreText" format="string"/>
+        <attr name="pullWidth" format="dimension"/>
+        <attr name="footerBgColor" format="color"/>
+        <attr name="footerWidth" format="dimension"/>
+        <attr name="moreViewMarginRight" format="dimension"/>
+        <attr name="moreViewMoveMaxDimen" format="dimension"/>
     </declare-styleable>
 </resources>
