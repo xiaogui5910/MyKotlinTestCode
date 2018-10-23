@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/hrl_main"
     android:background="#FFFFFF"
-    app:footerBgColor="#66666666"
+    app:footerBgColor="@android:color/holo_orange_dark"
     app:scanMoreText="随便看看"
     app:releaseScanMoreText="进来看看呗"
     android:layout_width="match_parent"

@@ -4,7 +4,10 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
+import android.os.Build
 import android.support.annotation.NonNull
+import android.support.annotation.RequiresApi
+import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
@@ -32,7 +35,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private const val BACK_ANIM_DUR = 500L
         private const val BEZIER_ANIM_DUR = 350L
         private const val ROTATION_ANIM_DUR = 200L
-        private const val DEFAULT_MARGIN_RIGHT = 26f
+        private const val DEFAULT_MARGIN_RIGHT = 10f
         private const val DEFAULT_PULL_WIDTH = 100f
         private const val DEFAULT_MOVE_MAX_DIMEN = 40f
         private const val DEFAULT_FOOTER_WIDTH = 20f
@@ -49,6 +52,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private var moreViewMoveMaxDimen = 0f
         private var scanMore: String? = null
         private var releaseScanMore: String? = null
+        private var defaultOffsetX = 0f
     }
 
     private var touchStartX = 0f
@@ -75,7 +79,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private var isRefresh = false
     private var scrollState = false
 
-    private var childView: View? = null
+    private var childView: RecyclerView? = null
     private var footerView: AnimView? = null
     private var moreView: View? = null
     /**
@@ -90,6 +94,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private var backAnimator: ValueAnimator? = null
     private var arrowRotateAnim: RotateAnimation? = null
     private var arrowRotateBackAnim: RotateAnimation? = null
+    private var end=false
 
     /**
      * 滑动监听
@@ -121,6 +126,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 DEFAULT_FOOTER_WIDTH, displayMetrics)
         val defaultMoreViewMarginRight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_MARGIN_RIGHT, displayMetrics)
+        defaultOffsetX = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                40f, displayMetrics)
         scanMore = DEFAULT_SCAN_MORE
         releaseScanMore = DEFAULT_RELEASE_SCAN_MORE
 
@@ -147,7 +154,29 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         ta.recycle()
 
         post {
-            childView = getChildAt(0)
+            childView = getChildAt(0) as RecyclerView?
+            childView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                    super.onScrollStateChanged(recyclerView, newState)
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        //加载更多功能的代码
+                        if (!canScrollRight()) {
+
+                             end = true
+                            childView?.translationX = -defaultOffsetX
+                            footerView?.layoutParams?.width = defaultOffsetX.toInt()
+                            footerView?.requestLayout()
+
+                            moveMoreView(defaultOffsetX, false)
+                        }
+                    }
+
+                }
+
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                }
+            })
             addFooterView()
             addMoreView()
             initBackAnim()
@@ -173,6 +202,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private fun addMoreView() {
         val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         params.gravity = Gravity.RIGHT or Gravity.CENTER_VERTICAL
+        Log.e("layout", "moreViewMarginRight=$moreViewMarginRight")
         params.setMargins(0, 0, moreViewMarginRight, 0)
 
         moreView = LayoutInflater.from(context).inflate(R.layout.item_load_more, this, false).apply {
@@ -256,7 +286,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         if (childCount >= 1) {
             throw  RuntimeException("only can attach one child")
         }
-        childView = child
+        childView = child as RecyclerView?
         super.addView(child)
     }
 
@@ -292,14 +322,17 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             MotionEvent.ACTION_MOVE -> {
                 val currX = ev.x
                 val dx = currX - touchStartX
+                Log.e("layout", "onInterceptTouchEvent---111")
                 if (dx < -10 && !canScrollRight()) {
                     setScrollState(true)
+                    Log.e("layout", "onInterceptTouchEvent---111---canScrollRight")
                     return true
                 }
             }
         }
         return super.onInterceptTouchEvent(ev)
     }
+
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (isRefresh) {
@@ -308,6 +341,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         when (event?.action) {
             MotionEvent.ACTION_MOVE -> {
                 touchCurrX = event.x
+                Log.e("layout", "onTouchEvent=touchStartX - touchCurrX==${touchStartX - touchCurrX}")
                 var dx = touchStartX - touchCurrX
                 dx = Math.min(pullWidth * 2, dx)
                 dx = Math.max(0f, dx)

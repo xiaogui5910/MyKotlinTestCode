@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -38,10 +39,10 @@ class MainActivity : AppCompatActivity() {
         var footerView = LayoutInflater.from(this).inflate(R.layout.footer, rvTest.parent as
                 ViewGroup,
                 false)
-        //        testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
+//                testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
 
         LinearSnapHelper().attachToRecyclerView(rvTest)
-        rvTest.adapter = RvAdapter(this, dataList)
+//        rvTest.adapter = RvAdapter(this, dataList)
         rvTest.setOnClickListener { }
         hrl_main.setOnRefreshListener {
             Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()

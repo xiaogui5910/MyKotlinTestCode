@@ -8,8 +8,6 @@ import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
 import android.view.View
-import android.view.animation.DecelerateInterpolator
-import kotlin.math.log
 
 /**
  * description ：橡皮筋动画view
@@ -61,7 +59,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     }
 
     init {
-        pullWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20f, resources
+        pullWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, resources
                 .displayMetrics).toInt()
         pullDelta = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, resources
                 .displayMetrics).toInt()
@@ -108,6 +106,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        Log.e("anim",mWidth.toString())
         when (animStatus) {
             AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(),
                     mHeight.toFloat(), backPaint)
@@ -121,7 +120,8 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
             reset()
             moveTo(mWidth.toFloat(), 0f)
             lineTo((mWidth - pullWidth).toFloat(), 0f)
-            quadTo(delta.toFloat(), (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(), mHeight.toFloat())
+            quadTo(delta.toFloat(), (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(),
+                    mHeight.toFloat())
             lineTo(mWidth.toFloat(), mHeight.toFloat())
         }
         canvas?.drawPath(path, backPaint)
