@@ -4,18 +4,17 @@ import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import com.example.chenchenggui.mykotlintestcode.R.id.rv_test
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -41,10 +40,7 @@ class MainActivity : AppCompatActivity() {
                 false)
         //        testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
 
-        val mCardScaleHelper = CardScaleHelper()
-        mCardScaleHelper.setScale(1f)
-        mCardScaleHelper.currentItemPos = 0
-        mCardScaleHelper.attachToRecyclerView(rvTest)
+        LinearSnapHelper().attachToRecyclerView(rvTest)
         rvTest.adapter = RvAdapter(this, dataList)
         rvTest.setOnClickListener { }
         hrl_main.setOnRefreshListener {
