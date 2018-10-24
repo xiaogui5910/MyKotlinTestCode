@@ -59,7 +59,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     }
 
     init {
-        pullWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 40f, resources
+        pullWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50f, resources
                 .displayMetrics).toInt()
         pullDelta = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, resources
                 .displayMetrics).toInt()
@@ -75,6 +75,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var widthMSpec = widthMeasureSpec
         val width = MeasureSpec.getSize(widthMeasureSpec)
+        log("width=$width==pullDelta=$pullDelta==pullWidth=$pullWidth")
         if (width > pullDelta + pullWidth) {
             widthMSpec = MeasureSpec.makeMeasureSpec(pullDelta + pullWidth, MeasureSpec.getMode
             (widthMeasureSpec))
@@ -88,6 +89,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
             mWidth = width
             mHeight = height
 
+            log("mWidth=$mWidth===pullWidth=$pullWidth")
             if (mWidth < pullWidth) {
                 animStatus = AnimatorStatus.PULL_LEFT
             }
@@ -106,7 +108,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        Log.e("anim",mWidth.toString())
+        Log.e("anim","+mWidth=$mWidth===animStatus=$animStatus")
         when (animStatus) {
             AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(),
                     mHeight.toFloat(), backPaint)
@@ -116,13 +118,14 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     }
 
     private fun drawBack(canvas: Canvas?, delta: Int) {
+        log("drawBack====mWidth=$mWidth=============top=$top")
         with(path) {
             reset()
-            moveTo(mWidth.toFloat(), 0f)
-            lineTo((mWidth - pullWidth).toFloat(), 0f)
+            moveTo(mWidth.toFloat(), top)
+            lineTo((mWidth - pullWidth).toFloat(), top)
             quadTo(delta.toFloat(), (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(),
-                    mHeight.toFloat())
-            lineTo(mWidth.toFloat(), mHeight.toFloat())
+                    mHeight.toFloat()-top)
+            lineTo(mWidth.toFloat(), mHeight.toFloat()-top)
         }
         canvas?.drawPath(path, backPaint)
 
@@ -148,22 +151,24 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
         with(path) {
             reset()
             moveTo((mWidth - pullWidth).toFloat(), top)
-            quadTo(0f, (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(), mHeight.toFloat()
+            quadTo(0f, (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(), mHeight
+                    .toFloat()
                     - top)
         }
 
         canvas?.drawPath(path, backPaint)
     }
 
-    fun releaseDrag() {
+    fun releaseDrag(defaultOffsetX: Float) {
         animStatus = AnimView.AnimatorStatus.RELEASE
         start = System.currentTimeMillis()
         stop = start + bezierBackDur
         bezierDelta = mWidth - pullWidth
         isBezierBackDone = false
+        offsetX=defaultOffsetX
         requestLayout()
     }
-
+var offsetX=0f
     fun setBgColor(color: Int) {
         backPaint.color = color
     }
