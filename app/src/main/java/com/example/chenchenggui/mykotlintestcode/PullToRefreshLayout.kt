@@ -367,27 +367,33 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 if (childView == null) return true
                 if (dx <= 0) {
                     log("childView?.translationX=${childView?.translationX!!}")
-                    if (childView?.translationX!! >= 0 || !canScrollRight()) {
-                        childView?.translationX = 0f
-                        footerView?.layoutParams?.width = 0
-                        footerView?.requestLayout()
-
-                        moveMoreView(0f, false, false)
-
-                        childView?.onTouchEvent(event)
-                        return super.onTouchEvent(event)
+                    if (childView?.translationX!! >= 0 ) {
+//                        childView?.translationX = 0f
+//                        footerView?.layoutParams?.width = 0
+//                        footerView?.requestLayout()
+//
+//                        moveMoreView(0f, false, false)
+                        log(" childView?.onTouchEvent---")
+                        childView?.dispatchTouchEvent(event)
+                        return true
                     }
+                    log("dx11=$dx--defaultOffsetX=$defaultOffsetX")
                     dx = Math.min(defaultOffsetX * 2, -dx)
+                    log("dx11--11=$dx")
                     dx = Math.max(0f, dx)
+                    log("dx11--22=$dx")
                     val unit = dx / 2
-                    var offsetX = interpolator.getInterpolation(unit / defaultOffsetX) * unit - moreViewMoveMaxDimen
+                    var offsetX = interpolator.getInterpolation(unit / defaultOffsetX) * unit
+                    offsetX= defaultOffsetX-offsetX
+                    log("offsetX11=$offsetX")
                     //超过最大距离后开始计算偏移量
-                    childView?.translationX = offsetX
+                    childView?.translationX = -offsetX
                     footerView?.layoutParams?.width = offsetX.toInt()
                     footerView?.requestLayout()
 
-                    moveMoreView(offsetX, false, true)
+                    moveMoreView(offsetX, false, false)
                 } else {
+                    log("dx22=$dx")
                     dx = Math.min(pullWidth * 2, dx)
                     dx = Math.max(0f, dx)
                     val unit = dx / 2
@@ -395,6 +401,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                     //超过最大距离后开始计算偏移量
                     val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
                     offsetX += defaultOffsetX
+                    log("offsetX22=$offsetX")
                     childView?.translationX = -offsetX
                     footerView?.layoutParams?.width = offsetX.toInt()
                     footerView?.top = offsetY
