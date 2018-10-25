@@ -19,8 +19,6 @@ import android.view.animation.RotateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-
 
 /**
  * description ：弹性拉伸刷新布局
@@ -40,6 +38,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private const val DEFAULT_PULL_WIDTH = 100f
         private const val DEFAULT_MOVE_MAX_DIMEN = 50f
         private const val DEFAULT_FOOTER_WIDTH = 50f
+        private const val DEFAULT_FOOTER_VERTICAL_MARGIN = 10f
         private const val DEFAULT_VISIBLE_WIDTH = 40f
 
         private const val DEFAULT_SCAN_MORE = "查看更多"
@@ -54,6 +53,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private var moreViewMoveMaxDimen = 0f
         private var scanMore: String? = null
         private var releaseScanMore: String? = null
+        /**
+         * 默认"查看更多"可见值
+         */
         private var defaultOffsetX = 0f
     }
 
@@ -66,14 +68,18 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      */
     private var pullWidth = 0f
     /**
-     * 脚布局宽度
-     */
-    private var footerWidth = 0f
-
-    /**
      * more_view右边距
      */
     private var moreViewMarginRight = 0
+
+    /**
+     * 脚布局垂直方向边距
+     */
+    private var footerVerticalMargin = 0
+    /**
+     * 脚布局宽度
+     */
+    private var footerWidth = 0f
     /**
      * 脚局部背景颜色
      */
@@ -82,7 +88,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private var isRefresh = false
     private var scrollState = false
 
-    private var childView: RecyclerView? = null
+    private var childView: View? = null
     private var footerView: AnimView? = null
     private var moreView: View? = null
     /**
@@ -102,7 +108,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     /**
      * 滑动监听
      */
-    var scrollListener: ((Boolean) -> Unit)? = null
+    private var scrollListener: ((Boolean) -> Unit)? = null
 
     fun setOnScrollListener(listener: (Boolean) -> Unit) {
         this.scrollListener = listener
@@ -111,7 +117,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     /**
      * 刷新监听
      */
-    var refreshListener: (() -> Unit)? = null
+    private var refreshListener: (() -> Unit)? = null
 
     fun setOnRefreshListener(listener: (() -> Unit)) {
         this.refreshListener = listener
@@ -127,10 +133,13 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 DEFAULT_MOVE_MAX_DIMEN, displayMetrics)
         val defaultFooterWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_FOOTER_WIDTH, displayMetrics)
+        val defaultFooterVerticalMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                DEFAULT_FOOTER_VERTICAL_MARGIN, displayMetrics)
         val defaultMoreViewMarginRight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_MARGIN_RIGHT, displayMetrics)
         defaultOffsetX = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_VISIBLE_WIDTH, displayMetrics)
+
         scanMore = DEFAULT_SCAN_MORE
         releaseScanMore = DEFAULT_RELEASE_SCAN_MORE
 
@@ -143,6 +152,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
         footerViewBgColor = ta.getColor(R.styleable.PullToRefreshLayout_footerBgColor, Color.GRAY)
         footerWidth = ta.getDimension(R.styleable.PullToRefreshLayout_footerWidth, defaultFooterWidth)
+        footerVerticalMargin = ta.getDimension(R.styleable.PullToRefreshLayout_footerVerticalMargin,
+                defaultFooterVerticalMargin).toInt()
 
 
         val scanMoreText = ta.getString(R.styleable.PullToRefreshLayout_scanMoreText)
@@ -157,15 +168,15 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         ta.recycle()
 
         post {
-            childView = getChildAt(0) as RecyclerView?
-            childView?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            childView = getChildAt(0)
+            if (childView is RecyclerView) {
+                val recyclerView = childView as RecyclerView
+                recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                     super.onScrollStateChanged(recyclerView, newState)
                     if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                         //加载更多功能的代码
-                        log("newState0=$newState")
                         if (!canScrollRight()) {
-
                             isFooterViewShow = true
                             childView?.translationX = -defaultOffsetX
                             footerView?.layoutParams?.width = defaultOffsetX.toInt()
@@ -174,32 +185,11 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                             moveMoreView(defaultOffsetX, false)
                             animateScroll(0f, 600, false)
                         }
-
-//                        //得到当前显示的最后一个item的view
-//                        val lastChildView=childView?.layoutManager?.getChildAt(childView?.layoutManager?.childCount!!-1)
-//                        //得到lastChildView的bottom坐标值
-//                        val lastChildBottom = lastChildView?.bottom
-//                        //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
-//                        val recyclerBottom =  childView?.bottom!!-childView?.paddingBottom!!
-//                        //通过这个lastChildView得到这个view当前的position值
-//                        val lastPosition  = childView?.layoutManager?.getPosition(lastChildView!!)
-//
-//                        //判断lastChildView的bottom值跟recyclerBottom
-//                        //判断lastPosition是不是最后一个position
-//                        //如果两个条件都满足则说明是真正的滑动到了底部
-//                        if(lastChildBottom == recyclerBottom && lastPosition == childView?.layoutManager?.itemCount!!-1
-//                        &&scrollX== -defaultOffsetX.toInt()){
-//                            log("到底了。。不能滑动咯")
-//                            recyclerView.smoothScrollToPosition(childView?.adapter?.itemCount!!-1)
-//                            animateScroll(0f, 600, false)
-//                        }
                     }
-                }
+                    }
+                })
+            }
 
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                }
-            })
             addFooterView()
             addMoreView()
             initBackAnim()
@@ -207,13 +197,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
     }
 
-
     private fun addFooterView() {
-        val params = FrameLayout.LayoutParams(0, ViewGroup.LayoutParams
-                .MATCH_PARENT)
-        val margin = (resources.displayMetrics.density * 10 + 0.5f).toInt()
-        params.topMargin = margin
-        params.bottomMargin = margin
+        val params = FrameLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT)
+        params.topMargin = footerVerticalMargin
+        params.bottomMargin = footerVerticalMargin
         params.gravity = Gravity.RIGHT
 
         footerView = AnimView(context).apply {
@@ -227,7 +214,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private fun addMoreView() {
         val params = FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
         params.gravity = Gravity.RIGHT or Gravity.CENTER_VERTICAL
-        Log.e("layout", "moreViewMarginRight=$moreViewMarginRight")
         params.setMargins(0, 0, moreViewMarginRight, 0)
 
         moreView = LayoutInflater.from(context).inflate(R.layout.item_load_more, this, false).apply {
@@ -235,7 +221,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             moreText = findViewById(R.id.tv_more_text)
         }
         addViewInternal(moreView!!)
-
     }
 
     private fun initBackAnim() {
@@ -246,26 +231,20 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             addListener(AnimListener())
 
             addUpdateListener {
-                var value: Float = it.animatedValue as Float
+                val value: Float = it.animatedValue as Float
                 var offsetX = value
-                log("value=$value===footerWidth=$footerWidth")
                 var offsetY = interpolator.getInterpolation(value / height) * value
-                log("addUpdateListener-offsetY11=$offsetY")
-                val interpolation = interpolator.getInterpolation(value / footerWidth)
 
                 if (value <= footerWidth) {
-//                    log("addUpdateListener-offsetY22=$offsetY")
-                    offsetX *= interpolation
+                    offsetX *= interpolator.getInterpolation(value / footerWidth)
                     if (offsetX <= defaultOffsetX) {
-                        log("offsetX=$offsetX==defaultOffsetX=$defaultOffsetX")
                         offsetX = defaultOffsetX
                     }
+
                     footerView?.layoutParams?.width = offsetX.toInt()
                     footerView?.top = offsetY
                     footerView?.requestLayout()
-                    log("offsetX <= footerWidth===$offsetX==offsetY=$offsetY")
                 } else {
-                    log("addUpdateListener--value=$value")
                     //记录当前收缩动画的宽高
                     if (offsetY >= animStartTop) {
                         offsetY = animStartTop
@@ -285,8 +264,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
     private fun moveMoreView(offsetX: Float, release: Boolean, move: Boolean = false) {
         val dx = offsetX / 2
-        log("moveMoreView==dx=$dx==moreViewMoveMaxDimen=$moreViewMoveMaxDimen==release=$release" +
-                "==canScrollRight()=${canScrollRight()}")
         moreView?.visibility = if (move) View.VISIBLE else View.INVISIBLE
         if (dx <= moreViewMoveMaxDimen) {
             moreView?.translationX = -dx
@@ -348,7 +325,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             moreText?.text = scanMore
             arrowIv?.clearAnimation()
             isRefresh = false
-            log("onAnimation--isFooterViewShow----")
         }
 
         override fun onAnimationCancel(animation: Animator?) {
@@ -357,10 +333,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         override fun onAnimationStart(animation: Animator?) {
             if (isRefresh) {
                 refreshListener?.invoke()
-                log("onAnimation--start----0000")
             }
             animStartTop = footerView?.top!!
-            log("onAnimation--start----1111")
         }
     }
 
@@ -380,13 +354,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 val currX = ev.x
                 val dx = touchStartX - currX
                 touchLastX = currX
-                Log.e("layout", "onInterceptTouchEvent---111==dx=$dx--scrollX=$scrollX")
-                val canScrollHorizontally = childView?.canScrollHorizontally(1)
-                log("onInterceptTouchEvent---canScrollHorizontally11=$canScrollHorizontally" +
-                        "===footerView?.width=${footerView?.width}")
                 if (dx > 10 && !canScrollRight() && scrollX >= 0) {
                     setScrollState(true)
-                    Log.e("layout", "onInterceptTouchEvent---111---canScrollRight")
                     return true
                 }
             }
@@ -402,12 +371,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         when (event?.action) {
             MotionEvent.ACTION_MOVE -> {
                 touchCurrX = event.x
-                Log.e("layout", "onTouchEvent=touchStartX - touchCurrX==${touchStartX - touchCurrX}")
                 var dx = touchStartX - touchCurrX
 
-                log("dx==$dx")
                 if (childView == null) return true
-                log("dx22=$dx")
                 dx = Math.min(pullWidth * 2, dx)
                 dx = Math.max(0f, dx)
                 val unit = dx / 2
@@ -416,15 +382,11 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 val interpolation = interpolator.getInterpolation(input)
                 var offsetX = interpolation * unit
                 //超过最大距离后开始计算偏移量
-                log("input=$input==interpolation=$interpolation")
-
 
                 val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
                 if (isFooterViewShow) {
-                    log("isFooterViewShow=$isFooterViewShow")
                     offsetX += defaultOffsetX
                 }
-                log("offsetX22=$offsetX")
                 childView?.translationX = -offsetX
                 footerView?.layoutParams?.width = offsetX.toInt()
                 footerView?.top = offsetY
@@ -433,14 +395,11 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 moveMoreView(offsetX, false, true)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                if (childView == null) {
-                    return true
-                }
-                if (childView?.translationX!! >= 0) {
+                if (childView == null||childView?.translationX!! >= 0) {
                     return true
                 }
                 val childDx = Math.abs(childView?.translationX!!)
-                log("ACTION_UP===childDx=$childDx--scrollX=$scrollX")
+
                 if (reachReleasePoint()) {
                     isFooterViewShow = true
                     isRefresh = true
@@ -449,7 +408,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 backAnimator?.start()
 
                 if (childDx >= footerWidth) {
-                    footerView?.releaseDrag(defaultOffsetX)
+                    footerView?.releaseDrag()
 
                     if (reachReleasePoint()) {
                         isRefresh = true
@@ -478,12 +437,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     }
 
     override fun onNestedPreScroll(target: View?, dx: Int, dy: Int, consumed: IntArray) {
-        log("onNestedPreScroll---dx=$dx--dy=$dy--scrollX=$scrollX--footerwidth=${footerView?.width}")
         val hiddenMoreView = dx < 0 && scrollX > -defaultOffsetX && !canScrollRight()
                 && footerView?.width != 0
 
         val showMoreView = dx > 0 && scrollX < 0 && !canScrollRight()
-        log("onNestedPreScroll---hiddenMoreView=$hiddenMoreView--showMoreView=$showMoreView")
         if (hiddenMoreView || showMoreView) {
             scrollBy(dx, 0)
             consumed[0] = dx
@@ -492,23 +449,18 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
     override fun onStopNestedScroll(child: View?) {
         super.onStopNestedScroll(child)
-        log("onStopNestedScroll---tranx=${childView?.translationX}---scrollX=$scrollX--cancrollright=${canScrollRight()}")
 
         animateScroll(0f, 600, false)
-
-        log("onStopNestedScroll---")
     }
 
     override fun onNestedFling(target: View?, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
         var realConsumed = consumed
 
-        log("onNestedFling--velocityX=$velocityX")
         if (target is RecyclerView && velocityX > 0) {
             val firstChild = target.getChildAt(0)
             val childAdapterPosition = target.getChildAdapterPosition(firstChild)
             realConsumed = childAdapterPosition > 3
         }
-        log("onNestedFling--realConsumed=$realConsumed---consumed=$consumed")
 
         if (!realConsumed) {
             animateScroll(velocityX, computeDuration(0f), realConsumed)
@@ -540,9 +492,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
     override fun onNestedPreFling(target: View?, velocityX: Float, velocityY: Float): Boolean {
         //隐藏moreView过程中消费掉fling
-        log("onNestedPreFling--velocityX=$velocityX--scrollX=$scrollX--footerWidth" +
-                "=${footerView?.width}--${mOffsetAnimator?.isRunning}")
-
         var isAnimRunning = false
         if (mOffsetAnimator != null) {
             isAnimRunning = mOffsetAnimator!!.isRunning
@@ -589,7 +538,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      * 限定滚动的范围，scrollBy默认调用scrollTo
      */
     override fun scrollTo(x: Int, y: Int) {
-        log("x=$x--scrollX=$scrollX")
         var realX = x
         if (x >=0) {
             realX = 0
@@ -611,9 +559,5 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     override fun getNestedScrollAxes(): Int {
         return ViewCompat.SCROLL_AXIS_NONE
     }
-}
-
-inline fun log(msg: Any) {
-    Log.e("layout", msg.toString())
 }
 

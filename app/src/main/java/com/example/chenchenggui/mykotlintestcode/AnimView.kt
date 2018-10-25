@@ -23,7 +23,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     private var mWidth = 0
     private var mHeight = 0
     /**
-     * 默认拉伸宽度，绘制矩形，超过后绘制曲线，默认值20dp
+     * 默认拉伸宽度，绘制矩形，超过后绘制曲线，默认值50dp
      */
     private var pullWidth = 0
     /**
@@ -35,17 +35,15 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     private var start = 0L
     private var stop = 0L
     private var bezierBackRatio = 0f
+        get() {
+            if (System.currentTimeMillis() >= stop) return 1f
+            val ratio = (System.currentTimeMillis() - start) / bezierBackDur.toFloat()
+            return Math.min(1f, ratio)
+        }
     private var bezierDelta = 0
         get() {
-            bezierBackRatio = getBezierBackRatio()
             return (field * bezierBackRatio).toInt()
         }
-
-    private fun getBezierBackRatio(): Float {
-        if (System.currentTimeMillis() >= stop) return 1f
-        val ratio = (System.currentTimeMillis() - start) / bezierBackDur.toFloat()
-        return Math.min(1f, ratio)
-    }
 
     var bezierBackDur = 0L
 
@@ -75,7 +73,6 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         var widthMSpec = widthMeasureSpec
         val width = MeasureSpec.getSize(widthMeasureSpec)
-        log("width=$width==pullDelta=$pullDelta==pullWidth=$pullWidth")
         if (width > pullDelta + pullWidth) {
             widthMSpec = MeasureSpec.makeMeasureSpec(pullDelta + pullWidth, MeasureSpec.getMode
             (widthMeasureSpec))
@@ -89,7 +86,6 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
             mWidth = width
             mHeight = height
 
-            log("mWidth=$mWidth===pullWidth=$pullWidth")
             if (mWidth < pullWidth) {
                 animStatus = AnimatorStatus.PULL_LEFT
             }
@@ -108,7 +104,6 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
-        Log.e("anim","+mWidth=$mWidth===animStatus=$animStatus")
         when (animStatus) {
             AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(),
                     mHeight.toFloat(), backPaint)
@@ -118,14 +113,13 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     }
 
     private fun drawBack(canvas: Canvas?, delta: Int) {
-        log("drawBack====mWidth=$mWidth=============top=$top")
         with(path) {
             reset()
             moveTo(mWidth.toFloat(), top)
             lineTo((mWidth - pullWidth).toFloat(), top)
             quadTo(delta.toFloat(), (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(),
-                    mHeight.toFloat()-top)
-            lineTo(mWidth.toFloat(), mHeight.toFloat()-top)
+                    mHeight.toFloat() - top)
+            lineTo(mWidth.toFloat(), mHeight.toFloat() - top)
         }
         canvas?.drawPath(path, backPaint)
 
@@ -152,23 +146,21 @@ log("isBezierBackDone=$isBezierBackDone==pullWidth=$pullWidth")
             reset()
             moveTo((mWidth - pullWidth).toFloat(), top)
             quadTo(0f, (mHeight / 2).toFloat(), (mWidth - pullWidth).toFloat(), mHeight
-                    .toFloat()
-                    - top)
+                    .toFloat() - top)
         }
 
         canvas?.drawPath(path, backPaint)
     }
 
-    fun releaseDrag(defaultOffsetX: Float) {
+    fun releaseDrag() {
         animStatus = AnimView.AnimatorStatus.RELEASE
         start = System.currentTimeMillis()
         stop = start + bezierBackDur
         bezierDelta = mWidth - pullWidth
         isBezierBackDone = false
-        offsetX=defaultOffsetX
         requestLayout()
     }
-var offsetX=0f
+
     fun setBgColor(color: Int) {
         backPaint.color = color
     }
