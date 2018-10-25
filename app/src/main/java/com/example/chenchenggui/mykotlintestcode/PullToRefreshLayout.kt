@@ -35,7 +35,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private const val ROTATION_ANIM_DUR = 200L
         private const val DEFAULT_MARGIN_RIGHT = 10f
         private const val DEFAULT_PULL_WIDTH = 100f
-        private const val DEFAULT_MOVE_MAX_DIMEN = 40f
+        private const val DEFAULT_MOVE_MAX_DIMEN = 50f
         private const val DEFAULT_FOOTER_WIDTH = 50f
         private const val DEFAULT_VISIBLE_WIDTH = 40f
 
@@ -340,25 +340,12 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             }
             MotionEvent.ACTION_MOVE -> {
                 val currX = ev.x
-                val dx = currX - touchStartX
-                var deltaX = currX - touchLastX
                 touchLastX = currX
                 Log.e("layout", "onInterceptTouchEvent---111")
-                if (dx < -10 && !canScrollRight()) {
+                if (!canScrollRight()) {
                     setScrollState(true)
                     Log.e("layout", "onInterceptTouchEvent---111---canScrollRight")
                     return true
-                }
-                if (moveDelta>= defaultOffsetX){
-                    requestDisallowInterceptTouchEvent(true)
-                    return super.onInterceptTouchEvent(ev)
-                }
-                if (deltaX > 0 && !canScrollRight()) {
-                    moveDelta+=deltaX
-                    if (moveDelta< defaultOffsetX){
-                        setScrollState(true)
-                        return true
-                    }
                 }
             }
         }
@@ -366,7 +353,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     }
 
 
-    var moveDelta = 0f
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (isRefresh) {
             return super.onTouchEvent(event)
@@ -378,25 +364,29 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 var dx = touchStartX - touchCurrX
 
                 log("dx==$dx")
-                var rightDx = Math.abs(dx)
                 if (childView == null) return true
                 if (dx <= 0) {
+                    log("childView?.translationX=${childView?.translationX!!}")
+                    if (childView?.translationX!! >= 0 || !canScrollRight()) {
+                        childView?.translationX = 0f
+                        footerView?.layoutParams?.width = 0
+                        footerView?.requestLayout()
+
+                        moveMoreView(0f, false, false)
+
+                        childView?.onTouchEvent(event)
+                        return super.onTouchEvent(event)
+                    }
                     dx = Math.min(defaultOffsetX * 2, -dx)
                     dx = Math.max(0f, dx)
                     val unit = dx / 2
-                    var offsetX = interpolator.getInterpolation(unit / defaultOffsetX) * unit
+                    var offsetX = interpolator.getInterpolation(unit / defaultOffsetX) * unit - moreViewMoveMaxDimen
                     //超过最大距离后开始计算偏移量
                     childView?.translationX = offsetX
                     footerView?.layoutParams?.width = offsetX.toInt()
                     footerView?.requestLayout()
 
                     moveMoreView(offsetX, false, true)
-                    //                    dx = Math.min(pullWidth * 2, -dx)
-                    //                    childView?.translationX = -dx
-                    //                    footerView?.layoutParams?.width = dx.toInt()
-                    //                    footerView?.requestLayout()
-                    //
-                    //                    moveMoreView(dx, false, true)1
                 } else {
                     dx = Math.min(pullWidth * 2, dx)
                     dx = Math.max(0f, dx)
@@ -412,20 +402,14 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
                     moveMoreView(offsetX, false, true)
                 }
-                //                dx = Math.min(pullWidth * 2, dx)
-                //                dx = Math.max(0f, dx)
-                //
-                //                if (childView == null || dx <= 0) {
-                //                    return true
-                //                }
-
-
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (childView == null) {
                     return true
                 }
-
+                if (childView?.translationX!! >= 0) {
+                    return true
+                }
                 val childDx = Math.abs(childView?.translationX!!)
                 log("ACTION_UP===childDx=$childDx")
                 backAnimator?.setFloatValues(childDx, 0f)

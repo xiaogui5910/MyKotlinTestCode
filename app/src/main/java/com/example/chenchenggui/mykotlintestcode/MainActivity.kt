@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 false)
 //                testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
 
-        LinearSnapHelper().attachToRecyclerView(rvTest)
+//        LinearSnapHelper().attachToRecyclerView(rvTest)
 //        rvTest.adapter = RvAdapter(this, dataList)
         rvTest.setOnClickListener { }
         hrl_main.setOnRefreshListener {
