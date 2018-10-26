@@ -134,7 +134,7 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
         if (bezierBackRatio == 1f) {
             isBezierBackDone = true
         }
-
+log("isBezierBackDone=$isBezierBackDone==pullWidth=$pullWidth")
         if (isBezierBackDone && mWidth <= pullWidth) {
             drawFooterBack(canvas)
         }

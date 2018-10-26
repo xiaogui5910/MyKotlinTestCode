@@ -43,7 +43,9 @@ class MainActivity : AppCompatActivity() {
 
 //        LinearSnapHelper().attachToRecyclerView(rvTest)
 //        rvTest.adapter = RvAdapter(this, dataList)
-        rvTest.setOnClickListener { }
+        testAdapter.setOnItemClickListener { adapter, view, position ->
+            Toast.makeText(this@MainActivity, "position=$position", Toast.LENGTH_SHORT).show()
+        }
         hrl_main.setOnRefreshListener {
             Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()
         }

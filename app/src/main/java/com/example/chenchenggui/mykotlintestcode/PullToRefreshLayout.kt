@@ -94,7 +94,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private var backAnimator: ValueAnimator? = null
     private var arrowRotateAnim: RotateAnimation? = null
     private var arrowRotateBackAnim: RotateAnimation? = null
-    private var end = false
+    private var isFooterViewShow = false
 
     /**
      * 滑动监听
@@ -163,7 +163,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                         log("newState0=$newState")
                         if (!canScrollRight()) {
 
-                            end = true
+                            isFooterViewShow = true
                             childView?.translationX = -defaultOffsetX
                             footerView?.layoutParams?.width = defaultOffsetX.toInt()
                             footerView?.requestLayout()
@@ -171,7 +171,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                             moveMoreView(defaultOffsetX, false)
                         }
                     }
-
                 }
 
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -225,11 +224,13 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 var value: Float = it.animatedValue as Float
                 var offsetX = value
                 log("value=$value===footerWidth=$footerWidth")
-                val offsetY = interpolator.getInterpolation(value / height) * value
+                var offsetY = interpolator.getInterpolation(value / height) * value
+                log("addUpdateListener-offsetY11=$offsetY")
+                val interpolation = interpolator.getInterpolation(value / footerWidth)
 
                 if (value <= footerWidth) {
-                    log("offsetY=$offsetY")
-                    offsetX *= interpolator.getInterpolation(value / footerWidth)
+//                    log("addUpdateListener-offsetY22=$offsetY")
+                    offsetX *= interpolation
                     if (offsetX <= defaultOffsetX) {
                         log("offsetX=$offsetX==defaultOffsetX=$defaultOffsetX")
                         offsetX = defaultOffsetX
@@ -237,8 +238,13 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                     footerView?.layoutParams?.width = offsetX.toInt()
                     footerView?.top = offsetY
                     footerView?.requestLayout()
-                    log("offsetX <= footerWidth===$offsetX")
+                    log("offsetX <= footerWidth===$offsetX==offsetY=$offsetY")
                 } else {
+                    log("addUpdateListener--value=$value")
+                    //记录当前收缩动画的宽高
+                    if (offsetY >= animStartTop) {
+                        offsetY = animStartTop
+                    }
                     footerView?.top = offsetY
                     footerView?.layoutParams?.width = offsetX.toInt()
                 }
@@ -313,20 +319,27 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
 
         override fun onAnimationEnd(animation: Animator?) {
-            if (isRefresh) {
-                refreshListener?.invoke()
-            }
+
             moreText?.text = scanMore
             arrowIv?.clearAnimation()
             isRefresh = false
+            log("onAnimation--isFooterViewShow----")
         }
 
         override fun onAnimationCancel(animation: Animator?) {
         }
 
         override fun onAnimationStart(animation: Animator?) {
+            if (isRefresh) {
+                refreshListener?.invoke()
+                log("onAnimation--start----0000")
+            }
+            animStartTop = footerView?.top!!
+            log("onAnimation--start----1111")
         }
     }
+
+    var animStartTop = 0f
 
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         if (isRefresh) return true
@@ -340,9 +353,17 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             }
             MotionEvent.ACTION_MOVE -> {
                 val currX = ev.x
+                val dx = touchStartX - currX
                 touchLastX = currX
-                Log.e("layout", "onInterceptTouchEvent---111")
-                if (!canScrollRight()) {
+                Log.e("layout", "onInterceptTouchEvent---111==dx=$dx")
+                val canScrollHorizontally = childView?.canScrollHorizontally(1)
+                log("onInterceptTouchEvent---canScrollHorizontally11=$canScrollHorizontally" +
+                        "===footerView?.width=${footerView?.width}")
+                var needToMove = true
+                if (dx < 0) {
+                    needToMove = footerView?.width != 0
+                }
+                if (Math.abs(dx) > 10 && !canScrollRight()) {
                     setScrollState(true)
                     Log.e("layout", "onInterceptTouchEvent---111---canScrollRight")
                     return true
@@ -365,16 +386,17 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
                 log("dx==$dx")
                 if (childView == null) return true
-                if (dx <= 0) {
-                    log("childView?.translationX=${childView?.translationX!!}")
-                    if (childView?.translationX!! >= 0 ) {
+                if (dx < 0) {
+
+                    if (childView?.translationX!! >= 0 || !canScrollRight()) {
 //                        childView?.translationX = 0f
 //                        footerView?.layoutParams?.width = 0
 //                        footerView?.requestLayout()
 //
 //                        moveMoreView(0f, false, false)
                         log(" childView?.onTouchEvent---")
-                        childView?.dispatchTouchEvent(event)
+                        childView?.onTouchEvent(event)
+                        isFooterViewShow = false
                         return true
                     }
                     log("dx11=$dx--defaultOffsetX=$defaultOffsetX")
@@ -384,7 +406,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                     log("dx11--22=$dx")
                     val unit = dx / 2
                     var offsetX = interpolator.getInterpolation(unit / defaultOffsetX) * unit
-                    offsetX= defaultOffsetX-offsetX
+                    offsetX = defaultOffsetX - offsetX
+                    log("childView?.translationX=${childView?.translationX!!}")
                     log("offsetX11=$offsetX")
                     //超过最大距离后开始计算偏移量
                     childView?.translationX = -offsetX
@@ -397,10 +420,19 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                     dx = Math.min(pullWidth * 2, dx)
                     dx = Math.max(0f, dx)
                     val unit = dx / 2
-                    var offsetX = interpolator.getInterpolation(unit / pullWidth) * unit
+                    val input = unit / (pullWidth)
+
+                    val interpolation = interpolator.getInterpolation(input)
+                    var offsetX = interpolation * unit
                     //超过最大距离后开始计算偏移量
+                    log("input=$input==interpolation=$interpolation")
+
+
                     val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
-                    offsetX += defaultOffsetX
+                    if (isFooterViewShow) {
+                        log("isFooterViewShow=$isFooterViewShow")
+                        offsetX += defaultOffsetX
+                    }
                     log("offsetX22=$offsetX")
                     childView?.translationX = -offsetX
                     footerView?.layoutParams?.width = offsetX.toInt()
@@ -419,6 +451,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 }
                 val childDx = Math.abs(childView?.translationX!!)
                 log("ACTION_UP===childDx=$childDx")
+                if (reachReleasePoint()) {
+                    isFooterViewShow = true
+                }
                 backAnimator?.setFloatValues(childDx, 0f)
                 backAnimator?.start()
 
