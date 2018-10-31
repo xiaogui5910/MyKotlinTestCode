@@ -9,7 +9,6 @@ import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.animation.Animation
@@ -32,6 +31,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
     companion object {
         private const val BACK_ANIM_DUR = 500L
+        private const val SCROLL_ANIM_DUR = 600L
         private const val BEZIER_ANIM_DUR = 350L
         private const val ROTATION_ANIM_DUR = 200L
         private const val DEFAULT_MARGIN_RIGHT = 10f
@@ -84,6 +84,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      * 脚局部背景颜色
      */
     private var footerViewBgColor: Int = Color.GRAY
+    private var animStartTop = 0f
 
     private var isRefresh = false
     private var scrollState = false
@@ -103,6 +104,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private var backAnimator: ValueAnimator? = null
     private var arrowRotateAnim: RotateAnimation? = null
     private var arrowRotateBackAnim: RotateAnimation? = null
+    private var mOffsetAnimator: ValueAnimator? = null
     private var isFooterViewShow = false
 
     /**
@@ -155,15 +157,11 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         footerVerticalMargin = ta.getDimension(R.styleable.PullToRefreshLayout_footerVerticalMargin,
                 defaultFooterVerticalMargin).toInt()
 
-
-        val scanMoreText = ta.getString(R.styleable.PullToRefreshLayout_scanMoreText)
-        val releaseScanMoreText = ta.getString(R.styleable.PullToRefreshLayout_releaseScanMoreText)
-
-        if (!TextUtils.isEmpty(scanMoreText)) {
-            scanMore = scanMoreText
+        if (ta.hasValue(R.styleable.PullToRefreshLayout_scanMoreText)) {
+            scanMore = ta.getString(R.styleable.PullToRefreshLayout_scanMoreText)
         }
-        if (!TextUtils.isEmpty(releaseScanMoreText)) {
-            releaseScanMore = releaseScanMoreText
+        if (ta.hasValue(R.styleable.PullToRefreshLayout_releaseScanMoreText)) {
+            releaseScanMore = ta.getString(R.styleable.PullToRefreshLayout_releaseScanMoreText)
         }
         ta.recycle()
 
@@ -172,20 +170,20 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             if (childView is RecyclerView) {
                 val recyclerView = childView as RecyclerView
                 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                    super.onScrollStateChanged(recyclerView, newState)
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                        //加载更多功能的代码
-                        if (!canScrollRight()) {
-                            isFooterViewShow = true
-                            childView?.translationX = -defaultOffsetX
-                            footerView?.layoutParams?.width = defaultOffsetX.toInt()
-                            footerView?.requestLayout()
+                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                        super.onScrollStateChanged(recyclerView, newState)
+                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                            //滑动停止后，最后一条item显示时滑动到底部，展示查看更多
+                            if (!canScrollRight()) {
+                                isFooterViewShow = true
+                                childView?.translationX = -defaultOffsetX
+                                footerView?.layoutParams?.width = defaultOffsetX.toInt()
+                                footerView?.requestLayout()
 
-                            moveMoreView(defaultOffsetX, false)
-                            animateScroll(0f, 600, false)
+                                moveMoreView(defaultOffsetX, false)
+                                animateScroll(0f, SCROLL_ANIM_DUR.toInt(), false)
+                            }
                         }
-                    }
                     }
                 })
             }
@@ -254,10 +252,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 }
 
                 childView?.translationX = -offsetX
-
                 moveMoreView(offsetX, true)
             }
 
+            //动画时长
             duration = BACK_ANIM_DUR
         }
     }
@@ -321,7 +319,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
 
         override fun onAnimationEnd(animation: Animator?) {
-
             moreText?.text = scanMore
             arrowIv?.clearAnimation()
             isRefresh = false
@@ -338,8 +335,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
     }
 
-    var animStartTop = 0f
-
     override fun onInterceptTouchEvent(ev: MotionEvent?): Boolean {
         if (isRefresh) return true
 
@@ -354,6 +349,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 val currX = ev.x
                 val dx = touchStartX - currX
                 touchLastX = currX
+
+                //拦截条件
                 if (dx > 10 && !canScrollRight() && scrollX >= 0) {
                     setScrollState(true)
                     return true
@@ -362,7 +359,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
         return super.onInterceptTouchEvent(ev)
     }
-
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (isRefresh) {
@@ -374,19 +370,20 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 var dx = touchStartX - touchCurrX
 
                 if (childView == null) return true
+
                 dx = Math.min(pullWidth * 2, dx)
                 dx = Math.max(0f, dx)
                 val unit = dx / 2
-                val input = unit / (pullWidth)
 
-                val interpolation = interpolator.getInterpolation(input)
-                var offsetX = interpolation * unit
-                //超过最大距离后开始计算偏移量
-
+                //计算偏移量
+                var offsetX = interpolator.getInterpolation(unit / pullWidth) * unit
                 val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
+
+                //偏移量加上默认脚布局宽度
                 if (isFooterViewShow) {
                     offsetX += defaultOffsetX
                 }
+
                 childView?.translationX = -offsetX
                 footerView?.layoutParams?.width = offsetX.toInt()
                 footerView?.top = offsetY
@@ -395,7 +392,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 moveMoreView(offsetX, false, true)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                if (childView == null||childView?.translationX!! >= 0) {
+                if (childView == null || childView?.translationX!! >= 0) {
                     return true
                 }
                 val childDx = Math.abs(childView?.translationX!!)
@@ -404,15 +401,16 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                     isFooterViewShow = true
                     isRefresh = true
                 }
+
                 backAnimator?.setFloatValues(childDx, 0f)
                 backAnimator?.start()
 
                 if (childDx >= footerWidth) {
                     footerView?.releaseDrag()
 
-                    if (reachReleasePoint()) {
-                        isRefresh = true
-                    }
+//                    if (reachReleasePoint()) {
+//                        isRefresh = true
+//                    }
                 }
                 setScrollState(false)
                 return true
@@ -447,10 +445,13 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
     }
 
+    /**
+     * 停止嵌套滑动后修正处理
+     */
     override fun onStopNestedScroll(child: View?) {
         super.onStopNestedScroll(child)
 
-        animateScroll(0f, 600, false)
+        animateScroll(0f, SCROLL_ANIM_DUR.toInt(), false)
     }
 
     override fun onNestedFling(target: View?, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
@@ -503,7 +504,6 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         return false
     }
 
-    private var mOffsetAnimator: ValueAnimator? = null
     private fun animateScroll(velocityX: Float, duration: Int, consumed: Boolean) {
         if (canScrollRight()) {
             return
@@ -519,7 +519,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         } else {
             mOffsetAnimator?.cancel()
         }
-        mOffsetAnimator?.duration = Math.min(duration, 600).toLong()
+        mOffsetAnimator?.duration = Math.min(duration, SCROLL_ANIM_DUR.toInt()).toLong()
 
         if (velocityX >= 0) {
             mOffsetAnimator?.setIntValues(currentOffset, 0)
@@ -539,7 +539,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      */
     override fun scrollTo(x: Int, y: Int) {
         var realX = x
-        if (x >=0) {
+        if (x >= 0) {
             realX = 0
         }
         if (x <= -defaultOffsetX) {

@@ -5,7 +5,6 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.View
 
@@ -128,7 +127,6 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
         if (bezierBackRatio == 1f) {
             isBezierBackDone = true
         }
-log("isBezierBackDone=$isBezierBackDone==pullWidth=$pullWidth")
         if (isBezierBackDone && mWidth <= pullWidth) {
             drawFooterBack(canvas)
         }
