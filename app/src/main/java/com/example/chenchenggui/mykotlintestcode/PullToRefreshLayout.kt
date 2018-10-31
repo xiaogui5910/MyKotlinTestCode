@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
 import android.support.annotation.NonNull
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
 import android.text.TextUtils
 import android.util.AttributeSet
@@ -18,6 +19,8 @@ import android.view.animation.RotateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+
 
 /**
  * description ：弹性拉伸刷新布局
@@ -169,7 +172,27 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                             footerView?.requestLayout()
 
                             moveMoreView(defaultOffsetX, false)
+                            animateScroll(0f, 600, false)
                         }
+
+//                        //得到当前显示的最后一个item的view
+//                        val lastChildView=childView?.layoutManager?.getChildAt(childView?.layoutManager?.childCount!!-1)
+//                        //得到lastChildView的bottom坐标值
+//                        val lastChildBottom = lastChildView?.bottom
+//                        //得到Recyclerview的底部坐标减去底部padding值，也就是显示内容最底部的坐标
+//                        val recyclerBottom =  childView?.bottom!!-childView?.paddingBottom!!
+//                        //通过这个lastChildView得到这个view当前的position值
+//                        val lastPosition  = childView?.layoutManager?.getPosition(lastChildView!!)
+//
+//                        //判断lastChildView的bottom值跟recyclerBottom
+//                        //判断lastPosition是不是最后一个position
+//                        //如果两个条件都满足则说明是真正的滑动到了底部
+//                        if(lastChildBottom == recyclerBottom && lastPosition == childView?.layoutManager?.itemCount!!-1
+//                        &&scrollX== -defaultOffsetX.toInt()){
+//                            log("到底了。。不能滑动咯")
+//                            recyclerView.smoothScrollToPosition(childView?.adapter?.itemCount!!-1)
+//                            animateScroll(0f, 600, false)
+//                        }
                     }
                 }
 
@@ -184,8 +207,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
     }
 
+
     private fun addFooterView() {
-        val params = FrameLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT)
+        val params = FrameLayout.LayoutParams(0, ViewGroup.LayoutParams
+                .MATCH_PARENT)
         val margin = (resources.displayMetrics.density * 10 + 0.5f).toInt()
         params.topMargin = margin
         params.bottomMargin = margin
@@ -355,15 +380,11 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 val currX = ev.x
                 val dx = touchStartX - currX
                 touchLastX = currX
-                Log.e("layout", "onInterceptTouchEvent---111==dx=$dx")
+                Log.e("layout", "onInterceptTouchEvent---111==dx=$dx--scrollX=$scrollX")
                 val canScrollHorizontally = childView?.canScrollHorizontally(1)
                 log("onInterceptTouchEvent---canScrollHorizontally11=$canScrollHorizontally" +
                         "===footerView?.width=${footerView?.width}")
-                var needToMove = true
-                if (dx < 0) {
-                    needToMove = footerView?.width != 0
-                }
-                if (Math.abs(dx) > 10 && !canScrollRight()) {
+                if (dx > 10 && !canScrollRight() && scrollX >= 0) {
                     setScrollState(true)
                     Log.e("layout", "onInterceptTouchEvent---111---canScrollRight")
                     return true
@@ -386,61 +407,30 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
                 log("dx==$dx")
                 if (childView == null) return true
-                if (dx < 0) {
+                log("dx22=$dx")
+                dx = Math.min(pullWidth * 2, dx)
+                dx = Math.max(0f, dx)
+                val unit = dx / 2
+                val input = unit / (pullWidth)
 
-                    if (childView?.translationX!! >= 0 || !canScrollRight()) {
-//                        childView?.translationX = 0f
-//                        footerView?.layoutParams?.width = 0
-//                        footerView?.requestLayout()
-//
-//                        moveMoreView(0f, false, false)
-                        log(" childView?.onTouchEvent---")
-                        childView?.onTouchEvent(event)
-                        isFooterViewShow = false
-                        return true
-                    }
-                    log("dx11=$dx--defaultOffsetX=$defaultOffsetX")
-                    dx = Math.min(defaultOffsetX * 2, -dx)
-                    log("dx11--11=$dx")
-                    dx = Math.max(0f, dx)
-                    log("dx11--22=$dx")
-                    val unit = dx / 2
-                    var offsetX = interpolator.getInterpolation(unit / defaultOffsetX) * unit
-                    offsetX = defaultOffsetX - offsetX
-                    log("childView?.translationX=${childView?.translationX!!}")
-                    log("offsetX11=$offsetX")
-                    //超过最大距离后开始计算偏移量
-                    childView?.translationX = -offsetX
-                    footerView?.layoutParams?.width = offsetX.toInt()
-                    footerView?.requestLayout()
-
-                    moveMoreView(offsetX, false, false)
-                } else {
-                    log("dx22=$dx")
-                    dx = Math.min(pullWidth * 2, dx)
-                    dx = Math.max(0f, dx)
-                    val unit = dx / 2
-                    val input = unit / (pullWidth)
-
-                    val interpolation = interpolator.getInterpolation(input)
-                    var offsetX = interpolation * unit
-                    //超过最大距离后开始计算偏移量
-                    log("input=$input==interpolation=$interpolation")
+                val interpolation = interpolator.getInterpolation(input)
+                var offsetX = interpolation * unit
+                //超过最大距离后开始计算偏移量
+                log("input=$input==interpolation=$interpolation")
 
 
-                    val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
-                    if (isFooterViewShow) {
-                        log("isFooterViewShow=$isFooterViewShow")
-                        offsetX += defaultOffsetX
-                    }
-                    log("offsetX22=$offsetX")
-                    childView?.translationX = -offsetX
-                    footerView?.layoutParams?.width = offsetX.toInt()
-                    footerView?.top = offsetY
-                    footerView?.requestLayout()
-
-                    moveMoreView(offsetX, false, true)
+                val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
+                if (isFooterViewShow) {
+                    log("isFooterViewShow=$isFooterViewShow")
+                    offsetX += defaultOffsetX
                 }
+                log("offsetX22=$offsetX")
+                childView?.translationX = -offsetX
+                footerView?.layoutParams?.width = offsetX.toInt()
+                footerView?.top = offsetY
+                footerView?.requestLayout()
+
+                moveMoreView(offsetX, false, true)
             }
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 if (childView == null) {
@@ -450,9 +440,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                     return true
                 }
                 val childDx = Math.abs(childView?.translationX!!)
-                log("ACTION_UP===childDx=$childDx")
+                log("ACTION_UP===childDx=$childDx--scrollX=$scrollX")
                 if (reachReleasePoint()) {
                     isFooterViewShow = true
+                    isRefresh = true
                 }
                 backAnimator?.setFloatValues(childDx, 0f)
                 backAnimator?.start()
@@ -482,7 +473,144 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         scrollListener?.invoke(scrollState)
     }
 
+    override fun onStartNestedScroll(child: View?, target: View?, nestedScrollAxes: Int): Boolean {
+        return nestedScrollAxes and ViewCompat.SCROLL_AXIS_HORIZONTAL != 0
+    }
 
+    override fun onNestedPreScroll(target: View?, dx: Int, dy: Int, consumed: IntArray) {
+        log("onNestedPreScroll---dx=$dx--dy=$dy--scrollX=$scrollX--footerwidth=${footerView?.width}")
+        val hiddenMoreView = dx < 0 && scrollX > -defaultOffsetX && !canScrollRight()
+                && footerView?.width != 0
+
+        val showMoreView = dx > 0 && scrollX < 0 && !canScrollRight()
+        log("onNestedPreScroll---hiddenMoreView=$hiddenMoreView--showMoreView=$showMoreView")
+        if (hiddenMoreView || showMoreView) {
+            scrollBy(dx, 0)
+            consumed[0] = dx
+        }
+    }
+
+    override fun onStopNestedScroll(child: View?) {
+        super.onStopNestedScroll(child)
+        log("onStopNestedScroll---tranx=${childView?.translationX}---scrollX=$scrollX--cancrollright=${canScrollRight()}")
+
+        animateScroll(0f, 600, false)
+
+        log("onStopNestedScroll---")
+    }
+
+    override fun onNestedFling(target: View?, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
+        var realConsumed = consumed
+
+        log("onNestedFling--velocityX=$velocityX")
+        if (target is RecyclerView && velocityX > 0) {
+            val firstChild = target.getChildAt(0)
+            val childAdapterPosition = target.getChildAdapterPosition(firstChild)
+            realConsumed = childAdapterPosition > 3
+        }
+        log("onNestedFling--realConsumed=$realConsumed---consumed=$consumed")
+
+        if (!realConsumed) {
+            animateScroll(velocityX, computeDuration(0f), realConsumed)
+        } else {
+            animateScroll(velocityX, computeDuration(velocityX), realConsumed)
+        }
+        return true
+    }
+
+    private fun computeDuration(velocityX: Float): Int {
+        val distance: Int = if (velocityX > 0) {
+            Math.abs(defaultOffsetX.toInt() - scrollX)
+        } else {
+            Math.abs(defaultOffsetX.toInt() - (defaultOffsetX.toInt() - scrollX))
+        }
+
+        val duration: Int
+        val realVelocityX = Math.abs(velocityX)
+
+        duration = if (realVelocityX > 0) {
+            3 * Math.round(1000 * (distance / realVelocityX))
+        } else {
+            val distanceRatio = distance.toFloat() / width
+            ((distanceRatio + 1) * 150).toInt()
+        }
+
+        return duration
+    }
+
+    override fun onNestedPreFling(target: View?, velocityX: Float, velocityY: Float): Boolean {
+        //隐藏moreView过程中消费掉fling
+        log("onNestedPreFling--velocityX=$velocityX--scrollX=$scrollX--footerWidth" +
+                "=${footerView?.width}--${mOffsetAnimator?.isRunning}")
+
+        var isAnimRunning = false
+        if (mOffsetAnimator != null) {
+            isAnimRunning = mOffsetAnimator!!.isRunning
+        }
+        if (velocityX < 0 && scrollX >= -defaultOffsetX && !canScrollRight()
+                || isAnimRunning) {
+            return true
+        }
+        return false
+    }
+
+    private var mOffsetAnimator: ValueAnimator? = null
+    private fun animateScroll(velocityX: Float, duration: Int, consumed: Boolean) {
+        if (canScrollRight()) {
+            return
+        }
+        val currentOffset = scrollX
+        if (mOffsetAnimator == null) {
+            mOffsetAnimator = ValueAnimator()
+            mOffsetAnimator?.addUpdateListener { animation ->
+                if (animation.animatedValue is Int) {
+                    scrollTo(animation.animatedValue as Int, 0)
+                }
+            }
+        } else {
+            mOffsetAnimator?.cancel()
+        }
+        mOffsetAnimator?.duration = Math.min(duration, 600).toLong()
+
+        if (velocityX >= 0) {
+            mOffsetAnimator?.setIntValues(currentOffset, 0)
+            mOffsetAnimator?.start()
+        } else {
+            //如果子View没有消耗down事件 那么就让自身滑倒0位置
+            if (!consumed) {
+                mOffsetAnimator?.setIntValues(currentOffset, 0)
+                mOffsetAnimator?.start()
+            }
+
+        }
+    }
+
+    /**
+     * 限定滚动的范围，scrollBy默认调用scrollTo
+     */
+    override fun scrollTo(x: Int, y: Int) {
+        log("x=$x--scrollX=$scrollX")
+        var realX = x
+        if (x >=0) {
+            realX = 0
+        }
+        if (x <= -defaultOffsetX) {
+            realX = -defaultOffsetX.toInt()
+        }
+        if (realX != scrollX) {
+            super.scrollTo(realX, y)
+        }
+    }
+
+    /**
+     * 获取嵌套滑动的轴
+     * @see ViewCompat.SCROLL_AXIS_HORIZONTAL 垂直
+     * @see ViewCompat.SCROLL_AXIS_VERTICAL 水平
+     * @see ViewCompat.SCROLL_AXIS_NONE 都支持
+     */
+    override fun getNestedScrollAxes(): Int {
+        return ViewCompat.SCROLL_AXIS_NONE
+    }
 }
 
 inline fun log(msg: Any) {
