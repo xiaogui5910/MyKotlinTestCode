@@ -1,17 +1,15 @@
 package com.example.chenchenggui.mykotlintestcode
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
@@ -35,10 +33,10 @@ class MainActivity : AppCompatActivity() {
 
         val testAdapter = TestAdapter(R.layout.item, dataList)
         rvTest.adapter = testAdapter
-
-        var footerView = LayoutInflater.from(this).inflate(R.layout.footer, rvTest.parent as
-                ViewGroup,
-                false)
+//
+//        var footerView = LayoutInflater.from(this).inflate(R.layout.footer, rvTest.parent as
+//                ViewGroup,
+//                false)
 //                testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
 
 //        LinearSnapHelper().attachToRecyclerView(rvTest)
@@ -46,9 +44,9 @@ class MainActivity : AppCompatActivity() {
         testAdapter.setOnItemClickListener { adapter, view, position ->
             Toast.makeText(this@MainActivity, "position=$position", Toast.LENGTH_SHORT).show()
         }
-        hrl_main.setOnRefreshListener {
-            Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()
-        }
+//        hrl_main.setOnRefreshListener {
+//            Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     class RvAdapter(var context: Context, var dataList: List<String>) : RecyclerView.Adapter<RvAdapter
