@@ -44,9 +44,9 @@ class MainActivity : AppCompatActivity() {
         testAdapter.setOnItemClickListener { adapter, view, position ->
             Toast.makeText(this@MainActivity, "position=$position", Toast.LENGTH_SHORT).show()
         }
-//        hrl_main.setOnRefreshListener {
-//            Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()
-//        }
+        hrl_main.setOnRefreshListener {
+            Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()
+        }
     }
 
     class RvAdapter(var context: Context, var dataList: List<String>) : RecyclerView.Adapter<RvAdapter
