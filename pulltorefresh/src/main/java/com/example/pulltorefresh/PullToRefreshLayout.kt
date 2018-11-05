@@ -37,7 +37,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private const val DEFAULT_MARGIN_RIGHT = 10f
         private const val DEFAULT_PULL_WIDTH = 100f
         private const val DEFAULT_MOVE_MAX_DIMEN = 50f
+        private const val DEFAULT_MORE_VIEW_TEXT_SIZE = 15f
         private const val DEFAULT_FOOTER_WIDTH = 50f
+        private const val DEFAULT_FOOTER_BG_RADIUS = 20f
         private const val DEFAULT_FOOTER_VERTICAL_MARGIN = 10f
         private const val DEFAULT_VISIBLE_WIDTH = 40f
 
@@ -51,6 +53,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
          * 滑动最大距离
          */
         private var moreViewMoveMaxDimen = 0f
+        private var moreViewTextColor = Color.BLACK
+        private var moreViewTextSize = 0f
         private var scanMore: String? = null
         private var releaseScanMore: String? = null
         /**
@@ -84,6 +88,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      * 脚局部背景颜色
      */
     private var footerViewBgColor: Int = Color.GRAY
+    /**
+     * 脚布局矩形圆角
+     */
+    private var footerViewBgRadius: Float = 0f
     private var animStartTop = 0f
 
     private var isRefresh = false
@@ -133,13 +141,17 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 DEFAULT_PULL_WIDTH, displayMetrics)
         val defaultMoreViewMoveMaxDimen = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_MOVE_MAX_DIMEN, displayMetrics)
+        val defaultMoreViewTextSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                DEFAULT_MORE_VIEW_TEXT_SIZE, displayMetrics)
         val defaultFooterWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_FOOTER_WIDTH, displayMetrics)
+        val defaultFooterRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                DEFAULT_FOOTER_BG_RADIUS, displayMetrics)
         val defaultFooterVerticalMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_FOOTER_VERTICAL_MARGIN, displayMetrics)
         val defaultMoreViewMarginRight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_MARGIN_RIGHT, displayMetrics)
-        defaultOffsetX = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+        val defaultVisibleWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_VISIBLE_WIDTH, displayMetrics)
 
         scanMore = DEFAULT_SCAN_MORE
@@ -149,11 +161,16 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         pullWidth = ta.getDimension(R.styleable.PullToRefreshLayout_pullWidth, defaultPullWidth)
         moreViewMoveMaxDimen = ta.getDimension(R.styleable.PullToRefreshLayout_moreViewMoveMaxDimen,
                 defaultMoreViewMoveMaxDimen)
+        moreViewTextColor = ta.getColor(R.styleable.PullToRefreshLayout_moreViewTextColor, Color.BLACK)
+        moreViewTextSize = ta.getDimension(R.styleable.PullToRefreshLayout_moreViewTestSize, defaultMoreViewTextSize)
+        defaultOffsetX = ta.getDimension(R.styleable.PullToRefreshLayout_moreViewVisibleWidth,
+                defaultVisibleWidth)
         moreViewMarginRight = -ta.getDimension(R.styleable.PullToRefreshLayout_moreViewMarginRight,
                 defaultMoreViewMarginRight).toInt()
 
         footerViewBgColor = ta.getColor(R.styleable.PullToRefreshLayout_footerBgColor, Color.GRAY)
         footerWidth = ta.getDimension(R.styleable.PullToRefreshLayout_footerWidth, defaultFooterWidth)
+        footerViewBgRadius = ta.getDimension(R.styleable.PullToRefreshLayout_footerBgRadius, defaultFooterRadius)
         footerVerticalMargin = ta.getDimension(R.styleable.PullToRefreshLayout_footerVerticalMargin,
                 defaultFooterVerticalMargin).toInt()
 
@@ -204,6 +221,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         footerView = AnimView(context).apply {
             layoutParams = params
             setBgColor(footerViewBgColor)
+            setBgRadius(footerViewBgRadius)
+            pullWidth=footerWidth.toInt()
+//            pullDelta=this@PullToRefreshLayout.pullWidth.toInt()
+
             bezierBackDur = BEZIER_ANIM_DUR
         }
         addViewInternal(footerView!!)
@@ -217,6 +238,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         moreView = LayoutInflater.from(context).inflate(R.layout.item_load_more, this, false).apply {
             layoutParams = params
             moreText = findViewById(R.id.tv_more_text)
+            moreText?.setTextSize(TypedValue.COMPLEX_UNIT_PX,moreViewTextSize)
+            moreText?.setTextColor(moreViewTextColor)
         }
         addViewInternal(moreView!!)
     }

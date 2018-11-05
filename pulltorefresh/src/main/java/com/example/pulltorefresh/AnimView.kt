@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.RectF
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -24,11 +25,11 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     /**
      * 默认拉伸宽度，绘制矩形，超过后绘制曲线，默认值50dp
      */
-    private var pullWidth = 0
+     var pullWidth = 0
     /**
      * 默认最大拉伸距离，超过后无法继续拉伸，默认值80dp
      */
-    private var pullDelta = 0
+     var pullDelta = 0
     var top = 0f
 
     private var start = 0L
@@ -48,6 +49,11 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
 
     private var backPaint: Paint
     private var path: Path
+    private var mRectF:RectF= RectF()
+    /**
+     * 矩形圆角大小
+     */
+    private var radius:Float=20f
 
     private var animStatus = AnimatorStatus.PULL_LEFT
 
@@ -103,9 +109,22 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+
+//        when (animStatus) {
+//            AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(),
+//                    mHeight.toFloat(), backPaint)
+//            AnimatorStatus.DRAG_LEFT -> drawDrag(canvas)
+//            AnimatorStatus.RELEASE -> drawBack(canvas, bezierDelta)
+//        }
         when (animStatus) {
-            AnimatorStatus.PULL_LEFT -> canvas?.drawRect(0f, 0f, mWidth.toFloat(),
-                    mHeight.toFloat(), backPaint)
+            AnimatorStatus.PULL_LEFT -> {
+                with(mRectF){
+                    left=0f
+                    top=0f
+                    right=mWidth.toFloat()+radius
+                    bottom=mHeight.toFloat()
+                }
+                canvas?.drawRoundRect(mRectF,radius,radius,backPaint)}
             AnimatorStatus.DRAG_LEFT -> drawDrag(canvas)
             AnimatorStatus.RELEASE -> drawBack(canvas, bezierDelta)
         }
@@ -133,7 +152,14 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
     }
 
     private fun drawFooterBack(canvas: Canvas?) {
-        canvas?.drawRect(0f, 0f, mWidth.toFloat(), mHeight.toFloat(), backPaint)
+//        canvas?.drawRect(0f, 0f, mWidth.toFloat(), mHeight.toFloat(), backPaint)
+        with(mRectF){
+            left=0f
+            top=0f
+            right=mWidth.toFloat()+radius
+            bottom=mHeight.toFloat()
+        }
+        canvas?.drawRoundRect(mRectF,radius,radius,backPaint)
     }
 
     private fun drawDrag(canvas: Canvas?) {
@@ -161,5 +187,8 @@ class AnimView(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int 
 
     fun setBgColor(color: Int) {
         backPaint.color = color
+    }
+    fun setBgRadius(bgRadius:Float){
+        radius=bgRadius
     }
 }

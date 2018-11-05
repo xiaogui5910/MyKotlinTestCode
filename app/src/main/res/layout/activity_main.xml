@@ -6,6 +6,13 @@
     android:background="#FFFFFF"
     app:footerBgColor="@android:color/holo_orange_dark"
     app:scanMoreText="随便看看"
+    app:moreViewTestSize="14sp"
+    app:pullWidth="100dp"
+    app:footerWidth="50dp"
+    app:moreViewVisibleWidth="40dp"
+    app:footerBgRadius="10dp"
+    app:footerVerticalMargin="10dp"
+    app:moreViewTextColor="#FF0000"
     app:releaseScanMoreText="进来看看呗"
     android:layout_width="match_parent"
     android:layout_height="300dp">
