@@ -114,6 +114,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     private var arrowRotateBackAnim: RotateAnimation? = null
     private var mOffsetAnimator: ValueAnimator? = null
     private var isFooterViewShow = false
+    /**
+     * 嵌套滑动后是否需要继续滚动
+     */
+    private var isNeedScroll = false
 
     /**
      * 滑动监听
@@ -199,6 +203,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
                                 moveMoreView(defaultOffsetX, false)
                                 animateScroll(0f, SCROLL_ANIM_DUR.toInt(), false)
+
+                                isNeedScroll = false
                             }
                         }
                     }
@@ -222,7 +228,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
             layoutParams = params
             setBgColor(footerViewBgColor)
             setBgRadius(footerViewBgRadius)
-            pullWidth=footerWidth.toInt()
+            pullWidth = footerWidth.toInt()
 //            pullDelta=this@PullToRefreshLayout.pullWidth.toInt()
 
             bezierBackDur = BEZIER_ANIM_DUR
@@ -238,7 +244,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         moreView = LayoutInflater.from(context).inflate(R.layout.item_load_more, this, false).apply {
             layoutParams = params
             moreText = findViewById(R.id.tv_more_text)
-            moreText?.setTextSize(TypedValue.COMPLEX_UNIT_PX,moreViewTextSize)
+            moreText?.setTextSize(TypedValue.COMPLEX_UNIT_PX, moreViewTextSize)
             moreText?.setTextColor(moreViewTextColor)
         }
         addViewInternal(moreView!!)
@@ -375,6 +381,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
                 //拦截条件
                 if (dx > 10 && !canScrollRight() && scrollX >= 0) {
+                    parent.requestDisallowInterceptTouchEvent(true)
                     setScrollState(true)
                     return true
                 }
@@ -463,6 +470,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
         val showMoreView = dx > 0 && scrollX < 0 && !canScrollRight()
         if (hiddenMoreView || showMoreView) {
+            isNeedScroll = true
             scrollBy(dx, 0)
             consumed[0] = dx
         }
@@ -473,8 +481,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      */
     override fun onStopNestedScroll(child: View?) {
         super.onStopNestedScroll(child)
-
-        animateScroll(0f, SCROLL_ANIM_DUR.toInt(), false)
+        if (isNeedScroll) {
+            animateScroll(0f, SCROLL_ANIM_DUR.toInt(), false)
+        }
     }
 
     override fun onNestedFling(target: View?, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
@@ -534,6 +543,22 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         val currentOffset = scrollX
         if (mOffsetAnimator == null) {
             mOffsetAnimator = ValueAnimator()
+            mOffsetAnimator?.addListener(object : Animator.AnimatorListener {
+                override fun onAnimationRepeat(p0: Animator?) {
+                }
+
+                override fun onAnimationStart(p0: Animator?) {
+                }
+
+                override fun onAnimationEnd(p0: Animator?) {
+                    isNeedScroll = false
+                }
+
+                override fun onAnimationCancel(p0: Animator?) {
+//                    isNeedScroll=true
+                }
+
+            })
             mOffsetAnimator?.addUpdateListener { animation ->
                 if (animation.animatedValue is Int) {
                     scrollTo(animation.animatedValue as Int, 0)

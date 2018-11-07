@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.example.pulltorefresh.PullToRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/hrl_main"
-    android:background="#FFFFFF"
-    app:footerBgColor="@android:color/holo_orange_dark"
-    app:scanMoreText="随便看看"
-    app:moreViewTestSize="14sp"
-    app:pullWidth="100dp"
-    app:footerWidth="50dp"
-    app:moreViewVisibleWidth="40dp"
-    app:footerBgRadius="10dp"
-    app:footerVerticalMargin="10dp"
-    app:moreViewTextColor="#FF0000"
-    app:releaseScanMoreText="进来看看呗"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="300dp">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_test"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_layout"
+        android:background="#FFFFFF"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="@android:color/holo_blue_bright"
+        app:tabMode="fixed"
+        app:tabSelectedTextColor="@android:color/holo_red_dark"
+        app:tabTextColor="#000000"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
-</com.example.pulltorefresh.PullToRefreshLayout>
+        android:layout_height="wrap_content" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
+
