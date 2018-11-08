@@ -5,7 +5,7 @@ buildscript {
     ext.kotlin_version = '1.2.61'
 
     ext.groupName="com.ccg.qie"
-    ext.releaseVersionName="1.0.0"
+    ext.releaseVersionName="1.1.0"
     repositories {
         google()
         jcenter()
