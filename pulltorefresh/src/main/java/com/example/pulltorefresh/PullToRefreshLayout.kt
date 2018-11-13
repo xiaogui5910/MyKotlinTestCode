@@ -39,6 +39,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         private const val DEFAULT_MOVE_MAX_DIMEN = 50f
         private const val DEFAULT_MORE_VIEW_TEXT_SIZE = 15f
         private const val DEFAULT_FOOTER_WIDTH = 50f
+        private const val DEFAULT_FOOTER_PULL_MAX_TOP = 30f
         private const val DEFAULT_FOOTER_BG_RADIUS = 20f
         private const val DEFAULT_FOOTER_VERTICAL_MARGIN = 10f
         private const val DEFAULT_VISIBLE_WIDTH = 40f
@@ -84,6 +85,10 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
      * 脚布局宽度
      */
     private var footerWidth = 0f
+    /**
+     * 脚布局拉动时最大缩放高度
+     */
+    private var footerPullMaxTop = 0f
     /**
      * 脚局部背景颜色
      */
@@ -149,6 +154,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
                 DEFAULT_MORE_VIEW_TEXT_SIZE, displayMetrics)
         val defaultFooterWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_FOOTER_WIDTH, displayMetrics)
+        val defaultFooterTop = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
+                DEFAULT_FOOTER_PULL_MAX_TOP, displayMetrics)
         val defaultFooterRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                 DEFAULT_FOOTER_BG_RADIUS, displayMetrics)
         val defaultFooterVerticalMargin = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
@@ -174,6 +181,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
         footerViewBgColor = ta.getColor(R.styleable.PullToRefreshLayout_footerBgColor, Color.GRAY)
         footerWidth = ta.getDimension(R.styleable.PullToRefreshLayout_footerWidth, defaultFooterWidth)
+        footerPullMaxTop = ta.getDimension(com.example.pulltorefresh.R.styleable.PullToRefreshLayout_footerPullMaxTop,
+                defaultFooterTop)
         footerViewBgRadius = ta.getDimension(R.styleable.PullToRefreshLayout_footerBgRadius, defaultFooterRadius)
         footerVerticalMargin = ta.getDimension(R.styleable.PullToRefreshLayout_footerVerticalMargin,
                 defaultFooterVerticalMargin).toInt()
@@ -407,14 +416,24 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
                 //计算偏移量
                 var offsetX = interpolator.getInterpolation(unit / pullWidth) * unit
-                val offsetY = interpolator.getInterpolation(unit / height) * unit - moreViewMoveMaxDimen
+                var offsetY = interpolator.getInterpolation(unit / height) * unit -
+                        moreViewMoveMaxDimen
+                if (offsetY >= footerPullMaxTop) {
+                    offsetY = footerPullMaxTop
+                }
 
                 //偏移量加上默认脚布局宽度
                 if (isFooterViewShow) {
                     offsetX += defaultOffsetX
                 }
+                var tranX = offsetX
+                //位移最大值。超过的部分缩短为滑动距离的一半
+                val max = (pullWidth * 0.8f + defaultOffsetX)
+                if (tranX >= max) {
+                    tranX = (tranX - max) * 0.5f + max
+                }
 
-                childView?.translationX = -offsetX
+                childView?.translationX = -tranX
                 footerView?.layoutParams?.width = offsetX.toInt()
                 footerView?.top = offsetY
                 footerView?.requestLayout()
@@ -600,12 +619,12 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
     /**
      * 获取嵌套滑动的轴
-     * @see ViewCompat.SCROLL_AXIS_HORIZONTAL 垂直
-     * @see ViewCompat.SCROLL_AXIS_VERTICAL 水平
+     * @see ViewCompat.SCROLL_AXIS_HORIZONTAL 水平
+     * @see ViewCompat.SCROLL_AXIS_VERTICAL 垂直
      * @see ViewCompat.SCROLL_AXIS_NONE 都支持
      */
     override fun getNestedScrollAxes(): Int {
-        return ViewCompat.SCROLL_AXIS_NONE
+        return ViewCompat.SCROLL_AXIS_HORIZONTAL
     }
 }
 

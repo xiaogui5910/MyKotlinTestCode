@@ -6,6 +6,7 @@
         <attr name="pullWidth" format="dimension"/>
         <attr name="footerBgColor" format="color"/>
         <attr name="footerWidth" format="dimension"/>
+        <attr name="footerPullMaxTop" format="dimension"/>
         <attr name="footerBgRadius" format="dimension"/>
         <attr name="footerVerticalMargin" format="dimension"/>
         <attr name="moreViewMarginRight" format="dimension"/>
