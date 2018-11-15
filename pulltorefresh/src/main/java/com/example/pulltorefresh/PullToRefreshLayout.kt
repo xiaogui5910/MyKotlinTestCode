@@ -227,6 +227,16 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         }
     }
 
+    fun reset() {
+        removeView(footerView)
+        removeView(moreView)
+        childView?.translationX = 0f
+        addFooterView()
+        addMoreView()
+        initBackAnim()
+        initRotateAnim()
+    }
+
     private fun addFooterView() {
         val params = FrameLayout.LayoutParams(0, ViewGroup.LayoutParams.MATCH_PARENT)
         params.topMargin = footerVerticalMargin
