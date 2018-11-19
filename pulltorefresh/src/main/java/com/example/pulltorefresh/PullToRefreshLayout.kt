@@ -181,7 +181,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
         footerViewBgColor = ta.getColor(R.styleable.PullToRefreshLayout_footerBgColor, Color.GRAY)
         footerWidth = ta.getDimension(R.styleable.PullToRefreshLayout_footerWidth, defaultFooterWidth)
-        footerPullMaxTop = ta.getDimension(com.example.pulltorefresh.R.styleable.PullToRefreshLayout_footerPullMaxTop,
+        footerPullMaxTop = ta.getDimension(R.styleable.PullToRefreshLayout_footerPullMaxTop,
                 defaultFooterTop)
         footerViewBgRadius = ta.getDimension(R.styleable.PullToRefreshLayout_footerBgRadius, defaultFooterRadius)
         footerVerticalMargin = ta.getDimension(R.styleable.PullToRefreshLayout_footerVerticalMargin,
@@ -494,9 +494,8 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     }
 
     override fun onNestedPreScroll(target: View?, dx: Int, dy: Int, consumed: IntArray) {
-        val hiddenMoreView = dx < 0 && scrollX > -defaultOffsetX && !canScrollRight()
+        val hiddenMoreView = dx < 0 && scrollX > -defaultOffsetX.toInt() && !canScrollRight()
                 && footerView?.width != 0
-
         val showMoreView = dx > 0 && scrollX < 0 && !canScrollRight()
         if (hiddenMoreView || showMoreView) {
             isNeedScroll = true
@@ -558,7 +557,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         if (mOffsetAnimator != null) {
             isAnimRunning = mOffsetAnimator!!.isRunning
         }
-        if (velocityX < 0 && scrollX >= -defaultOffsetX && !canScrollRight()
+        if (velocityX < 0 && scrollX >= -defaultOffsetX.toInt() && !canScrollRight()
                 || isAnimRunning) {
             return true
         }
