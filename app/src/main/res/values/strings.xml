@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyKotlinTestCode</string>
+    <string name="pull_to_refresh">橡皮筋刷新</string>
+    <string name="red_packet">红包雨</string>
 </resources>
