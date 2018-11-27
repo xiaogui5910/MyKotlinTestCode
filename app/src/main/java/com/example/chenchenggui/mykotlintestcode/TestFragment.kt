@@ -93,6 +93,7 @@ class TestFragment : Fragment() {
         override fun convert(helper: BaseViewHolder?, item: String?) {
             Log.e("main", "item=$item")
             helper?.setText(R.id.tv_text, "icon-$item")
+            helper?.setText(R.id.tv_text2, "icon-$item-desc")
         }
     }
 }

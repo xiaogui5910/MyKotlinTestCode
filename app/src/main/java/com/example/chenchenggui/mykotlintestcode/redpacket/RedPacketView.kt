@@ -28,7 +28,7 @@ class RedPacketView : View {
     private var animator: ValueAnimator? = null//属性动画，用该动画来不断改变红包下落的坐标值
 
     private var paint: Paint? = null//画笔
-    private var prevTime: Long = 0
+    private var prevTime: Long = 0L
     private val redPacketList = ArrayList<RedPacket>()//红包数组
     private var redMatrix: Matrix? = null
 
@@ -53,18 +53,22 @@ class RedPacketView : View {
      * 初始化
      */
     private fun init() {
+        //初始化画笔
         paint = Paint().apply {
             isFilterBitmap = true
             isDither = true
             isAntiAlias = true
         }
-        redMatrix=Matrix()
+        redMatrix = Matrix()
 
+        //绘制view开启硬件加速
         setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        //初始化属性动画
         initAnimator()
     }
 
     private fun initAnimator() {
+        //创建一个属性动画，通过属性动画来控制刷新红包下落的位置
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
             //每次动画更新的时候，更新红包下落的坐标值
             addUpdateListener {
@@ -124,7 +128,7 @@ class RedPacketView : View {
 
     }
 
-    private fun setRedPacketCount(count: Int) {
+    fun setRedPacketCount(count: Int) {
         if (mImgIds.isEmpty())
             return
         for (i in 0 until count) {
