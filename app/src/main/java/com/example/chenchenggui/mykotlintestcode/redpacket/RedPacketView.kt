@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -19,7 +20,8 @@ import java.util.*
  * creation date: 2018/11/27
  */
 class RedPacketView : View {
-    private var mImgIds = intArrayOf(R.drawable.red_packets_icon)//红包图片
+    private var mImgIds = intArrayOf(R.drawable.rain_red_packet, R.drawable.rain_line
+            , R.drawable.rain_oval, R.drawable.rain_star)//红包图片
     private var count: Int = 0//红包数量
     private var speed: Int = 0//下落速度
     private var maxSize: Float = 0f//红包大小的范围
@@ -79,10 +81,15 @@ class RedPacketView : View {
                 for (i in redPacketList.indices) {
                     val redPacket = redPacketList[i]
                     //更新红包的下落的位置y
-                    redPacket.y += +redPacket.speed * secs
+                    redPacket.y += redPacket.speed * secs
+                    redPacket.x -= redPacket.speed * secs / 10
 
-                    //如果y坐标大于view的高度 说明划出屏幕，y重新设置起始位置，以及中奖属性
-                    if (redPacket.y > height) {
+                    //如果y坐标大于view的高度或者x坐标小于负红包宽度 说明划出屏幕，重新设置x,y起始位置，以及中奖属性
+                    if (redPacket.y > height || redPacket.x < -redPacket.width) {
+                        val random = Random()
+                        val rx = random.nextInt(mWidth) + 100 - redPacket.width
+                        Log.e("red_packet", "rx=$rx")
+                        redPacket.x = (if (rx <= 0) 100 else rx).toFloat()
                         redPacket.y = (0 - redPacket.height).toFloat()
                         redPacket.isRealRed = redPacket.isRealRedPacket
                     }
@@ -133,9 +140,15 @@ class RedPacketView : View {
             return
         for (i in 0 until count) {
             //获取红包原始图片
-            val originalBitmap = BitmapFactory.decodeResource(resources, mImgIds[0])
+            val randomIndex: Int = when {
+                i < 3 -> 1
+                i < 9 -> Random().nextInt(mImgIds.size - 2) + 2
+                else -> 0
+            }
+            val originalBitmap = BitmapFactory.decodeResource(resources, mImgIds[randomIndex])
             //生成红包实体类
-            val redPacket = RedPacket(context, originalBitmap, speed, maxSize, minSize, mWidth)
+            val redPacket = RedPacket(context, originalBitmap, speed, maxSize, minSize, mWidth,
+                    randomIndex == 0)
             //添加进入红包数组
             redPacketList.add(redPacket)
         }
@@ -176,15 +189,38 @@ class RedPacketView : View {
         //遍历红包数组，绘制红包
         for (i in redPacketList.indices) {
             val redPacket = redPacketList[i]
-            //将红包旋转redPacket.rotation角度后 移动到（redPacket.x，redPacket.y）进行绘制红包
+            if (!redPacket.isRedPacketStyle) {
+                //将红包旋转redPacket.rotation角度后 移动到（redPacket.x，redPacket.y）进行绘制红包
 
-            redMatrix?.let {
-                it.setTranslate((-redPacket.width / 2).toFloat(), (-redPacket.height / 2).toFloat())
-                it.postRotate(redPacket.rotation)
-                it.postTranslate(redPacket.width / 2 + redPacket.x, redPacket.height / 2 +
-                        redPacket.y)
-                //绘制红包
-                canvas.drawBitmap(redPacket.bitmap!!, it, paint)
+                redMatrix?.let {
+                    it.setTranslate((-redPacket.width / 2).toFloat(), (-redPacket.height / 2).toFloat())
+                    if (redPacket.isRedPacketStyle) {
+//                    it.postRotate(redPacket.rotation)
+                    }
+                    it.postTranslate(redPacket.width / 2 + redPacket.x, redPacket.height / 2 +
+                            redPacket.y)
+                    //绘制红包
+                    canvas.drawBitmap(redPacket.bitmap!!, it, paint)
+                }
+            }
+
+        }
+        for (i in redPacketList.indices) {
+            val redPacket = redPacketList[i]
+            if (redPacket.isRedPacketStyle) {
+
+                //将红包旋转redPacket.rotation角度后 移动到（redPacket.x，redPacket.y）进行绘制红包
+
+                redMatrix?.let {
+                    it.setTranslate((-redPacket.width / 2).toFloat(), (-redPacket.height / 2).toFloat())
+                    if (redPacket.isRedPacketStyle) {
+//                    it.postRotate(redPacket.rotation)
+                    }
+                    it.postTranslate(redPacket.width / 2 + redPacket.x, redPacket.height / 2 +
+                            redPacket.y)
+                    //绘制红包
+                    canvas.drawBitmap(redPacket.bitmap!!, it, paint)
+                }
             }
 
         }
@@ -196,11 +232,12 @@ class RedPacketView : View {
                 //根据点击的坐标点，判断是否点击在红包的区域
                 val redPacket = isRedPacketClick(motionEvent.x, motionEvent.y)
                 if (redPacket != null) {
-                    //如果点击在红包上，重新设置起始位置，以及中奖属性
-                    redPacket.y = (0 - redPacket.height).toFloat()
-                    redPacket.isRealRed = redPacket.isRealRedPacket
-
-                    onRedPacketClickListener?.onRedPacketClickListener(redPacket)
+                    if (redPacket.isRedPacketStyle) {
+                        //如果点击在红包上，重新设置起始位置，以及中奖属性
+                        redPacket.y = (0 - redPacket.height).toFloat()
+                        redPacket.isRealRed = redPacket.isRealRedPacket
+                        onRedPacketClickListener?.onRedPacketClickListener(redPacket)
+                    }
                 }
             }
             MotionEvent.ACTION_MOVE -> {

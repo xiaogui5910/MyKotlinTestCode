@@ -2,6 +2,7 @@ package com.example.chenchenggui.mykotlintestcode.redpacket
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.util.Log
 import java.util.*
 
 /**
@@ -9,7 +10,8 @@ import java.util.*
  * author : chenchenggui
  * creation date: 2018/11/27
  */
-class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: Float, minSize: Float, viewWidth: Int) {
+class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: Float, minSize:
+Float, viewWidth: Int, var isRedPacketStyle: Boolean) {
     var x: Float = 0f
     var y: Float = 0f
     var rotation: Float = 0f
@@ -20,7 +22,12 @@ class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: F
     var bitmap: Bitmap? = null
     var money: Int = 0
     var isRealRed: Boolean = false
+    var prizeName:String=""
+    var prizeType:PrizeType=PrizeType.EMPTY
 
+    enum class PrizeType{
+        MONEY,COUPON,EMPTY
+    }
     /**
      * 随机 是否为中奖红包
      */
@@ -28,11 +35,20 @@ class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: F
     //中奖金额
     val isRealRedPacket: Boolean
         get() {
-            val random = Random()
-            val num = random.nextInt(10) + 1
-            if (num % 2 == 0) {
-                money = num * 2
-                return true
+            if (isRedPacketStyle){
+                val random = Random()
+                val num = random.nextInt(10) + 1
+                if (num % 2 == 0) {
+                    if (num<=5){
+                        prizeType=PrizeType.MONEY
+                        prizeName="企鹅体育的红包"
+                    }else{
+                        prizeType=PrizeType.COUPON
+                        prizeName="沃尔玛的优惠券"
+                    }
+                    money = num * 2
+                    return true
+                }
             }
             return false
         }
@@ -43,18 +59,24 @@ class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: F
         if (widthRandom < minSize || widthRandom > maxSize) {
             widthRandom = maxSize.toDouble()
         }
+//        if (isRedPacketStyle){
+            widthRandom=0.6
+//        }
+        Log.e("red_packet","widthRandom=$widthRandom")
         //红包的宽度
         width = (originalBitmap.width * widthRandom).toInt()
         //红包的高度
         height = width * originalBitmap.height / originalBitmap.width
+        Log.e("red_packet","width=$width---height=$height")
         val mWidth = if (viewWidth == 0) context.resources.displayMetrics.widthPixels else viewWidth
         //生成红包bitmap
         bitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true)
         originalBitmap.recycle()
         val random = Random()
         //红包起始位置x:[0,mWidth-width]
-        val rx = random.nextInt(mWidth) - width
-        x = (if (rx <= 0) 0 else rx).toFloat()
+        val rx = random.nextInt(mWidth)+100 - width
+        Log.e("red_packet","rx=$rx")
+        x = (if (rx <= 0) 100 else rx).toFloat()
         //红包起始位置y
         y = (-height).toFloat()
         //初始化该红包的下落速度
@@ -65,6 +87,7 @@ class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: F
         rotationSpeed = Math.random().toFloat() * 90 - 45
         //初始化是否为中奖红包
         isRealRed = isRealRedPacket
+        Log.e("red_packet","isRealRed=$isRealRed")
     }
 
     /**

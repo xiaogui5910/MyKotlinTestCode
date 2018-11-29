@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_red_packet_open"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/rain_red_packet_open">
+
+    <FrameLayout
+        android:id="@+id/fl_opening"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:text="企鹅体育红包抢不停"
+            android:textColor="#FFE2B1"
+            android:textSize="24sp" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/ll_show_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/rain_logo" />
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="企鹅体育的红包"
+                android:textColor="#FFE2B1"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/ll_money_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="bottom"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_money"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3.89"
+                    android:textColor="#FFE2B1"
+                    android:textSize="40sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="元"
+                    android:textColor="#FFE2B1"
+                    android:textSize="14sp" />
+            </LinearLayout>
+            <TextView
+                android:text="领取500元优惠券"
+                android:id="@+id/tv_coupon"
+                android:textColor="#FFE2B1"
+                android:layout_marginTop="24dp"
+                android:padding="10dp"
+                android:visibility="gone"
+                android:background="@drawable/shape_dialog_red_packet_coupon"
+                android:textSize="14sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_thanks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="哎呀，运气不好！\n没关系等下次一定可以中奖的～"
+            android:textColor="#FFE2B1"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_money_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="94dp"
+            android:text="已存入余额 >"
+            android:textColor="#FFE2B1"
+            android:textSize="14sp" />
+    </LinearLayout>
+</RelativeLayout>
