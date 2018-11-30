@@ -4,12 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#80000000"
     tools:context=".activity.RedPacketActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_red_packet"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimaryDark" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/tb_red_packet"
         android:background="@android:color/darker_gray"
         android:scaleType="fitXY" />
 
@@ -17,64 +23,108 @@
         android:id="@+id/start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_red_packet"
         android:text="开始" />
-
-    <Button
-        android:id="@+id/stop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:text="结束" />
 
     <TextView
         android:id="@+id/money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tb_red_packet"
+        android:layout_centerInParent="true"
         android:layout_marginTop="10dp"
         android:text="中奖金额:"
         android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_red_packet"
+        android:layout_alignParentRight="true"
+        android:text="结束" />
 
     <com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketView
         android:id="@+id/red_packets_view1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/tb_red_packet"
         app:count="20"
         app:max_size="0.8"
         app:min_size="0.6"
         app:speed="500" />
+
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_marginLeft="12dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_below="@+id/start"
-        android:gravity="center_vertical"
-        android:background="@drawable/shape_red_packet_second"
+        android:id="@+id/ll_time"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_red_packet"
+        android:layout_marginLeft="12dp"
+        android:background="@drawable/shape_red_packet_second"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="20dp"
+        android:paddingTop="8dp"
+        android:paddingRight="20dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
+
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="剩余"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="14sp" />
+
         <TextView
-            android:text="5"
             android:id="@+id/tv_count"
-            android:textColor="#FFE2B1"
-            android:textSize="14sp"
-            android:padding="2dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:padding="2dp"
+            android:text="5"
+            android:textColor="#FFE2B1"
+            android:textSize="14sp" />
+
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="秒"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="14sp" />
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_red_packet_entrance"
+        android:layout_width="123.5dp"
+        android:layout_height="37.5dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/red_packet_entrance"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="红包雨降临"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <FrameLayout
+        android:id="@+id/fl_count_down_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#66000000"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/iv_count_down"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/rain_num_3" />
+    </FrameLayout>
 </RelativeLayout>

@@ -51,6 +51,10 @@ class RedPacketDialog : DialogFragment() {
             //            openRedPacket()
             listener?.invoke()
         }
+        if (isEnd){
+            tvThanks.text="哎呀，来晚了\n下次要快一点儿哦~"
+            showEmptyRedPacket(null)
+        }
         return openDialogView
     }
 
@@ -80,7 +84,7 @@ class RedPacketDialog : DialogFragment() {
 
     }
 
-    private fun showEmptyRedPacket(redPacket: RedPacket) {
+    private fun showEmptyRedPacket(redPacket: RedPacket?) {
         rlRedPacket.setBackgroundResource(R.drawable.rain_red_packet_opend)
         flOpening.visibility = View.GONE
         llMoney.visibility = View.VISIBLE
@@ -103,4 +107,5 @@ class RedPacketDialog : DialogFragment() {
     fun setOnDialogPositiveListener(l: (() -> Unit)?) {
         listener = l
     }
+   var isEnd=false
 }

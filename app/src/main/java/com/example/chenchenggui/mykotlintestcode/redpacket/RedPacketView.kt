@@ -7,7 +7,6 @@ import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -88,7 +87,7 @@ class RedPacketView : View {
                     if (redPacket.y > height || redPacket.x < -redPacket.width) {
                         val random = Random()
                         val rx = random.nextInt(mWidth) + 100 - redPacket.width
-                        Log.e("red_packet", "rx=$rx")
+//                        Log.e("red_packet", "rx=$rx")
                         redPacket.x = (if (rx <= 0) 100 else rx).toFloat()
                         redPacket.y = (0 - redPacket.height).toFloat()
                         redPacket.isRealRed = redPacket.isRealRedPacket

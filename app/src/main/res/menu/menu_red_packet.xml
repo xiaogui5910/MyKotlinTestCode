@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
     <item
-        android:id="@+id/pull_to_refresh"
+        android:id="@+id/show"
         android:orderInCategory="1"
-        android:title="@string/pull_to_refresh"
+        android:title="@string/red_packet_show"
         app:showAsAction="never" />
     <item
-        android:id="@+id/red_packet"
+        android:id="@+id/project"
         android:orderInCategory="4"
-        android:title="@string/red_packet"
+        android:title="@string/red_packet_project"
         app:showAsAction="never" />
 </menu>
 
