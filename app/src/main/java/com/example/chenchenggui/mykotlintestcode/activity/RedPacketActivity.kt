@@ -95,26 +95,27 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
                     override fun onGlobalLayout() {
                         rl_red_packet_entrance.viewTreeObserver.removeOnGlobalLayoutListener(this)
                         rl_red_packet_entrance.translationX = rl_red_packet_entrance.measuredWidth.toFloat()
-
-                        showAnim = ValueAnimator.ofInt(0, rl_red_packet_entrance.measuredWidth)
-                                .apply {
-                                    addListener(object : RedPacketAnimatorListener() {
-                                        override fun onAnimationEnd(animation: Animator?) {
-                                            startBackAnim()
-                                        }
-                                    })
-                                    addUpdateListener {
-                                        val dx = it.animatedValue as Int
-                                        rl_red_packet_entrance.translationX = (rl_red_packet_entrance
-                                                .measuredWidth - dx).toFloat()
-                                    }
-                                    duration = 2000
-                                    interpolator = BounceInterpolator()
-                                    start()
-                                }
                     }
                 })
 
+                rl_red_packet_entrance.post {
+                    showAnim = ValueAnimator.ofInt(0, rl_red_packet_entrance.measuredWidth)
+                            .apply {
+                                addListener(object : RedPacketAnimatorListener() {
+                                    override fun onAnimationEnd(animation: Animator?) {
+                                        startBackAnim()
+                                    }
+                                })
+                                addUpdateListener {
+                                    val dx = it.animatedValue as Int
+                                    rl_red_packet_entrance.translationX = (rl_red_packet_entrance
+                                            .measuredWidth - dx).toFloat()
+                                }
+                                duration = 2000
+                                interpolator = BounceInterpolator()
+                                start()
+                            }
+                }
 
             }
         }
