@@ -231,6 +231,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         removeView(footerView)
         removeView(moreView)
         childView?.translationX = 0f
+        if (scrollX!=0){
+            scrollX=0
+        }
         addFooterView()
         addMoreView()
         initBackAnim()
