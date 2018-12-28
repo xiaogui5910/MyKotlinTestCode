@@ -3,6 +3,7 @@
     <string name="pull_to_refresh">橡皮筋刷新</string>
     <string name="red_packet">红包雨</string>
     <string name="expand_item">ExpandableItem</string>
+    <string name="section_item">SectionItem</string>
     <string name="red_packet_show">演示效果</string>
     <string name="red_packet_project">项目效果</string>
 </resources>
