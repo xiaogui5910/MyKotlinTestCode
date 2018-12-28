@@ -12,5 +12,10 @@
         android:orderInCategory="4"
         android:title="@string/red_packet"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/expand_item"
+        android:orderInCategory="2"
+        android:title="@string/expand_item"
+        app:showAsAction="never" />
 </menu>
 

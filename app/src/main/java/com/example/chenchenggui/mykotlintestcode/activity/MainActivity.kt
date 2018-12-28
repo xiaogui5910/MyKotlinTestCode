@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
         when(item?.itemId){
             R.id.pull_to_refresh->{}
             R.id.red_packet->{startActivity(Intent(this,RedPacketActivity::class.java))}
+            R.id.expand_item->{startActivity(Intent(this,ExpandableItemActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }
