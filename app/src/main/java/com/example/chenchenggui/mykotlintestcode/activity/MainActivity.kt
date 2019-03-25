@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.chenchenggui.mykotlintestcode.R
+import com.example.chenchenggui.mykotlintestcode.R.id.tool_bar
 import com.example.chenchenggui.mykotlintestcode.TestFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -51,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             R.id.red_packet->{startActivity(Intent(this,RedPacketActivity::class.java))}
             R.id.expand_item->{startActivity(Intent(this,ExpandableItemActivity::class.java))}
             R.id.section_item->{startActivity(Intent(this,SectionActivity::class.java))}
+            R.id.avdev->{startActivity(Intent(this,AudioVideoDevActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }

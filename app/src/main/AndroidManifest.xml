@@ -21,8 +21,10 @@
         <activity
             android:name=".activity.ExpandableItemActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activity.SectionActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" ></activity>
+        <activity
+            android:name=".activity.SectionActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".activity.AudioVideoDevActivity"></activity>
     </application>
 
 </manifest>
