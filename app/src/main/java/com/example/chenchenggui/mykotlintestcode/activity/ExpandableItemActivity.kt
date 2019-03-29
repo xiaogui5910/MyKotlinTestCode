@@ -7,22 +7,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.example.chenchenggui.mykotlintestcode.R
+import com.example.chenchenggui.mykotlintestcode.R.id.tb_expand
 import com.example.chenchenggui.mykotlintestcode.expandableitem.ExpandableItemAdapter
 import com.example.chenchenggui.mykotlintestcode.expandableitem.Level0Item
 import com.example.chenchenggui.mykotlintestcode.expandableitem.Level1Item
 import kotlinx.android.synthetic.main.activity_expandable_item.*
 
-class ExpandableItemActivity : AppCompatActivity() {
+class ExpandableItemActivity : BaseActivity() {
+    override fun getLayoutId() = R.layout.activity_expandable_item
 
     lateinit var dataList: ArrayList<MultiItemEntity>
     lateinit var adapter: ExpandableItemAdapter
     lateinit var rvExpand: RecyclerView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_expandable_item)
-
-        initToolbar()
+    override fun initView() {
 
         rvExpand = findViewById(R.id.rv_expand)
 
@@ -57,12 +55,6 @@ class ExpandableItemActivity : AppCompatActivity() {
         }
     }
 
-    private fun initToolbar() {
-        setSupportActionBar(tb_expand)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "ExpandableItem"
-    }
 
     private fun generateData(): ArrayList<MultiItemEntity> {
         val list = ArrayList<MultiItemEntity>()
@@ -94,10 +86,4 @@ class ExpandableItemActivity : AppCompatActivity() {
         return list
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            android.R.id.home -> finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
 }

@@ -13,16 +13,14 @@ import com.example.chenchenggui.mykotlintestcode.sectionitem.UserInfo
 import com.example.chenchenggui.mykotlintestcode.toast
 import kotlinx.android.synthetic.main.activity_section.*
 
-class SectionActivity : AppCompatActivity() {
+class SectionActivity : BaseActivity() {
+    override fun getLayoutId() = R.layout.activity_section
 
     lateinit var dataList: ArrayList<MySection>
     lateinit var adapter: SectionItemAdapter
     lateinit var rvExpand: RecyclerView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_section)
-        initToolbar()
+    override fun initView() {
         rvExpand = findViewById(R.id.rv_section)
 
         dataList = generateData()
@@ -43,7 +41,7 @@ class SectionActivity : AppCompatActivity() {
             toast(mySection.header + "--position=$position")
             val dataList = adapter.data
             dataList.addAll(position, mySection.subList)
-            dataList.removeAt(position+mySection.subList.size)
+            dataList.removeAt(position + mySection.subList.size)
             adapter.setNewData(dataList)
             log(adapter.data.toString())
         }
@@ -83,19 +81,4 @@ class SectionActivity : AppCompatActivity() {
         }
         return list
     }
-
-    private fun initToolbar() {
-        setSupportActionBar(tb_section)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = "SectionItem"
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
-            android.R.id.home -> finish()
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
 }

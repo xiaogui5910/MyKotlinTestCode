@@ -53,6 +53,7 @@ class MainActivity : AppCompatActivity() {
             R.id.expand_item->{startActivity(Intent(this,ExpandableItemActivity::class.java))}
             R.id.section_item->{startActivity(Intent(this,SectionActivity::class.java))}
             R.id.avdev->{startActivity(Intent(this,AudioVideoDevActivity::class.java))}
+            R.id.webview->{startActivity(Intent(this,WebViewTestActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }

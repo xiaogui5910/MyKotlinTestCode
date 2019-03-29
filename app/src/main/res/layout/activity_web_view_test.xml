@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F2F2F2"
     android:orientation="vertical"
-    tools:context=".activity.SectionActivity">
+    tools:context=".activity.WebViewTestActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
@@ -14,13 +13,8 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@android:color/white" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_section"
+    <WebView
+        android:id="@+id/webView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginStart="12dp"
-        android:layout_marginLeft="12dp"
-        android:layout_marginEnd="12dp"
-        android:layout_marginRight="12dp"
-        android:layout_marginBottom="12dp" />
+        android:layout_height="match_parent" />
 </LinearLayout>
