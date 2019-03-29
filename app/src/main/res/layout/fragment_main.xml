@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    android:orientation="vertical">
+
+    <com.example.pulltorefresh.PullToRefreshLayout
+        android:id="@+id/hrl_main"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="#FFFFFF"
+        app:footerBgColor="@android:color/holo_orange_dark"
+        app:footerBgRadius="10dp"
+        app:footerVerticalMargin="10dp"
+        app:footerWidth="40dp"
+        app:moreViewMoveMaxDimen="20dp"
+        app:moreViewTestSize="11sp"
+        app:footerPullMaxTop="5dp"
+        app:moreViewMarginRight="12dp"
+        app:moreViewTextColor="#FF0000"
+        app:moreViewVisibleWidth="20dp"
+        app:pullWidth="100dp"
+        app:releaseScanMoreText="进来看看呗"
+        app:scanMoreText="随便看看">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_test"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" />
+    </com.example.pulltorefresh.PullToRefreshLayout>
+</LinearLayout>

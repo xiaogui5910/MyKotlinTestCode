@@ -1,10 +1,9 @@
 package com.example.chenchenggui.mykotlintestcode
 
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,13 +14,29 @@ import android.widget.TextView
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
-import kotlinx.android.synthetic.main.activity_main.*
+import com.example.pulltorefresh.PullToRefreshLayout
 
-class MainActivity : AppCompatActivity() {
+/**
+ * description ：
+ * author : chenchenggui
+ * creation date: 2018/11/7
+ */
+class TestFragment : Fragment() {
+    lateinit var rvTest:RecyclerView
+    lateinit var hrlMain:PullToRefreshLayout
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.fragment_main, container, false)
+        rvTest= view.findViewById(R.id.rv_test)
+//        hrlMain=view.findViewById(R.id.hrl_main)
+        return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         val dataList = ArrayList<String>()
         for (c in 'A'..'D') {
             dataList.add(c.toString())
@@ -29,23 +44,25 @@ class MainActivity : AppCompatActivity() {
         for ((index, str) in dataList.withIndex()) {
             Log.e("main", "index=$index---value=$str")
         }
-        val rvTest = rv_test
-        rvTest.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        rvTest.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
 
         val testAdapter = TestAdapter(R.layout.item, dataList)
         rvTest.adapter = testAdapter
+//
+//        var footerView = LayoutInflater.from(this).inflate(R.layout.footer, rvTest.parent as
+//                ViewGroup,
+//                false)
+//                testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
 
-        var footerView = LayoutInflater.from(this).inflate(R.layout.footer, rvTest.parent as
-                ViewGroup,
-                false)
-        //        testAdapter.addFooterView(footerView,0, LinearLayout.HORIZONTAL)
-
-        LinearSnapHelper().attachToRecyclerView(rvTest)
-        rvTest.adapter = RvAdapter(this, dataList)
-        rvTest.setOnClickListener { }
-        hrl_main.setOnRefreshListener {
-            Toast.makeText(this@MainActivity, "刷新数据成功", Toast.LENGTH_SHORT).show()
+//        LinearSnapHelper().attachToRecyclerView(rvTest)
+//        rvTest.adapter = RvAdapter(this, dataList)
+        testAdapter.setOnItemClickListener { adapter, view, position ->
+            Toast.makeText(context, "position=$position", Toast.LENGTH_SHORT).show()
         }
+//        hrlMain.setOnRefreshListener {
+//            Toast.makeText(context, "刷新数据成功", Toast.LENGTH_SHORT).show()
+//        }
     }
 
     class RvAdapter(var context: Context, var dataList: List<String>) : RecyclerView.Adapter<RvAdapter
@@ -76,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         override fun convert(helper: BaseViewHolder?, item: String?) {
             Log.e("main", "item=$item")
             helper?.setText(R.id.tv_text, "icon-$item")
+            helper?.setText(R.id.tv_text2, "icon-$item-desc")
         }
     }
 }

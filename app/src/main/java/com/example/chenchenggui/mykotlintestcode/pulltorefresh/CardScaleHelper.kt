@@ -1,4 +1,4 @@
-package com.example.chenchenggui.mykotlintestcode
+package com.example.chenchenggui.mykotlintestcode.pulltorefresh
 
 import android.content.Context
 import android.support.v7.widget.LinearSnapHelper

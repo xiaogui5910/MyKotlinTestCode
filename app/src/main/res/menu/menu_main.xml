@@ -1,0 +1,36 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity">
+    <item
+        android:id="@+id/pull_to_refresh"
+        android:orderInCategory="1"
+        android:title="@string/pull_to_refresh"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/expand_item"
+        android:orderInCategory="2"
+        android:title="@string/expand_item"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/section_item"
+        android:orderInCategory="3"
+        android:title="@string/section_item"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/red_packet"
+        android:orderInCategory="4"
+        android:title="@string/red_packet"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/avdev"
+        android:orderInCategory="5"
+        android:title="@string/avdev"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/webview"
+        android:orderInCategory="6"
+        android:title="@string/webview"
+        app:showAsAction="never" />
+</menu>
+
