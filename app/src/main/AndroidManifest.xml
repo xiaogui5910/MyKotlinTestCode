@@ -24,8 +24,9 @@
         <activity
             android:name=".activity.SectionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".activity.AudioVideoDevActivity" />
-        <activity android:name=".activity.WebViewTestActivity"></activity>
+        <activity android:name=".avdev.AudioVideoDevActivity" />
+        <activity android:name=".activity.WebViewTestActivity" />
+        <activity android:name=".activity.ViewStubTestActivity"></activity>
     </application>
 
 </manifest>

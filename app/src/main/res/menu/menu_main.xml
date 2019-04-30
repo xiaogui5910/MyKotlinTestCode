@@ -32,5 +32,10 @@
         android:orderInCategory="6"
         android:title="@string/webview"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/viewStub"
+        android:orderInCategory="6"
+        android:title="@string/viewStub"
+        app:showAsAction="never" />
 </menu>
 

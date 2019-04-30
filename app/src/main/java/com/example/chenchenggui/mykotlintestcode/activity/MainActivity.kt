@@ -11,8 +11,8 @@ import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.chenchenggui.mykotlintestcode.R
-import com.example.chenchenggui.mykotlintestcode.R.id.tool_bar
 import com.example.chenchenggui.mykotlintestcode.TestFragment
+import com.example.chenchenggui.mykotlintestcode.avdev.AudioVideoDevActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -38,8 +38,7 @@ class MainActivity : AppCompatActivity() {
         viewPager.adapter = TestPageAdapter(supportFragmentManager)
         tabLayout.setupWithViewPager(viewPager)
 
-        var toolbar = tool_bar
-        setSupportActionBar(toolbar)
+        setSupportActionBar(tool_bar)
     }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main,menu)
@@ -52,8 +51,9 @@ class MainActivity : AppCompatActivity() {
             R.id.red_packet->{startActivity(Intent(this,RedPacketActivity::class.java))}
             R.id.expand_item->{startActivity(Intent(this,ExpandableItemActivity::class.java))}
             R.id.section_item->{startActivity(Intent(this,SectionActivity::class.java))}
-            R.id.avdev->{startActivity(Intent(this,AudioVideoDevActivity::class.java))}
+            R.id.avdev->{startActivity(Intent(this, AudioVideoDevActivity::class.java))}
             R.id.webview->{startActivity(Intent(this,WebViewTestActivity::class.java))}
+            R.id.viewStub->{startActivity(Intent(this,ViewStubTestActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }

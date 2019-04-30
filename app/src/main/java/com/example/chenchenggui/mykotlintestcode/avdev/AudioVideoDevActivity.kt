@@ -1,11 +1,11 @@
-package com.example.chenchenggui.mykotlintestcode.activity
+package com.example.chenchenggui.mykotlintestcode.avdev
 
 import android.graphics.BitmapFactory
 import android.graphics.Paint
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.SurfaceHolder
 import com.example.chenchenggui.mykotlintestcode.R
+import com.example.chenchenggui.mykotlintestcode.activity.BaseActivity
 import kotlinx.android.synthetic.main.activity_audio_video_dev.*
 
 class AudioVideoDevActivity : BaseActivity() {
