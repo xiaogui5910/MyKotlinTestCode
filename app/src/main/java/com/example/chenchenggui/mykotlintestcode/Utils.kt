@@ -9,7 +9,7 @@ import android.widget.Toast
  * creation date: 2018/12/14
  */
 fun log(msg: Any) {
-    Log.e("red_packet", "$msg")
+    Log.e("my_kotlin_test_code", "$msg")
 }
 
 fun toast(msg: Any) {
