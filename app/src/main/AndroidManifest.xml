@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.chenchenggui.mykotlintestcode">
 
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
@@ -28,7 +29,7 @@
         <activity
             android:name=".activity.SectionActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".avdev.AudioVideoDevActivity" />
+        <activity android:name=".avdev.AudioVideoDevActivity" android:screenOrientation="portrait"/>
         <activity android:name=".activity.WebViewTestActivity" />
         <activity android:name=".activity.ViewStubTestActivity"></activity>
     </application>
