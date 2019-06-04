@@ -18,6 +18,7 @@
     <string name="av_dev_stop_play">停止</string>
     <string name="record">AudioRecord</string>
     <string name="camera">Camera</string>
+    <string name="opengl">OpenGL</string>
 
     <string name="picture">Picture</string>
     <string name="description_info">Info</string>

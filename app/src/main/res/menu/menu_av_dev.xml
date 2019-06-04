@@ -12,6 +12,11 @@
         android:orderInCategory="2"
         android:title="@string/camera"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/opengl"
+        android:orderInCategory="3"
+        android:title="@string/opengl"
+        app:showAsAction="never" />
 
 </menu>
 

@@ -26,7 +26,19 @@ class AudioVideoDevActivity : BaseActivity() {
                 ft.commit()
             }
             R.id.camera -> {
+                if (supportFragmentManager.fragments[0] is CameraFragment) {
+                    return super.onOptionsItemSelected(item)
+                }
                 val fragment = CameraFragment()
+                val ft = supportFragmentManager.beginTransaction()
+                ft.replace(R.id.av_dev_container, fragment)
+                ft.commit()
+            }
+            R.id.opengl -> {
+                if (supportFragmentManager.fragments[0] is OpenGLFragment) {
+                    return super.onOptionsItemSelected(item)
+                }
+                val fragment = OpenGLFragment()
                 val ft = supportFragmentManager.beginTransaction()
                 ft.replace(R.id.av_dev_container, fragment)
                 ft.commit()

@@ -10,6 +10,7 @@ import android.graphics.*
 import android.hardware.Camera
 import android.hardware.camera2.*
 import android.media.ImageReader
+import android.media.MediaCodec
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
