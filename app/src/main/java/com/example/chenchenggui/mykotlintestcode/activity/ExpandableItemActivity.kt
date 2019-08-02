@@ -11,6 +11,7 @@ import com.example.chenchenggui.mykotlintestcode.expandableitem.ExpandableItemAd
 import com.example.chenchenggui.mykotlintestcode.expandableitem.Level0Item
 import com.example.chenchenggui.mykotlintestcode.expandableitem.Level1Item
 import kotlinx.android.synthetic.main.activity_expandable_item.*
+import java.util.*
 
 class ExpandableItemActivity : BaseActivity() {
     override fun getLayoutId() = R.layout.activity_expandable_item
