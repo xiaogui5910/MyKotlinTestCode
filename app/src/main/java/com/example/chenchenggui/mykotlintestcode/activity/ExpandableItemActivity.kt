@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.MenuItem
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.example.chenchenggui.mykotlintestcode.R
-import com.example.chenchenggui.mykotlintestcode.R.id.tb_expand
 import com.example.chenchenggui.mykotlintestcode.expandableitem.ExpandableItemAdapter
 import com.example.chenchenggui.mykotlintestcode.expandableitem.Level0Item
 import com.example.chenchenggui.mykotlintestcode.expandableitem.Level1Item
