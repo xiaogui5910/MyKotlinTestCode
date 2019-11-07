@@ -1,6 +1,8 @@
 package com.example.chenchenggui.mykotlintestcode.activity
 
 import android.animation.Animator
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.os.Build
 import android.os.Bundle
@@ -15,6 +17,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation
 import android.view.animation.BounceInterpolator
 import android.widget.Button
 import android.widget.TextView
@@ -34,6 +38,7 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var tvCount: TextView
     private lateinit var tbRedPacket: Toolbar
     private var countDownTimer: CountDownTimer? = null
+    private var countDownbgTimer: CountDownTimer? = null
     /**
      * 为了模仿网络卡顿，来迟了~~
      */
@@ -60,6 +65,8 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
         start.setOnClickListener(this)
         stop.setOnClickListener(this)
         rl_red_packet_entrance.setOnClickListener(this)
+        iv_rain_close.setOnClickListener(this)
+        iv_count_down_close.setOnClickListener(this)
 
         setSupportActionBar(tbRedPacket)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -169,18 +176,20 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun showCountDownBoard() {
         fl_count_down_bg.visibility = View.VISIBLE
-        val countDownbgTimer = object : CountDownTimer(4 * 1000, 1000) {
+        countDownbgTimer = object : CountDownTimer(4 * 1000, 1000) {
             override fun onFinish() {
                 fl_count_down_bg.visibility = View.GONE
                 ll_time.visibility = View.VISIBLE
 
                 tvCount.text = "5"
                 startRedRain1()
+                updateUiWithStartRain()
                 countDownTimer = object : CountDownTimer(6 * 1000, 1000) {
                     override fun onFinish() {
                         tvCount.text = "5"
                         ll_time.visibility = View.GONE
                         stopRedRain()
+                        updateUiWithStopRain()
                     }
 
                     override fun onTick(millisUntilFinished: Long) {
@@ -192,17 +201,69 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
             override fun onTick(millisUntilFinished: Long) {
                 val count = millisUntilFinished / 1000
-                val idRes = when (count.toInt()) {
-                    3 -> R.drawable.rain_num_3
-                    2 -> R.drawable.rain_num_2
-                    1 -> R.drawable.rain_num_1
-                    0 -> R.drawable.rain_num_0
-                    else -> R.drawable.rain_num_3
+                when (count.toInt()) {
+                    3,2,1,0 -> {
+                        showCountDown(count.toInt())
+                    }
+                    else -> {
+                        iv_count_down.visibility = View.VISIBLE
+                        iv_count_down.setImageResource(R.drawable.rain_num_3)
+                    }
                 }
-                iv_count_down.setImageResource(idRes)
             }
 
         }.start()
+    }
+    private fun showCountDown(repeatCount:Int) {
+        iv_anim_countdown.visibility = View.VISIBLE
+        iv_count_down.visibility = View.VISIBLE
+        when (repeatCount) {
+            3 -> {
+                iv_anim_countdown.setImageResource(R.drawable.rain_num_3)
+                iv_count_down.setImageResource(R.drawable.rain_num_3)
+            }
+            2 -> {
+                iv_anim_countdown.setImageResource(R.drawable.rain_num_2)
+                iv_count_down.setImageResource(R.drawable.rain_num_2)
+            }
+            1 -> {
+                iv_anim_countdown.setImageResource(R.drawable.rain_num_1)
+                iv_count_down.setImageResource(R.drawable.rain_num_1)
+            }
+            0 -> {
+                iv_anim_countdown.setImageResource(R.drawable.rain_num_0)
+                iv_count_down.setImageResource(R.drawable.rain_num_0)
+            }
+            -1 -> {
+                iv_anim_countdown.setImageResource(R.drawable.rain_num_3)
+                iv_count_down.setImageResource(R.drawable.rain_num_3)
+                iv_anim_countdown.visibility = View.GONE
+                iv_count_down.visibility = View.GONE
+            }
+        }
+
+        val animSet = AnimatorSet()
+        val scaleX = ObjectAnimator.ofFloat(iv_anim_countdown, "scaleX", 1f, 2.5f)
+        val scaleY = ObjectAnimator.ofFloat(iv_anim_countdown, "scaleY", 1f, 2.5f)
+        val alpha = ObjectAnimator.ofFloat(iv_anim_countdown, "alpha", 1f, 0.15f)
+        scaleX.repeatCount = 5
+        scaleY.repeatCount = 5
+        alpha.repeatCount = 5
+        animSet.duration = 1000
+//        scaleX.interpolator = AccelerateInterpolator(5f)
+//        scaleY.interpolator = AccelerateInterpolator(5f)
+//        alpha.interpolator = AccelerateInterpolator(5f)
+        animSet.play(scaleX).with(scaleY).with(alpha)
+        animSet.start()
+    }
+
+    private fun updateUiWithStartRain() {
+        iv_rain_bg.visibility = View.VISIBLE
+        iv_rain_close.visibility =View.VISIBLE
+    }
+    private fun updateUiWithStopRain(){
+        iv_rain_bg.visibility = View.GONE
+        iv_rain_close.visibility =View.GONE
     }
 
     override fun onClick(v: View?) {
@@ -226,6 +287,18 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
                 clearAnim()
                 clickCount++
             }
+            //红包雨进行时关闭
+            R.id.iv_rain_close->{
+                redRainView1.stopRainNow()
+                countDownTimer?.cancel()
+                ll_time.visibility = View.GONE
+                updateUiWithStopRain()
+            }
+            //倒计时开始时关闭
+            R.id.iv_count_down_close->{
+                countDownbgTimer?.cancel()
+                fl_count_down_bg.visibility = View.GONE
+            }
         }
     }
 
@@ -247,6 +320,7 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
                 redRainView1.stopRainNow()
                 countDownTimer?.cancel()
                 ll_time.visibility = View.GONE
+                updateUiWithStopRain()
 
                 val dialog = RedPacketDialog()
                 dialog.setOnDialogPositiveListener {
