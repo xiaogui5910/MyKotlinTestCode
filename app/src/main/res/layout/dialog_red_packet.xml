@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_gravity="center"
-            android:text="企鹅体育红包抢不停"
+            android:text="红包抢不停"
             android:textColor="#FFE2B1"
             android:textSize="24sp" />
 
@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="企鹅体育的红包"
+                android:text="我的红包"
                 android:textColor="#FFE2B1"
                 android:textSize="14sp" />
 
