@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
+import android.os.CountDownTimer
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -19,6 +21,10 @@ import java.util.*
  * creation date: 2018/11/27
  */
 class RedPacketView : View {
+    private var countDownTimer: CountDownTimer?=null
+    private var scale2PointDownTimer: CountDownTimer?=null
+    private var scale2AlphaDownTimer: CountDownTimer?=null
+    private var scale2Point1DownTimer: CountDownTimer?=null
     private var mImgIds = intArrayOf(R.drawable.img_rain_red_packet1, R.drawable
             .img_rain_red_packet2, R.drawable.img_rain_red_packet3,
             R.drawable.img_rain_red_packet4)//红包图片
@@ -33,7 +39,13 @@ class RedPacketView : View {
     private var prevTime: Long = 0L
     private val redPacketList = ArrayList<RedPacket>()//红包数组
     private var redMatrix: Matrix? = null
+     var clickStyle: Int = CLICK_STYLE_DEFAULT_NO//点击响应样式
 
+    companion object{
+        const val CLICK_STYLE_DEFAULT_NO = 0
+        const val CLICK_STYLE_SCALE = 1
+        const val CLICK_STYLE_SCALE_ALPHA = 2
+    }
     private var onRedPacketClickListener: OnRedPacketClickListener? = null
 
     constructor(context: Context) : super(context) {
@@ -77,17 +89,29 @@ class RedPacketView : View {
                 val nowTime = System.currentTimeMillis()
                 val secs = (nowTime - prevTime).toFloat() / 1000f
                 prevTime = nowTime
+//                Log.e("xiaogui",secs.toString())
 
                 for (i in redPacketList.indices) {
                     val redPacket = redPacketList[i]
-                    //更新红包的下落的位置y
-                    redPacket.y += redPacket.speed * secs
+                    if (redPacket.clickAnimation ==RedPacket.ClickAnimation.SCALE){
+//                        redPacket.width+=1000*secs.toInt()
+//                        redPacket.height+=1000*secs.toInt()
+                        continue
+                    }else if (redPacket.clickAnimation ==RedPacket.ClickAnimation.SCALE_ALPHA){
+                        continue
+                    }else if (redPacket.clickAnimation ==RedPacket.ClickAnimation.DEFAULT){
+                        redPacket.resetWidthAndHeight()
 
-                    //如果y坐标大于view的高度 说明划出屏幕，重新设置y起始位置，以及中奖属性
-                    if (redPacket.y > height) {
-                        redPacket.y = (0 - (redPacket.height * (redPacket.index + 1))).toFloat()
-                        redPacket.isRealRed = redPacket.isRealRedPacket
+                        //更新红包的下落的位置y
+                        redPacket.y += redPacket.speed * secs
+
+                        //如果y坐标大于view的高度 说明划出屏幕，重新设置y起始位置，以及中奖属性
+                        if (redPacket.y > height) {
+                            redPacket.y = (0 - (redPacket.height * (redPacket.index + 1))).toFloat()
+                            redPacket.isRealRed = redPacket.isRealRedPacket
+                        }
                     }
+
                     //更新红包的旋转的角度
                     redPacket.rotation += redPacket.rotationSpeed * secs
                 }
@@ -113,6 +137,10 @@ class RedPacketView : View {
         invalidate()
         //动画取消
         animator?.cancel()
+        countDownTimer?.cancel()
+        scale2PointDownTimer?.cancel()
+        scale2Point1DownTimer?.cancel()
+        scale2AlphaDownTimer?.cancel()
     }
 
 
@@ -154,6 +182,10 @@ class RedPacketView : View {
      */
     fun pauseRain() {
         animator?.cancel()
+        countDownTimer?.cancel()
+        scale2PointDownTimer?.cancel()
+        scale2Point1DownTimer?.cancel()
+        scale2AlphaDownTimer?.cancel()
     }
 
     /**
@@ -211,6 +243,12 @@ class RedPacketView : View {
                     if (redPacket.isRedPacketStyle) {
 //                    it.postRotate(redPacket.rotation)
                     }
+                    when {
+                        redPacket.clickAnimation == RedPacket.ClickAnimation.SCALE -> it.postScale(1.2f, 1.2f)
+                        redPacket.clickAnimation == RedPacket.ClickAnimation.SCALE_POINT -> it.postScale(0.5f, 0.5f)
+                        redPacket.clickAnimation == RedPacket.ClickAnimation.SCALE_POINT1 -> it.postScale(0.1f, 0.1f)
+                        redPacket.clickAnimation == RedPacket.ClickAnimation.SCALE_POINT2 -> it.postScale(0.01f, 0.01f)
+                    }
                     it.postTranslate(redPacket.width / 2 + redPacket.x, redPacket.height / 2 +
                             redPacket.y)
                     //绘制红包
@@ -227,9 +265,12 @@ class RedPacketView : View {
                 //根据点击的坐标点，判断是否点击在红包的区域
                 val redPacket = isRedPacketClick(motionEvent.x, motionEvent.y)
                 if (redPacket != null) {
-                    if (redPacket.isRedPacketStyle) {
+                    if (redPacket.isRedPacketStyle&&redPacket.clickAnimation==RedPacket
+                                    .ClickAnimation.DEFAULT) {
+                        showClickAnim(redPacket)
+                        redPacket.clickAnimation = RedPacket.ClickAnimation.SCALE
                         //如果点击在红包上，重新设置起始位置，以及中奖属性
-                        redPacket.y = (0 - redPacket.height * (redPacket.index + 1)).toFloat()
+//                        redPacket.y = (0 - redPacket.height * (redPacket.index + 1)).toFloat()
                         redPacket.isRealRed = redPacket.isRealRedPacket
                         onRedPacketClickListener?.onRedPacketClickListener(redPacket)
                     }
@@ -241,6 +282,92 @@ class RedPacketView : View {
             }
         }
         return true
+    }
+
+    private fun showClickAnim(redPacket: RedPacket) {
+        val clickAnimDuration = 1 * 100L
+        countDownTimer = object : CountDownTimer(clickAnimDuration, 100) {
+            override fun onFinish() {
+                if (clickStyle== CLICK_STYLE_SCALE){
+                    scale2Point(redPacket,clickAnimDuration)
+                    redPacket.clickAnimation = RedPacket.ClickAnimation.SCALE_POINT
+                }else if (clickStyle == CLICK_STYLE_SCALE_ALPHA){
+//                    scale2Alpha(redPacket,clickAnimDuration)
+                    redPacket.clickAnimation = RedPacket.ClickAnimation.DEFAULT
+                    var initY = (0 - redPacket.height * (redPacket.index + 1)).toFloat()
+                    redPacket.y =initY+ redPacket.speed * clickAnimDuration
+                }
+
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+        }.start()
+    }
+
+    private fun scale2Alpha(redPacket: RedPacket, clickAnimDuration: Long) {
+        val scalePointDuration = 2*100L
+        val deltaDuration = clickAnimDuration+scalePointDuration
+        scale2AlphaDownTimer = object : CountDownTimer(scalePointDuration, 100) {
+            override fun onFinish() {
+                redPacket.clickAnimation = RedPacket.ClickAnimation.DEFAULT
+                var initY = (0 - redPacket.height * (redPacket.index + 1)).toFloat()
+                redPacket.y =initY+ redPacket.speed * deltaDuration
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+        }.start()
+    }
+
+
+    private fun scale2Point(redPacket: RedPacket, clickAnimDuration: Long) {
+        val scalePointDuration = 2*100L
+        val deltaDuration = clickAnimDuration+scalePointDuration
+        scale2PointDownTimer = object : CountDownTimer(scalePointDuration, 100) {
+            override fun onFinish() {
+                scale2Point1(redPacket,deltaDuration)
+                redPacket.clickAnimation = RedPacket.ClickAnimation.SCALE_POINT1
+//                var initY = (0 - redPacket.height * (redPacket.index + 1)).toFloat()
+//                redPacket.y =initY+ redPacket.speed * deltaDuration
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+        }.start()
+    }
+
+    private fun scale2Point1(redPacket: RedPacket, duration: Long) {
+        val scalePointDuration = 1*100L
+        val deltaDuration = duration+scalePointDuration
+        scale2Point1DownTimer = object : CountDownTimer(scalePointDuration, 100) {
+            override fun onFinish() {
+                scale2Point2(redPacket,deltaDuration)
+                redPacket.clickAnimation = RedPacket.ClickAnimation.SCALE_POINT2
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+        }.start()
+    }
+    private fun scale2Point2(redPacket: RedPacket, duration: Long) {
+        val scalePointDuration = 1*100L
+        val deltaDuration = duration+scalePointDuration
+        scale2Point1DownTimer = object : CountDownTimer(scalePointDuration, 100) {
+            override fun onFinish() {
+                redPacket.clickAnimation = RedPacket.ClickAnimation.DEFAULT
+                var initY = (0 - redPacket.height * (redPacket.index + 1)).toFloat()
+                redPacket.y =initY+ redPacket.speed * deltaDuration
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+        }.start()
     }
 
     //根据点击坐标点，遍历红包数组，看是否点击在红包上

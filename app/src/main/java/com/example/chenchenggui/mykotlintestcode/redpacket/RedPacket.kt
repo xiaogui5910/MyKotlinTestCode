@@ -2,7 +2,6 @@ package com.example.chenchenggui.mykotlintestcode.redpacket
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.util.Log
 import java.util.*
 
 /**
@@ -10,8 +9,8 @@ import java.util.*
  * author : chenchenggui
  * creation date: 2018/11/27
  */
-class RedPacket(context: Context, originalBitmap: Bitmap, speed: Int, maxSize: Float, minSize:
-Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
+class RedPacket(context: Context,var originalBitmap: Bitmap, speed: Int, var maxSize: Float,
+                var minSize:Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
     var x: Float = 0f
     var y: Float = 0f
     var rotation: Float = 0f
@@ -24,7 +23,16 @@ Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
     var isRealRed: Boolean = false
     var prizeName: String = ""
     var prizeType: PrizeType = PrizeType.EMPTY
+    var clickAnimation:ClickAnimation  =ClickAnimation.DEFAULT
+    var originalWidth = 0
+    var originalHeight = 0
 
+    /**
+     * 支持多个红包点击，点击红包消失动画效果
+     */
+    enum class ClickAnimation {
+        DEFAULT, SCALE, SCALE_POINT,SCALE_POINT1,SCALE_POINT2,SCALE_ALPHA
+    }
     enum class PrizeType {
         MONEY, COUPON, EMPTY
     }
@@ -42,10 +50,10 @@ Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
                 if (num % 2 == 0) {
                     if (num <= 5) {
                         prizeType = PrizeType.MONEY
-                        prizeName = "企鹅体育的红包"
+                        prizeName = "我的红包"
                     } else {
                         prizeType = PrizeType.COUPON
-                        prizeName = "沃尔玛的优惠券"
+                        prizeName = "你的优惠券"
                     }
                     money = num * 2
                     return true
@@ -66,9 +74,10 @@ Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
 //        Log.e("red_packet", "widthRandom=$widthRandom")
         //红包的宽度
         width = (originalBitmap.width * widthRandom).toInt()
+        originalWidth = width
         //红包的高度
         height = width * originalBitmap.height / originalBitmap.width
-//        Log.e("red_packet", "width=$width---height=$height")
+        originalHeight = height
         val mWidth = if (viewWidth == 0) context.resources.displayMetrics.widthPixels else viewWidth
         //生成红包bitmap
         bitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true)
@@ -91,6 +100,10 @@ Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
         //初始化是否为中奖红包
         isRealRed = isRealRedPacket
 //        Log.e("red_packet", "isRealRed=$isRealRed")
+    }
+    fun resetWidthAndHeight(){
+        width = originalWidth
+        height = originalHeight
     }
 
     /**
@@ -148,10 +161,10 @@ Float, viewWidth: Int, var isRedPacketStyle: Boolean, var index: Int) {
 //                if (num % 2 == 0) {
 //                    if (num<=5){
 //                        prizeType=PrizeType.MONEY
-//                        prizeName="企鹅体育的红包"
+//                        prizeName="我的红包"
 //                    }else{
 //                        prizeType=PrizeType.COUPON
-//                        prizeName="沃尔玛的优惠券"
+//                        prizeName="你的优惠券"
 //                    }
 //                    money = num * 2
 //                    return true

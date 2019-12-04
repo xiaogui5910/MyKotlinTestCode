@@ -182,7 +182,7 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
                 ll_time.visibility = View.VISIBLE
 
                 tvCount.text = "5"
-                startRedRain1()
+                startRedRain2()
                 updateUiWithStartRain()
                 countDownTimer = object : CountDownTimer(6 * 1000, 1000) {
                     override fun onFinish() {
@@ -312,30 +312,62 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun startRedRain1() {
-
+        redRainView1.clickStyle = RedPacketView.CLICK_STYLE_SCALE
         redRainView1.startRain()
 
         redRainView1.setOnRedPacketClickListener(object : RedPacketView.OnRedPacketClickListener {
             override fun onRedPacketClickListener(redPacket: RedPacket) {
-                redRainView1.stopRainNow()
-                countDownTimer?.cancel()
-                ll_time.visibility = View.GONE
-                updateUiWithStopRain()
+//                redRainView1.stopRainNow()
+//                countDownTimer?.cancel()
+//                ll_time.visibility = View.GONE
+//                updateUiWithStopRain()
+//
+//                val dialog = RedPacketDialog()
+//                dialog.setOnDialogPositiveListener {
+//                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
+//                    if (redPacket.isRealRed) {
+//                        dialog.openRedPacket(redPacket)
+//                        totalmoney += redPacket.money
+//                    } else {
+//                        dialog.openRedPacket(redPacket)
+//                    }
+//                }
+//
+//                redRainView1.post {
+//                    dialog.show(supportFragmentManager, "red_packet")
+//                }
+            }
+        })
+    }
 
-                val dialog = RedPacketDialog()
-                dialog.setOnDialogPositiveListener {
-                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
-                    if (redPacket.isRealRed) {
-                        dialog.openRedPacket(redPacket)
-                        totalmoney += redPacket.money
-                    } else {
-                        dialog.openRedPacket(redPacket)
-                    }
-                }
+    /**
+     * 点击放大，渐变消失
+     */
+    private fun startRedRain2() {
+        redRainView1.clickStyle = RedPacketView.CLICK_STYLE_SCALE_ALPHA
+        redRainView1.startRain()
 
-                redRainView1.post {
-                    dialog.show(supportFragmentManager, "red_packet")
-                }
+        redRainView1.setOnRedPacketClickListener(object : RedPacketView.OnRedPacketClickListener {
+            override fun onRedPacketClickListener(redPacket: RedPacket) {
+//                redRainView1.stopRainNow()
+//                countDownTimer?.cancel()
+//                ll_time.visibility = View.GONE
+//                updateUiWithStopRain()
+//
+//                val dialog = RedPacketDialog()
+//                dialog.setOnDialogPositiveListener {
+//                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
+//                    if (redPacket.isRealRed) {
+//                        dialog.openRedPacket(redPacket)
+//                        totalmoney += redPacket.money
+//                    } else {
+//                        dialog.openRedPacket(redPacket)
+//                    }
+//                }
+//
+//                redRainView1.post {
+//                    dialog.show(supportFragmentManager, "red_packet")
+//                }
             }
         })
     }
