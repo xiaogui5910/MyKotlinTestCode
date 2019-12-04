@@ -41,10 +41,10 @@ Float, viewWidth: Int, var isRedPacketStyle: Boolean) {
                 if (num % 2 == 0) {
                     if (num<=5){
                         prizeType=PrizeType.MONEY
-                        prizeName="企鹅体育的红包"
+                        prizeName="我的红包"
                     }else{
                         prizeType=PrizeType.COUPON
-                        prizeName="沃尔玛的优惠券"
+                        prizeName="你的优惠券"
                     }
                     money = num * 2
                     return true
