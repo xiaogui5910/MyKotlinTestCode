@@ -8,12 +8,22 @@ import android.graphics.Matrix
 import android.graphics.Paint
 import android.os.CountDownTimer
 import android.util.AttributeSet
-import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import com.example.chenchenggui.mykotlintestcode.R
 import java.util.*
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.util.Log
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.Request
+import com.bumptech.glide.request.animation.GlideAnimation
+import com.bumptech.glide.request.target.SimpleTarget
+import com.example.chenchenggui.mykotlintestcode.R
+import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketView.Companion.CLICK_STYLE_SCALE
+import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketView.Companion.CLICK_STYLE_SCALE_ALPHA
+import java.lang.Exception
+
 
 /**
  * description ：
@@ -26,8 +36,8 @@ class RedPacketView : View {
     private var scale2AlphaDownTimer: CountDownTimer?=null
     private var scale2Point1DownTimer: CountDownTimer?=null
     private var mImgIds = intArrayOf(R.drawable.img_rain_red_packet1, R.drawable
-            .img_rain_red_packet2, R.drawable.img_rain_red_packet3,
-            R.drawable.img_rain_red_packet4)//红包图片
+            .img_rain_red_packet1,R.drawable.img_rain_red_packet1,
+           R.drawable.img_rain_red_packet1)//红包图片
     private var count: Int = 0//红包数量
     private var speed: Int = 0//下落速度
     private var maxSize: Float = 0f//红包大小的范围
@@ -53,11 +63,11 @@ class RedPacketView : View {
     }
 
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {
-        val typedArray = context.obtainStyledAttributes(attrs, R.styleable.RedPacketView)
-        count = typedArray.getInt(R.styleable.RedPacketView_count, 20)
-        speed = typedArray.getInt(R.styleable.RedPacketView_speed, 500)
-        minSize = typedArray.getFloat(R.styleable.RedPacketView_min_size, 0.5f)
-        maxSize = typedArray.getFloat(R.styleable.RedPacketView_max_size, 1.2f)
+        val typedArray = context.obtainStyledAttributes(attrs, com.example.chenchenggui.mykotlintestcode.R.styleable.RedPacketView)
+        count = typedArray.getInt(com.example.chenchenggui.mykotlintestcode.R.styleable.RedPacketView_count, 20)
+        speed = typedArray.getInt(com.example.chenchenggui.mykotlintestcode.R.styleable.RedPacketView_speed, 500)
+        minSize = typedArray.getFloat(com.example.chenchenggui.mykotlintestcode.R.styleable.RedPacketView_min_size, 0.5f)
+        maxSize = typedArray.getFloat(com.example.chenchenggui.mykotlintestcode.R.styleable.RedPacketView_max_size, 1.2f)
         typedArray.recycle()
         init()
     }
@@ -89,7 +99,6 @@ class RedPacketView : View {
                 val nowTime = System.currentTimeMillis()
                 val secs = (nowTime - prevTime).toFloat() / 1000f
                 prevTime = nowTime
-//                Log.e("xiaogui",secs.toString())
 
                 for (i in redPacketList.indices) {
                     val redPacket = redPacketList[i]
@@ -161,20 +170,49 @@ class RedPacketView : View {
     fun setRedPacketCount(count: Int) {
         if (mImgIds.isEmpty())
             return
-        for (i in 0 until count) {
+
             //获取红包原始图片
 //            val randomIndex: Int = when {
 //                i % 7 == 1 -> Random().nextInt(mImgIds.size - 1) + 1
 //                else -> 0
 //            }
-            val randomIndex = Random().nextInt(mImgIds.size)
-            val originalBitmap = BitmapFactory.decodeResource(resources, mImgIds[randomIndex])
-            //生成红包实体类
-            val redPacket = RedPacket(context, originalBitmap, speed, maxSize, minSize, mWidth,
-                    true, i)
-            //添加进入红包数组
-            redPacketList.add(redPacket)
-        }
+            val url = "https://upstatic.qiecdn.com/upload/team_logo/9b2270787117caedaa472bc0b817759b.png"
+//            val bitmap = Glide.with(context)
+//                    .load(url)
+//                    .asBitmap()
+//                    .into(width, height)
+//                    .get()
+
+            Glide.with(context)
+                    .load(url)
+                    .asBitmap()
+                    .into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap?, glideAnimation: GlideAnimation<in Bitmap>?) {
+                            var originalBitmap = if (resource!=null){
+                                resource
+                            }else{
+                                val randomIndex = Random().nextInt(mImgIds.size)
+                                BitmapFactory.decodeResource(resources, mImgIds[randomIndex])
+                            }
+                            if (originalBitmap!=null){
+                                for (i in 0 until count) {
+                                    //生成红包实体类
+                                    val redPacket = RedPacket(context, originalBitmap, speed,
+                                            maxSize, minSize, mWidth,
+                                            true, i)
+                                    //添加进入红包数组
+                                    redPacketList.add(redPacket)
+                                }
+                            }
+                        }
+
+                        override fun onLoadFailed(e: Exception?, errorDrawable: Drawable?) {
+                            super.onLoadFailed(e, errorDrawable)
+                            Log.e("RedPacketView","onLoadFailed${e?.printStackTrace()}")
+                        }
+
+                    })
+
     }
 
     /**

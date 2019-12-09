@@ -81,7 +81,7 @@ class RedPacket(context: Context,var originalBitmap: Bitmap, speed: Int, var max
         val mWidth = if (viewWidth == 0) context.resources.displayMetrics.widthPixels else viewWidth
         //生成红包bitmap
         bitmap = Bitmap.createScaledBitmap(originalBitmap, width, height, true)
-        originalBitmap.recycle()
+//        originalBitmap.recycle()
         val random = Random()
         //红包起始位置x:[0,mWidth-width]
         val rx = random.nextInt(mWidth - 100) + 100 - width
