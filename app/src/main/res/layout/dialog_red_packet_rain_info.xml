@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_red_packet_rain_info"
+    android:layout_width="305dp"
+    android:layout_height="460dp">
+    <!--背景-->
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/img_red_packet_dialog_bg" />
+
+    <!--关闭-->
+    <ImageView
+        android:id="@+id/iv_red_packet_info_close"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/icon_red_packet_dialog_close" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="15dp">
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tv_countdown_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="103dp"
+            android:text="距红包雨开始还有"
+            android:textColor="@android:color/white"
+            android:textSize="17sp" />
+
+        <!--倒计时-->
+        <LinearLayout
+            android:id="@+id/ll_count_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_countdown_tips"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15.5dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/shape_info_count_down_bg"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@android:color/white"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_info_count_down_bg"
+                android:gravity="center"
+                android:text="2"
+                android:textColor="@android:color/white"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="28dp"
+                android:layout_height="32dp"
+                android:gravity="center"
+                android:text=":"
+                android:textColor="@android:color/white"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/shape_info_count_down_bg"
+                android:gravity="center"
+                android:text="4"
+                android:textColor="@android:color/white"
+                android:textSize="23sp" />
+
+            <TextView
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/shape_info_count_down_bg"
+                android:gravity="center"
+                android:text="8"
+                android:textColor="@android:color/white"
+                android:textSize="23sp" />
+        </LinearLayout>
+        <!--当前红包雨轮数-->
+        <LinearLayout
+            android:id="@+id/ll_current_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_count_down"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="当前第"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:text="1"
+                android:textColor="#FFA518"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="轮 , 红包奖品:"
+                android:textColor="@android:color/white"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!--本场总轮数-->
+        <LinearLayout
+            android:id="@+id/ll_total_round"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_current_round"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="本场直播共有"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="6"
+                android:textColor="#FFA518"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="轮红包雨"
+                android:textColor="@android:color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!--本轮奖品展示-->
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_show_prize"
+            android:layout_width="wrap_content"
+            android:layout_height="82.5dp"
+            android:layout_below="@+id/ll_total_round"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="24dp" />
+
+        <TextView
+            android:id="@+id/tv_prize_tips"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rv_show_prize"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:text="第六轮为超级红包雨，666元现金红包等你来！"
+            android:textColor="#FFCF16"
+            android:textSize="11sp" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -11,20 +11,20 @@ import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewTreeObserver
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.Animation
+import android.view.*
 import android.view.animation.BounceInterpolator
 import android.widget.Button
+import android.widget.RelativeLayout
 import android.widget.TextView
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.BaseViewHolder
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacket
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketDialog
+import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketRainInfoDialog
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketView
 import kotlinx.android.synthetic.main.activity_red_packet.*
 
@@ -67,11 +67,55 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
         rl_red_packet_entrance.setOnClickListener(this)
         iv_rain_close.setOnClickListener(this)
         iv_count_down_close.setOnClickListener(this)
+        fl_red_packet_info_entrance.setOnClickListener(this)
+
+        fl_red_packet_info_entrance.setOnLongClickListener {
+            rl_red_packet_rain.visibility = View.GONE
+            rl_red_packet_info_container_half.visibility =View.VISIBLE
+            true
+        }
+        iv_red_packet_info_half_close.setOnClickListener(this)
 
         setSupportActionBar(tbRedPacket)
         supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "红包雨"
+
+        initRedPacketInfoHalfView()
+    }
+
+    private val prizeList: ArrayList<String> = ArrayList()
+    private fun initRedPacketInfoHalfView() {
+        rv_show_prize.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
+                false)
+        prizeList.add("礼物道具")
+        prizeList.add("礼物道具")
+        prizeList.add("礼物道具")
+        prizeList.add("礼物道具")
+        prizeList.add("礼物道具")
+        val prizeAdapter = PrizeHalfAdapter(R.layout.item_red_packet_info_prize_half, prizeList)
+        rv_show_prize.adapter = prizeAdapter
+
+        val layoutParams = rv_show_prize.layoutParams as RelativeLayout.LayoutParams
+        if (prizeList.size<=4){
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+        }else{
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
+        }
+        rv_show_prize.layoutParams = layoutParams
+    }
+
+    class PrizeHalfAdapter(layoutResId: Int, data: List<String>) : BaseQuickAdapter<String,
+            BaseViewHolder>(layoutResId, data) {
+        override fun convert(helper: BaseViewHolder?, item: String?) {
+            val layoutParams = helper?.itemView?.layoutParams as ViewGroup.MarginLayoutParams?
+            val density = helper?.itemView?.context?.resources?.displayMetrics?.density
+            val leftMargin = 10 * density!!.toInt()
+            layoutParams?.leftMargin = if (helper?.adapterPosition != 0) leftMargin else 0
+            helper?.itemView?.layoutParams = layoutParams
+            helper?.setText(R.id.tv_red_packet_info_prize, item)
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -82,18 +126,26 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             android.R.id.home -> finish()
+            //效果演示
             R.id.show -> {
                 start.visibility = View.VISIBLE
                 stop.visibility = View.VISIBLE
                 money.visibility = View.VISIBLE
+                rl_red_packet_rain.visibility = View.VISIBLE
+                rl_red_packet_info_container.visibility = View.GONE
+                rl_red_packet_info_container_half.visibility =View.GONE
 
                 ll_time.visibility = View.GONE
                 rl_red_packet_entrance.visibility = View.GONE
             }
+            //项目演示
             R.id.project -> {
                 start.visibility = View.GONE
                 stop.visibility = View.GONE
                 money.visibility = View.GONE
+                rl_red_packet_rain.visibility = View.VISIBLE
+                rl_red_packet_info_container.visibility = View.GONE
+                rl_red_packet_info_container_half.visibility =View.GONE
 
                 rl_red_packet_entrance.visibility = View.VISIBLE
                 rl_red_packet_entrance.viewTreeObserver.addOnGlobalLayoutListener(object
@@ -123,6 +175,13 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
                                 start()
                             }
                 }
+
+            }
+            //红包信息入口
+            R.id.info_entrance -> {
+                rl_red_packet_rain.visibility = View.GONE
+                rl_red_packet_info_container_half.visibility =View.GONE
+                rl_red_packet_info_container.visibility = View.VISIBLE
 
             }
         }
@@ -202,7 +261,7 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
             override fun onTick(millisUntilFinished: Long) {
                 val count = millisUntilFinished / 1000
                 when (count.toInt()) {
-                    3,2,1,0 -> {
+                    3, 2, 1, 0 -> {
                         showCountDown(count.toInt())
                     }
                     else -> {
@@ -214,7 +273,8 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
         }.start()
     }
-    private fun showCountDown(repeatCount:Int) {
+
+    private fun showCountDown(repeatCount: Int) {
         iv_anim_countdown.visibility = View.VISIBLE
         iv_count_down.visibility = View.VISIBLE
         when (repeatCount) {
@@ -259,11 +319,12 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
     private fun updateUiWithStartRain() {
         iv_rain_bg.visibility = View.VISIBLE
-        iv_rain_close.visibility =View.VISIBLE
+        iv_rain_close.visibility = View.VISIBLE
     }
-    private fun updateUiWithStopRain(){
+
+    private fun updateUiWithStopRain() {
         iv_rain_bg.visibility = View.GONE
-        iv_rain_close.visibility =View.GONE
+        iv_rain_close.visibility = View.GONE
     }
 
     override fun onClick(v: View?) {
@@ -288,16 +349,22 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
                 clickCount++
             }
             //红包雨进行时关闭
-            R.id.iv_rain_close->{
+            R.id.iv_rain_close -> {
                 redRainView1.stopRainNow()
                 countDownTimer?.cancel()
                 ll_time.visibility = View.GONE
                 updateUiWithStopRain()
             }
             //倒计时开始时关闭
-            R.id.iv_count_down_close->{
+            R.id.iv_count_down_close -> {
                 countDownbgTimer?.cancel()
                 fl_count_down_bg.visibility = View.GONE
+            }
+            R.id.fl_red_packet_info_entrance->{
+                RedPacketRainInfoDialog().show(supportFragmentManager,"RedPacketRainInfoDialog")
+            }
+            R.id.iv_red_packet_info_half_close->{
+                rl_red_packet_info_container_half.visibility =View.GONE
             }
         }
     }
@@ -317,25 +384,25 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
         redRainView1.setOnRedPacketClickListener(object : RedPacketView.OnRedPacketClickListener {
             override fun onRedPacketClickListener(redPacket: RedPacket) {
-//                redRainView1.stopRainNow()
-//                countDownTimer?.cancel()
-//                ll_time.visibility = View.GONE
-//                updateUiWithStopRain()
-//
-//                val dialog = RedPacketDialog()
-//                dialog.setOnDialogPositiveListener {
-//                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
-//                    if (redPacket.isRealRed) {
-//                        dialog.openRedPacket(redPacket)
-//                        totalmoney += redPacket.money
-//                    } else {
-//                        dialog.openRedPacket(redPacket)
-//                    }
-//                }
-//
-//                redRainView1.post {
-//                    dialog.show(supportFragmentManager, "red_packet")
-//                }
+                redRainView1.stopRainNow()
+                countDownTimer?.cancel()
+                ll_time.visibility = View.GONE
+                updateUiWithStopRain()
+
+                val dialog = RedPacketDialog()
+                dialog.setOnDialogPositiveListener {
+                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
+                    if (redPacket.isRealRed) {
+                        dialog.openRedPacket(redPacket)
+                        totalmoney += redPacket.money
+                    } else {
+                        dialog.openRedPacket(redPacket)
+                    }
+                }
+
+                redRainView1.post {
+                    dialog.show(supportFragmentManager, "red_packet")
+                }
             }
         })
     }

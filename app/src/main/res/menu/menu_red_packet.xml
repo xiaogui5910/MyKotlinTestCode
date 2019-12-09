@@ -12,5 +12,10 @@
         android:orderInCategory="4"
         android:title="@string/red_packet_project"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/info_entrance"
+        android:orderInCategory="4"
+        android:title="@string/red_packet_info_entrance"
+        app:showAsAction="never" />
 </menu>
 

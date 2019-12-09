@@ -9,6 +9,7 @@
     <string name="section_item">SectionItem</string>
     <string name="red_packet_show">演示效果</string>
     <string name="red_packet_project">项目效果</string>
+    <string name="red_packet_info_entrance">红包信息入口</string>
     <string name="av_dev_start_record">开始录音</string>
     <string name="av_dev_stop_record">结束录音</string>
     <string name="av_dev_convert">转换</string>
