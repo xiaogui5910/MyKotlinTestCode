@@ -27,6 +27,8 @@ import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketDialog
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketRainInfoDialog
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketView
 import kotlinx.android.synthetic.main.activity_red_packet.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
     private lateinit var redRainView1: RedPacketView
@@ -82,6 +84,7 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
         supportActionBar?.title = "红包雨"
 
         initRedPacketInfoHalfView()
+        initInfoCountDownTimer()
     }
 
     private val prizeList: ArrayList<String> = ArrayList()
@@ -384,25 +387,25 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
         redRainView1.setOnRedPacketClickListener(object : RedPacketView.OnRedPacketClickListener {
             override fun onRedPacketClickListener(redPacket: RedPacket) {
-                redRainView1.stopRainNow()
-                countDownTimer?.cancel()
-                ll_time.visibility = View.GONE
-                updateUiWithStopRain()
-
-                val dialog = RedPacketDialog()
-                dialog.setOnDialogPositiveListener {
-                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
-                    if (redPacket.isRealRed) {
-                        dialog.openRedPacket(redPacket)
-                        totalmoney += redPacket.money
-                    } else {
-                        dialog.openRedPacket(redPacket)
-                    }
-                }
-
-                redRainView1.post {
-                    dialog.show(supportFragmentManager, "red_packet")
-                }
+//                redRainView1.stopRainNow()
+//                countDownTimer?.cancel()
+//                ll_time.visibility = View.GONE
+//                updateUiWithStopRain()
+//
+//                val dialog = RedPacketDialog()
+//                dialog.setOnDialogPositiveListener {
+//                    Log.e("red_pack", "activity-isRealRed=${redPacket.isRealRed}")
+//                    if (redPacket.isRealRed) {
+//                        dialog.openRedPacket(redPacket)
+//                        totalmoney += redPacket.money
+//                    } else {
+//                        dialog.openRedPacket(redPacket)
+//                    }
+//                }
+//
+//                redRainView1.post {
+//                    dialog.show(supportFragmentManager, "red_packet")
+//                }
             }
         })
     }
@@ -499,5 +502,74 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
         override fun onAnimationStart(animation: Animator?) {
         }
 
+    }
+
+    private var infoCountDownTimer: CountDownTimer? = null
+    /**
+     * 倒计时
+     */
+    private fun initInfoCountDownTimer() {
+        infoCountDownTimer = object : CountDownTimer(10 * 60 * 1000L, 1000L) {
+            override fun onFinish() {
+                updateShowTime(0)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                updateShowTime(millisUntilFinished)
+            }
+
+        }
+        infoCountDownTimer?.start()
+    }
+
+    private fun updateShowTime(millisUntilFinished: Long) {
+        resetTime(millisUntilFinished)
+    }
+    companion object {
+        private const val HOUR = 1000 * 60 * 60
+        private const val MIN = 1000 * 60
+        private const val SEC = 1000
+    }
+
+    private fun resetTime(ms: Long) {
+        if (ms < 0) {
+            setTimes(0, 0, 0, 0)
+            setEntranceTimes(0,0)
+            return
+        }
+
+        val hour: Int = (ms / HOUR).toInt()
+        val min: Int = ((ms % HOUR) / MIN).toInt()
+        val sec:Int = ((ms% MIN)/SEC).toInt()
+
+        val minDecade = min / 10
+        val minUnit = min - minDecade * 10
+
+        val secDecade = sec / 10
+        val secUnit = sec - secDecade * 10
+
+        setTimes( minDecade, minUnit,secDecade,secUnit)
+        setEntranceTimes(min,sec)
+    }
+
+    private fun setEntranceTimes( min: Int,sec: Int) {
+        val locale = Locale.getDefault()
+        val format = "%02d"
+        val formattedMin = String.format(locale, format, min)
+        val formattedSec = String.format(locale, format, sec)
+        tv_info_entrance_min.text = formattedMin
+        tv_info_entrance_sec.text = formattedSec
+    }
+
+    private fun setTimes(minDecade: Int, minUnit: Int, secDecade: Int, secUnit: Int) {
+        tv_info_halt_min_decade.text = minDecade.toString()
+        tv_info_halt_min_unit.text = minUnit.toString()
+        tv_info_halt_sec_decade.text = secDecade.toString()
+        tv_info_halt_sec_unit.text = secUnit.toString()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        infoCountDownTimer?.cancel()
     }
 }

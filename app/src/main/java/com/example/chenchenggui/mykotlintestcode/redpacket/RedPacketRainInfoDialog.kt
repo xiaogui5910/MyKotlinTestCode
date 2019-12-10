@@ -3,10 +3,10 @@ package com.example.chenchenggui.mykotlintestcode.redpacket
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.support.v4.app.DialogFragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +15,6 @@ import android.widget.*
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.example.chenchenggui.mykotlintestcode.R
-import kotlinx.android.synthetic.main.dialog_red_packet_rain_info.*
 
 /**
  * description ：
@@ -25,6 +24,10 @@ import kotlinx.android.synthetic.main.dialog_red_packet_rain_info.*
 class RedPacketRainInfoDialog : DialogFragment() {
     private lateinit var rvShowPrize: RecyclerView
     private lateinit var ivClose: ImageView
+    private lateinit var tvMinDecade: TextView
+    private lateinit var tvMinUnit: TextView
+    private lateinit var tvSecDecade: TextView
+    private lateinit var tvSecUnit: TextView
     private val prizeList: ArrayList<String> = ArrayList()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -35,11 +38,80 @@ class RedPacketRainInfoDialog : DialogFragment() {
         val rootView = LayoutInflater.from(context).inflate(R.layout.dialog_red_packet_rain_info, null)
         rvShowPrize = rootView.findViewById(R.id.rv_show_prize)
         ivClose = rootView.findViewById(R.id.iv_red_packet_info_close)
+
+        tvMinDecade = rootView.findViewById(R.id.tv_info_min_decade)
+        tvMinUnit = rootView.findViewById(R.id.tv_info_min_unit)
+        tvSecDecade = rootView.findViewById(R.id.tv_info_sec_decade)
+        tvSecUnit = rootView.findViewById(R.id.tv_info_sec_unit)
+
         ivClose.setOnClickListener { dismiss() }
         initPrize()
+        initCountDownTimer()
         return rootView
     }
 
+    private var countDownTimer: CountDownTimer? = null
+    /**
+     * 倒计时
+     */
+    private fun initCountDownTimer() {
+        countDownTimer = object : CountDownTimer(10 * 60 * 1000L, 1000L) {
+            override fun onFinish() {
+                updateShowTime(0)
+            }
+
+            override fun onTick(millisUntilFinished: Long) {
+                updateShowTime(millisUntilFinished)
+            }
+
+        }
+        countDownTimer?.start()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer?.cancel()
+    }
+
+    private fun updateShowTime(millisUntilFinished: Long) {
+        resetTime(millisUntilFinished)
+    }
+
+    companion object {
+        private const val HOUR = 1000 * 60 * 60
+        private const val MIN = 1000 * 60
+        private const val SEC = 1000
+    }
+
+    private fun resetTime(ms: Long) {
+        if (ms < 0) {
+            setTimes(0, 0, 0, 0)
+            return
+        }
+
+        val hour: Int = (ms / HOUR).toInt()
+        val min: Int = ((ms % HOUR) / MIN).toInt()
+        val sec:Int = ((ms% MIN)/SEC).toInt()
+
+        val minDecade = min / 10
+        val minUnit = min - minDecade * 10
+
+        val secDecade = sec / 10
+        val secUnit = sec - secDecade * 10
+
+        setTimes( minDecade, minUnit,secDecade,secUnit)
+    }
+
+    private fun setTimes(minDecade: Int, minUnit: Int, secDecade: Int, secUnit: Int) {
+        tvMinDecade.text = minDecade.toString()
+        tvMinUnit.text = minUnit.toString()
+        tvSecDecade.text = secDecade.toString()
+        tvSecUnit.text = secUnit.toString()
+    }
+
+    /**
+     * 奖品列表
+     */
     private fun initPrize() {
         rvShowPrize.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         prizeList.add("礼物道具")
@@ -50,9 +122,9 @@ class RedPacketRainInfoDialog : DialogFragment() {
         rvShowPrize.adapter = prizeAdapter
 
         val layoutParams = rvShowPrize.layoutParams as RelativeLayout.LayoutParams
-        if (prizeList.size<=3){
+        if (prizeList.size <= 3) {
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
-        }else{
+        } else {
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT)
         }
         rvShowPrize.layoutParams = layoutParams
