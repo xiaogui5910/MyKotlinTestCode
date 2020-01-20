@@ -37,5 +37,10 @@
         android:orderInCategory="6"
         android:title="@string/viewStub"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/dagger"
+        android:orderInCategory="7"
+        android:title="@string/dagger"
+        app:showAsAction="never" />
 </menu>
 

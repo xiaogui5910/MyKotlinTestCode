@@ -13,6 +13,7 @@ import android.view.MenuItem
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.TestFragment
 import com.example.chenchenggui.mykotlintestcode.avdev.AudioVideoDevActivity
+import com.example.chenchenggui.mykotlintestcode.di.TestDaggerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -54,6 +55,7 @@ class MainActivity : AppCompatActivity() {
             R.id.avdev->{startActivity(Intent(this, AudioVideoDevActivity::class.java))}
             R.id.webview->{startActivity(Intent(this,WebViewTestActivity::class.java))}
             R.id.viewStub->{startActivity(Intent(this,ViewStubTestActivity::class.java))}
+            R.id.dagger->{startActivity(Intent(this,TestDaggerActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }
