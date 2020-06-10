@@ -638,5 +638,9 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     override fun getNestedScrollAxes(): Int {
         return ViewCompat.SCROLL_AXIS_HORIZONTAL
     }
+
+    fun setMoreViewVisibleWidth(moreViewVisibleWidth:Float){
+        defaultOffsetX = moreViewVisibleWidth
+    }
 }
 
