@@ -42,5 +42,10 @@
         android:orderInCategory="7"
         android:title="@string/dagger"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/scrollbar"
+        android:orderInCategory="8"
+        android:title="@string/scrollbar"
+        app:showAsAction="never" />
 </menu>
 

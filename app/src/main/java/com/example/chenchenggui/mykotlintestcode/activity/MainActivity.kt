@@ -56,6 +56,7 @@ class MainActivity : AppCompatActivity() {
             R.id.webview->{startActivity(Intent(this,WebViewTestActivity::class.java))}
             R.id.viewStub->{startActivity(Intent(this,ViewStubTestActivity::class.java))}
             R.id.dagger->{startActivity(Intent(this,TestDaggerActivity::class.java))}
+            R.id.scrollbar->{startActivity(Intent(this,TestScrollbarActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }
