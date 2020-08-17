@@ -2,12 +2,12 @@ package com.example.chenchenggui.mykotlintestcode.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
+import com.google.android.material.tabs.TabLayout
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
+import androidx.viewpager.widget.ViewPager
+import androidx.appcompat.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.example.chenchenggui.mykotlintestcode.R
@@ -17,9 +17,9 @@ import com.example.chenchenggui.mykotlintestcode.di.TestDaggerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    lateinit var viewPager: ViewPager
+    lateinit var viewPager: androidx.viewpager.widget.ViewPager
     lateinit var tabLayout: TabLayout
-    lateinit var fragments: ArrayList<Fragment>
+    lateinit var fragments: ArrayList<androidx.fragment.app.Fragment>
     lateinit var titles: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,9 +61,9 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    inner class TestPageAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    inner class TestPageAdapter(fm: androidx.fragment.app.FragmentManager) : androidx.fragment.app.FragmentPagerAdapter(fm) {
 
-        override fun getItem(p0: Int): Fragment {
+        override fun getItem(p0: Int): androidx.fragment.app.Fragment {
             return fragments[p0]
         }
 

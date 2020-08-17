@@ -3,7 +3,7 @@ package com.example.chenchenggui.mykotlintestcode.redpacket
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
+import androidx.fragment.app.DialogFragment
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +20,7 @@ import com.example.chenchenggui.mykotlintestcode.R
  * author : chenchenggui
  * creation date: 2018/11/29
  */
-class RedPacketDialog : DialogFragment() {
+class RedPacketDialog : androidx.fragment.app.DialogFragment() {
     private lateinit var rlRedPacket: RelativeLayout
     private lateinit var flOpening: FrameLayout
     private lateinit var llMoney: LinearLayout

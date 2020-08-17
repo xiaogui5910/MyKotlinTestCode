@@ -1,20 +1,21 @@
 package com.example.chenchenggui.mykotlintestcode.expandableitem
 
-import com.chad.library.adapter.base.entity.AbstractExpandableItem
 import com.chad.library.adapter.base.entity.MultiItemEntity
+import com.chad.library.adapter.base.entity.node.BaseExpandNode
+import com.chad.library.adapter.base.entity.node.BaseNode
 
 /**
  * description ：
  * author : chenchenggui
  * creation date: 2018/12/27
  */
-data class Level0Item(var title:String,var subTitle:String,var iconUrl:String)
-    :AbstractExpandableItem<Level1Item>(),MultiItemEntity {
-    override fun getLevel(): Int {
-        return 0
+class Level0Item(var title: String, var subTitle: String, var iconUrl: String,
+                 var childNodeList: MutableList<BaseNode>?) : BaseExpandNode() {
+
+    init {
+        isExpanded = false
     }
 
-    override fun getItemType(): Int {
-        return ExpandableItemAdapter.TYPE_LEVEL_0
-    }
+    override val childNode: MutableList<BaseNode>?
+        get() = childNodeList
 }

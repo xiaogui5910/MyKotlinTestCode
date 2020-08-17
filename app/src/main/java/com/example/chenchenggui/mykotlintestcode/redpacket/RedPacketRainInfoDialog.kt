@@ -4,16 +4,13 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.support.v4.app.DialogFragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.*
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.example.chenchenggui.mykotlintestcode.R
 
 /**
@@ -21,8 +18,8 @@ import com.example.chenchenggui.mykotlintestcode.R
  * author : chenchenggui
  * creation date: 2018/11/29
  */
-class RedPacketRainInfoDialog : DialogFragment() {
-    private lateinit var rvShowPrize: RecyclerView
+class RedPacketRainInfoDialog : androidx.fragment.app.DialogFragment() {
+    private lateinit var rvShowPrize: androidx.recyclerview.widget.RecyclerView
     private lateinit var ivClose: ImageView
     private lateinit var tvMinDecade: TextView
     private lateinit var tvMinUnit: TextView
@@ -113,7 +110,7 @@ class RedPacketRainInfoDialog : DialogFragment() {
      * 奖品列表
      */
     private fun initPrize() {
-        rvShowPrize.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvShowPrize.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
         prizeList.add("礼物道具")
         prizeList.add("现金")
         prizeList.add("优惠券")
@@ -143,14 +140,15 @@ class RedPacketRainInfoDialog : DialogFragment() {
         listener = l
     }
 
-    class PrizeAdapter(layoutResId: Int, data: List<String>) : BaseQuickAdapter<String, BaseViewHolder>(layoutResId, data) {
-        override fun convert(helper: BaseViewHolder?, item: String?) {
-            val layoutParams = helper?.itemView?.layoutParams as ViewGroup.MarginLayoutParams?
-            val density = helper?.itemView?.context?.resources?.displayMetrics?.density
+    class PrizeAdapter(layoutResId: Int, data: MutableList<String>) : BaseQuickAdapter<String,
+            BaseViewHolder>(layoutResId, data) {
+        override fun convert(holder: BaseViewHolder, item: String) {
+            val layoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams?
+            val density = holder.itemView.context?.resources?.displayMetrics?.density
             val leftMargin = 10 * density!!.toInt()
-            layoutParams?.leftMargin = if (helper?.adapterPosition != 0) leftMargin else 0
-            helper?.itemView?.layoutParams = layoutParams
-            helper?.setText(R.id.tv_red_packet_info_prize, item)
+            layoutParams?.leftMargin = if (holder.adapterPosition != 0) leftMargin else 0
+            holder.itemView.layoutParams = layoutParams
+            holder.setText(R.id.tv_red_packet_info_prize, item)
         }
 
     }

@@ -2,15 +2,15 @@ package com.example.chenchenggui.mykotlintestcode.avdev
 
 import android.app.Dialog
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v7.app.AlertDialog
+import androidx.fragment.app.DialogFragment
+import androidx.appcompat.app.AlertDialog
 
 /**
  * description ：
  * author : chenchenggui
  * creation date: 2019/5/28
  */
-class ErrorDialog : DialogFragment() {
+class ErrorDialog : androidx.fragment.app.DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
             AlertDialog.Builder(activity!!)

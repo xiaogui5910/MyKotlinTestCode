@@ -8,11 +8,11 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.support.annotation.RequiresApi
-import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.Toolbar
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.appcompat.widget.Toolbar
 import android.util.Log
 import android.view.*
 import android.view.animation.BounceInterpolator
@@ -20,7 +20,7 @@ import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacket
 import com.example.chenchenggui.mykotlintestcode.redpacket.RedPacketDialog
@@ -89,7 +89,7 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
 
     private val prizeList: ArrayList<String> = ArrayList()
     private fun initRedPacketInfoHalfView() {
-        rv_show_prize.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL,
+        rv_show_prize.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL,
                 false)
         prizeList.add("礼物道具")
         prizeList.add("礼物道具")
@@ -108,15 +108,15 @@ class RedPacketActivity : AppCompatActivity(), View.OnClickListener {
         rv_show_prize.layoutParams = layoutParams
     }
 
-    class PrizeHalfAdapter(layoutResId: Int, data: List<String>) : BaseQuickAdapter<String,
+    class PrizeHalfAdapter(layoutResId: Int, data: MutableList<String>) : BaseQuickAdapter<String,
             BaseViewHolder>(layoutResId, data) {
-        override fun convert(helper: BaseViewHolder?, item: String?) {
-            val layoutParams = helper?.itemView?.layoutParams as ViewGroup.MarginLayoutParams?
-            val density = helper?.itemView?.context?.resources?.displayMetrics?.density
+        override fun convert(holder: BaseViewHolder, item: String) {
+            val layoutParams = holder.itemView.layoutParams as ViewGroup.MarginLayoutParams?
+            val density = holder.itemView.context?.resources?.displayMetrics?.density
             val leftMargin = 10 * density!!.toInt()
-            layoutParams?.leftMargin = if (helper?.adapterPosition != 0) leftMargin else 0
-            helper?.itemView?.layoutParams = layoutParams
-            helper?.setText(R.id.tv_red_packet_info_prize, item)
+            layoutParams?.leftMargin = if (holder.adapterPosition != 0) leftMargin else 0
+            holder.itemView.layoutParams = layoutParams
+            holder.setText(R.id.tv_red_packet_info_prize, item)
         }
 
     }

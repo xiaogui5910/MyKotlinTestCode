@@ -7,12 +7,28 @@ import com.chad.library.adapter.base.entity.SectionEntity
  * author : chenchenggui
  * creation date: 2018/12/28
  */
-class MySection : SectionEntity<UserInfo> {
+class MySection : SectionEntity {
     var isMore: Boolean = false
-    var subList: List<MySection> = ArrayList<MySection>()
+    var subList: List<MySection> = ArrayList()
+    var isMyHeader: Boolean = false
+    var header: String = ""
+    var userInfo: UserInfo = UserInfo("", "", "")
 
-    constructor(userInfo: UserInfo) : super(userInfo)
-    constructor(isHeader: Boolean, header: String, isMore: Boolean) : super(isHeader, header) {
-        this.isMore = isMore
+    constructor(userInfo: UserInfo) {
+        this.userInfo = userInfo
     }
+
+    constructor(isMyHeader: Boolean, header: String, isMore: Boolean) {
+        this.isMore = isMore
+        this.isMyHeader = isMyHeader
+        this.header = header
+    }
+
+    override val isHeader: Boolean
+        get() = isMyHeader
+
+    override fun toString(): String {
+        return "MySection(isMore=$isMore, subList=$subList, isMyHeader=$isMyHeader, header='$header', userInfo=$userInfo)"
+    }
+
 }

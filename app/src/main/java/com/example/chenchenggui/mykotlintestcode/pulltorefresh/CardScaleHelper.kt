@@ -1,8 +1,8 @@
 package com.example.chenchenggui.mykotlintestcode.pulltorefresh
 
 import android.content.Context
-import android.support.v7.widget.LinearSnapHelper
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearSnapHelper
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 
 /**
@@ -11,7 +11,7 @@ import android.view.View
  * creation date: 2018/10/19
  */
 class CardScaleHelper {
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var recyclerView: androidx.recyclerview.widget.RecyclerView
     private lateinit var context: Context
 
     var scale = 1.0f //两边视图scale,为1.0f表示不缩放
@@ -27,13 +27,13 @@ class CardScaleHelper {
 
     private var linearSnapHelper = CardLinearSnapHelper()
 
-    fun attachToRecyclerView(rv: RecyclerView) {
+    fun attachToRecyclerView(rv: androidx.recyclerview.widget.RecyclerView) {
         recyclerView = rv
         context = rv.context
-        rv.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+        rv.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                if (newState == androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE) {
                     linearSnapHelper.noNeedToScroll = currentItemOffset == 0 ||
                             currentItemOffset == getDestItemOffset(rv.adapter?.itemCount!! - 1)
                 } else {
@@ -41,7 +41,7 @@ class CardScaleHelper {
                 }
             }
 
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 //dx>0表示右滑，dx<0表示左滑，dy<0表示上滑，dy>0表示下滑
                 if (dx != 0) {
@@ -112,9 +112,9 @@ class CardScaleHelper {
      *  防止卡片在第一页和最后一页因无法"居中"而一直循环调用onScrollStateChanged-->
      *  SnapHelper.snapToTargetExistingView-->onScrollStateChanged
      */
-    class CardLinearSnapHelper : LinearSnapHelper() {
+    class CardLinearSnapHelper : androidx.recyclerview.widget.LinearSnapHelper() {
         var noNeedToScroll = false
-        override fun calculateDistanceToFinalSnap(layoutManager: RecyclerView.LayoutManager, targetView: View): IntArray? {
+        override fun calculateDistanceToFinalSnap(layoutManager: androidx.recyclerview.widget.RecyclerView.LayoutManager, targetView: View): IntArray? {
             return if (noNeedToScroll) {
                 intArrayOf(0, 0)
             } else {

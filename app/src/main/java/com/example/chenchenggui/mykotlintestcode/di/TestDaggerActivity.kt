@@ -1,7 +1,7 @@
 package com.example.chenchenggui.mykotlintestcode.di
 
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.activity.BaseActivity
 import com.example.chenchenggui.mykotlintestcode.di.testinjectcomponent.DaggerTestInjectComponent
@@ -44,10 +44,10 @@ class TestDaggerActivity : BaseActivity() {
 //            dataList.add(item)
 //        }
         DaggerTestDiModuleComponent.builder().build().inject(this)
-        rv_test_di.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        rv_test_di.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
 
 //        val testDiAdapter = TestDiAdapter(R.layout.item_test_di, dataList)
         rv_test_di.adapter = testDiAdapter
-        rv_test_di.addItemDecoration(DividerItemDecoration(this, DividerItemDecoration.VERTICAL))
+        rv_test_di.addItemDecoration(androidx.recyclerview.widget.DividerItemDecoration(this, androidx.recyclerview.widget.DividerItemDecoration.VERTICAL))
     }
 }

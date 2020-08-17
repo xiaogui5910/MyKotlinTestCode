@@ -24,7 +24,7 @@
         app:releaseScanMoreText="进来看看呗"
         app:scanMoreText="随便看看">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_test"
             android:layout_width="match_parent"
             android:layout_height="300dp" />

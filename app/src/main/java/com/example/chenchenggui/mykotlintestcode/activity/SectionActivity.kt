@@ -1,48 +1,45 @@
 package com.example.chenchenggui.mykotlintestcode.activity
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
-import android.view.MenuItem
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.log
 import com.example.chenchenggui.mykotlintestcode.sectionitem.MySection
 import com.example.chenchenggui.mykotlintestcode.sectionitem.SectionItemAdapter
 import com.example.chenchenggui.mykotlintestcode.sectionitem.UserInfo
 import com.example.chenchenggui.mykotlintestcode.toast
-import kotlinx.android.synthetic.main.activity_section.*
 
 class SectionActivity : BaseActivity() {
     override fun getLayoutId() = R.layout.activity_section
 
     lateinit var dataList: ArrayList<MySection>
     lateinit var adapter: SectionItemAdapter
-    lateinit var rvExpand: RecyclerView
+    lateinit var rvExpand: androidx.recyclerview.widget.RecyclerView
 
     override fun initView() {
         rvExpand = findViewById(R.id.rv_section)
 
         dataList = generateData()
 
+        rvExpand.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(this, androidx.recyclerview.widget.LinearLayoutManager.VERTICAL, false)
         adapter = SectionItemAdapter(R.layout.item_section_content, R.layout.item_section_header,
                 dataList)
 
         rvExpand.adapter = adapter
-        rvExpand.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         adapter.setOnItemClickListener { adapter, view, position ->
             val mySection = adapter.getItem(position) as MySection
             if (!mySection.isHeader) {
-                toast("onclick--$position--${mySection.t.title}")
+                toast("onclick--$position--${mySection.userInfo.title}")
             }
         }
         adapter.setOnItemChildClickListener { adapter, view, position ->
             val mySection = adapter.getItem(position) as MySection
             toast(mySection.header + "--position=$position")
-            val dataList = adapter.data
-            dataList.addAll(position, mySection.subList)
-            dataList.removeAt(position + mySection.subList.size)
-            adapter.setNewData(dataList)
+            val dataList:ArrayList<MySection> = adapter.data as ArrayList<MySection>
+
+            val newDataList =ArrayList<MySection>()
+            newDataList.addAll(dataList)
+            newDataList.addAll(position, mySection.subList)
+            newDataList.removeAt(position + mySection.subList.size)
+            adapter.setNewInstance(newDataList)
             log(adapter.data.toString())
         }
     }

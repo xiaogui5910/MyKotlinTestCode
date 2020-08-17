@@ -2,9 +2,9 @@ package com.example.chenchenggui.mykotlintestcode
 
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +13,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.example.pulltorefresh.PullToRefreshLayout
 
 /**
@@ -21,8 +21,8 @@ import com.example.pulltorefresh.PullToRefreshLayout
  * author : chenchenggui
  * creation date: 2018/11/7
  */
-class TestFragment : Fragment() {
-    lateinit var rvTest:RecyclerView
+class TestFragment : androidx.fragment.app.Fragment() {
+    lateinit var rvTest: androidx.recyclerview.widget.RecyclerView
     lateinit var hrlMain:PullToRefreshLayout
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -45,7 +45,7 @@ class TestFragment : Fragment() {
             Log.e("main", "index=$index---value=$str")
         }
 
-        rvTest.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        rvTest.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context, androidx.recyclerview.widget.LinearLayoutManager.HORIZONTAL, false)
 
         val testAdapter = TestAdapter(R.layout.item, dataList)
         rvTest.adapter = testAdapter
@@ -65,7 +65,7 @@ class TestFragment : Fragment() {
 //        }
     }
 
-    class RvAdapter(var context: Context, var dataList: List<String>) : RecyclerView.Adapter<RvAdapter
+    class RvAdapter(var context: Context, var dataList: List<String>) : androidx.recyclerview.widget.RecyclerView.Adapter<RvAdapter
     .RvViewHolder>() {
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): RvViewHolder {
             var view: View = LayoutInflater.from(context).inflate(R.layout.item, p0, false)
@@ -81,19 +81,19 @@ class TestFragment : Fragment() {
         }
 
 
-        class RvViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        class RvViewHolder(itemView: View) : androidx.recyclerview.widget.RecyclerView.ViewHolder(itemView) {
             var name: TextView = itemView.findViewById(R.id.tv_text)
             var image: ImageView = itemView.findViewById(R.id.iv_img)
 
         }
     }
 
-    class TestAdapter(layoutResId: Int, data: List<String>) : BaseQuickAdapter<String,
+    class TestAdapter(layoutResId: Int, data: MutableList<String>) : BaseQuickAdapter<String,
             BaseViewHolder>(layoutResId, data) {
-        override fun convert(helper: BaseViewHolder?, item: String?) {
+        override fun convert(holder: BaseViewHolder, item: String) {
             Log.e("main", "item=$item")
-            helper?.setText(R.id.tv_text, "icon-$item")
-            helper?.setText(R.id.tv_text2, "icon-$item-desc")
+            holder.setText(R.id.tv_text, "icon-$item")
+            holder.setText(R.id.tv_text2, "icon-$item-desc")
         }
     }
 }

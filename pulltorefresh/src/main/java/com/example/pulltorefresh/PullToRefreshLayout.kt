@@ -4,9 +4,9 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Color
-import android.support.annotation.NonNull
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.RecyclerView
+import androidx.annotation.NonNull
+import androidx.core.view.ViewCompat
+import androidx.recyclerview.widget.RecyclerView
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.TypedValue
@@ -197,12 +197,12 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
 
         post {
             childView = getChildAt(0)
-            if (childView is RecyclerView) {
-                val recyclerView = childView as RecyclerView
-                recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                    override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            if (childView is androidx.recyclerview.widget.RecyclerView) {
+                val recyclerView = childView as androidx.recyclerview.widget.RecyclerView
+                recyclerView.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+                    override fun onScrollStateChanged(recyclerView: androidx.recyclerview.widget.RecyclerView, newState: Int) {
                         super.onScrollStateChanged(recyclerView, newState)
-                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        if (newState == androidx.recyclerview.widget.RecyclerView.SCROLL_STATE_IDLE) {
                             //滑动停止后，最后一条item显示时滑动到底部，展示查看更多
                             if (!canScrollRight()) {
                                 isFooterViewShow = true
@@ -361,7 +361,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
         if (childCount >= 1) {
             throw  RuntimeException("only can attach one child")
         }
-        childView = child as RecyclerView?
+        childView = child as androidx.recyclerview.widget.RecyclerView?
         super.addView(child)
     }
 
@@ -520,7 +520,7 @@ class PullToRefreshLayout(context: Context, attrs: AttributeSet? = null, defStyl
     override fun onNestedFling(target: View?, velocityX: Float, velocityY: Float, consumed: Boolean): Boolean {
         var realConsumed = consumed
 
-        if (target is RecyclerView && velocityX > 0) {
+        if (target is androidx.recyclerview.widget.RecyclerView && velocityX > 0) {
             val firstChild = target.getChildAt(0)
             val childAdapterPosition = target.getChildAdapterPosition(firstChild)
             realConsumed = childAdapterPosition > 3

@@ -8,9 +8,9 @@ import android.media.*
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.support.v4.app.ActivityCompat
-import android.support.v4.app.Fragment
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import androidx.core.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
 import android.view.View
@@ -33,7 +33,7 @@ import kotlin.math.log
  * author : chenchenggui
  * creation date: 2019/5/24
  */
-class AudioRecordFragment : Fragment() {
+class AudioRecordFragment : androidx.fragment.app.Fragment() {
     private var isRecording = false
     private var audioRecord: AudioRecord? = null
     private var audioTrack: AudioTrack? = null
