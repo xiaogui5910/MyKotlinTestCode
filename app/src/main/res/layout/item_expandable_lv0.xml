@@ -2,21 +2,69 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_marginTop="6dp"
     android:layout_height="wrap_content"
+    android:layout_marginTop="6dp"
     android:background="@drawable/shape_lv0"
     android:orientation="vertical">
 
     <TextView
-        android:gravity="center_vertical"
-        android:layout_gravity="center_vertical"
         android:id="@+id/tv_lv0_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_margin="12dp"
+        android:gravity="center_vertical"
         android:text="篮球"
         android:textColor="#333333"
         android:textSize="15sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_lv0_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="12dp"
+            android:gravity="center_vertical"
+            android:text="篮球1"
+            android:textColor="#333333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="12dp"
+            android:gravity="center_vertical"
+            android:text="篮球2"
+            android:textColor="#333333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="12dp"
+            android:gravity="center_vertical"
+            android:text="篮球3"
+            android:textColor="#333333"
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="12dp"
+            android:gravity="center_vertical"
+            android:text="篮球3"
+            android:textColor="#333333"
+            android:textSize="15sp" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

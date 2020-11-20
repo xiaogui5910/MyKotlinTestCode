@@ -7,6 +7,7 @@
     <string name="viewStub">ViewStub</string>
     <string name="dagger">Dagger</string>
     <string name="scrollbar">Scrollbar</string>
+    <string name="coordinator">Coordinator</string>
     <string name="expand_item">ExpandableItem</string>
     <string name="section_item">SectionItem</string>
     <string name="red_packet_show">演示效果</string>
@@ -33,4 +34,6 @@
             you can display camera preview and take pictures.
         ]]>
     </string>
+
+    <string name="show_text">进来参与 %1$s 局游戏，即可领取 %2$s</string>
 </resources>

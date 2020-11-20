@@ -1,5 +1,6 @@
 package com.example.chenchenggui.mykotlintestcode.expandableitem.provider
 
+import android.view.View
 import com.chad.library.adapter.base.entity.node.BaseNode
 import com.chad.library.adapter.base.provider.BaseNodeProvider
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -12,7 +13,7 @@ import com.example.chenchenggui.mykotlintestcode.expandableitem.Level0Item
  * author : chenchenggui
  * creation date: 2020/8/17
  */
-class Level0Provider: BaseNodeProvider() {
+class Level0Provider : BaseNodeProvider() {
     override val itemViewType: Int
         get() = ExpandableItemAdapter.TYPE_LEVEL_0
     override val layoutId: Int
@@ -30,5 +31,14 @@ class Level0Provider: BaseNodeProvider() {
 //                        expand(pos)
 //                    }
 //                }
+        //用一行显示展开和收起内容
+//        val view = helper.getView<View>(R.id.ll_lv0_detail)
+//        helper.itemView.setOnClickListener {
+//            if (view.visibility == View.GONE) {
+//                view.visibility = View.VISIBLE
+//            } else {
+//                view.visibility = View.GONE
+//            }
+//        }
     }
 }

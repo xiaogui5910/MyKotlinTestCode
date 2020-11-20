@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
             R.id.viewStub->{startActivity(Intent(this,ViewStubTestActivity::class.java))}
             R.id.dagger->{startActivity(Intent(this,TestDaggerActivity::class.java))}
             R.id.scrollbar->{startActivity(Intent(this,TestScrollbarActivity::class.java))}
+            R.id.coordinator->{startActivity(Intent(this,CoordinatorActivity::class.java))}
         }
         return super.onOptionsItemSelected(item)
     }

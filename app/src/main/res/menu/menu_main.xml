@@ -47,5 +47,10 @@
         android:orderInCategory="8"
         android:title="@string/scrollbar"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/coordinator"
+        android:orderInCategory="9"
+        android:title="@string/coordinator"
+        app:showAsAction="never" />
 </menu>
 
