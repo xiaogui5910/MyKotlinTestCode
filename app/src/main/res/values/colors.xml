@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="control_background">#cc4285f4</color>
+    <color name="noble_yellow_caa869">#CAA869</color>
+    <color name="noble_progress_bg">#26454546</color>
+    <color name="noble_progress">#BA9D67</color>
 </resources>

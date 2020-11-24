@@ -6,41 +6,45 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/iv_img"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/iv_noble_img"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_marginTop="27.5dp"
         android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/img_noble_level"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_item"
+        android:id="@+id/tv_noble_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
-        android:text="我就是任性"
-        android:textColor="@android:color/black"
-        android:textSize="14sp"
+        android:text="大家好才是真滴好"
+        android:textColor="#999999"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_img" />
+        app:layout_constraintTop_toBottomOf="@+id/iv_noble_img" />
 
     <TextView
-        android:id="@+id/tv_desc"
+        android:id="@+id/tv_noble_header_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginTop="42dp"
+        android:drawableLeft="@drawable/img_noble_title_left"
+        android:drawableRight="@drawable/img_noble_title_right"
+        android:drawablePadding="10dp"
         android:gravity="center"
-        android:text="来呀一起玩呀"
-        android:textColor="@android:color/darker_gray"
+        android:paddingBottom="21dp"
+        android:text="今天天气真好"
+        android:textColor="@android:color/black"
         android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_noble_header" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

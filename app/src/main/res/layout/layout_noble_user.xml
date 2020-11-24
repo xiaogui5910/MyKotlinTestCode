@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/img_noble_person_bg">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="11.5dp"
+        android:src="@drawable/img_noble_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_open_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="您还不是贵族"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
+        app:layout_constraintStart_toEndOf="@+id/iv_icon"
+        app:layout_constraintTop_toTopOf="@+id/iv_icon" />
+
+    <TextView
+        android:id="@+id/tv_user_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="3.5dp"
+        android:text="游侠"
+        android:textColor="@android:color/black"
+        android:textSize="17sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/iv_icon"
+        app:layout_constraintTop_toTopOf="@+id/iv_icon" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="3.5dp"
+        android:text="有效期至 2020.11.30"
+        android:textColor="@android:color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_icon"
+        app:layout_constraintStart_toEndOf="@+id/iv_icon" />
+
+    <TextView
+        android:id="@+id/tv_noble_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="15dp"
+        android:text="贵族介绍"
+        android:textColor="#333333"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_noble_detail"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginEnd="5dp"
+        android:src="@drawable/img_noble_detail"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_noble_detail"
+        app:layout_constraintEnd_toStartOf="@+id/tv_noble_detail"
+        app:layout_constraintTop_toTopOf="@+id/tv_noble_detail" />
+
+    <TextView
+        android:id="@+id/tv_noble_keep_tips"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="12dp"
+        android:text="提示：本月保级还需充值200鹅肝，请于2020.11.30日前完成"
+        android:textColor="@android:color/black"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/pb_noble"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="10dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="5dp"
+        android:max="100"
+        android:progress="50"
+        android:progressDrawable="@drawable/shape_noble_person_pb"
+        app:layout_constraintBottom_toTopOf="@+id/tv_noble_keep_tips"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_noble_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50/100"
+        android:textColor="@android:color/white"
+        android:textSize="9sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pb_noble"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/pb_noble" />
+
+    <TextView
+        android:id="@+id/tv_noble_upgrade"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginBottom="9dp"
+        android:text="在充值 1000 鹅肝，即可升级为 骑士"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/pb_noble"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -35,5 +35,7 @@
         ]]>
     </string>
 
+    <string name="show_upgrade_text">在充值 %1$s 鹅肝，即可升级为 %2$s</string>
     <string name="show_text">进来参与 %1$s 局游戏，即可领取 %2$s</string>
+    <string name="show_privilege_text">大家都有 %1$s </string>
 </resources>
