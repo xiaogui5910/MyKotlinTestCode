@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="98dp"
+    android:background="@android:color/white">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="60dp" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_match_header_subtitle"
+        android:layout_width="56.5dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="第4节"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_match_header_team_left"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toEndOf="@+id/tv_king_guess_match_header_subtitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/king_guess_img_team_left" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_match_header_team_right"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/king_guess_img_team_right" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_match_header_team_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="凯尔特人"
+        android:textColor="#333333"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_match_header_team_left"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_match_header_team_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="金州勇士"
+        android:textColor="#333333"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/iv_king_guess_match_header_team_right"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_match_header_team_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="125-126"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
+        app:layout_constraintEnd_toStartOf="@+id/tv_king_guess_match_header_team_right"
+        app:layout_constraintStart_toEndOf="@+id/tv_king_guess_match_header_team_left"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="80dp" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_match_header_join_num"
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_king_guess_match_header_join"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rv_king_guess_match_header_join"
+        app:srcCompat="@drawable/king_guess_icon_join_num" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_match_header_join_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
+        android:gravity="center"
+        android:text="999+人"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/rv_king_guess_match_header_join"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_match_header_join_num"
+        app:layout_constraintTop_toTopOf="@+id/rv_king_guess_match_header_join" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_king_guess_match_header_join"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/guideline2"
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

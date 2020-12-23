@@ -14,6 +14,7 @@ import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.TestFragment
 import com.example.chenchenggui.mykotlintestcode.avdev.AudioVideoDevActivity
 import com.example.chenchenggui.mykotlintestcode.di.TestDaggerActivity
+import com.example.chenchenggui.mykotlintestcode.dialog.GuessListDialog
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -58,6 +59,9 @@ class MainActivity : AppCompatActivity() {
             R.id.dagger->{startActivity(Intent(this,TestDaggerActivity::class.java))}
             R.id.scrollbar->{startActivity(Intent(this,TestScrollbarActivity::class.java))}
             R.id.coordinator->{startActivity(Intent(this,CoordinatorActivity::class.java))}
+            R.id.guess->{
+                GuessListDialog().show(supportFragmentManager,"GuessListDialog")
+            }
         }
         return super.onOptionsItemSelected(item)
     }

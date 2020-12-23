@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="126.5dp"
+    android:background="#F8F8F7">
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_pea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="14dp"
+        android:drawableStart="@drawable/king_guess_icon_pea"
+        android:drawablePadding="6dp"
+        android:gravity="center"
+        android:text="99999999"
+        android:textColor="#333333"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_introduction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="15dp"
+        android:drawableEnd="@drawable/king_guess_icon_intro"
+        android:drawablePadding="2dp"
+        android:gravity="center"
+        android:text="玩法介绍"
+        android:textColor="#333333"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_king_guess_user_header_rank_bg"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="46.5dp"
+        android:layout_marginEnd="9dp"
+        android:background="@drawable/king_guess_shape_user_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_user_header_rank_bg"
+        android:layout_width="127dp"
+        android:layout_height="68dp"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_user_header_rank_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_user_header_rank_bg"
+        app:srcCompat="@drawable/king_guess_img_user_rank_bg" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_user_header_rank_cup"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_king_guess_user_header_rank_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_user_header_rank_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_user_header_rank_bg"
+        app:srcCompat="@drawable/king_guess_icon_rank_cup" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="999+"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/iv_king_guess_user_header_rank_bg"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_user_header_rank_cup"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_user_header_rank_bg" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_my_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4.5dp"
+        android:text="我的排名"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_king_guess_user_header_rank_bg"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_user_header_rank_cup"
+        app:layout_constraintTop_toBottomOf="@+id/tv_king_guess_user_header_rank" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_user_header_rank_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/view_king_guess_user_header_rank_bg"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_user_header_rank_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_user_header_rank_bg"
+        app:srcCompat="@drawable/king_guess_icon_rank_line" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_win_pea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="999"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_king_guess_user_header_my_win_pea"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_user_header_rank_line"
+        app:layout_constraintTop_toTopOf="@+id/tv_king_guess_user_header_rank" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_my_win_pea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:drawableStart="@drawable/king_guess_icon_pea"
+        android:drawablePadding="2dp"
+        android:text="赢取金豆"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_king_guess_user_header_rank_line"
+        app:layout_constraintTop_toTopOf="@+id/tv_king_guess_user_header_my_rank" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_prize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5000鹅肝"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/tv_king_guess_user_header_curr_prize"
+        app:layout_constraintStart_toStartOf="@+id/tv_king_guess_user_header_curr_prize"
+        app:layout_constraintTop_toTopOf="@+id/tv_king_guess_user_header_rank" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_user_header_curr_prize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="28.5dp"
+        android:drawableStart="@drawable/king_guess_icon_prize"
+        android:drawablePadding="2dp"
+        android:text="当前奖励"
+        android:textColor="#999999"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_user_header_rank_bg"
+        app:layout_constraintTop_toTopOf="@+id/tv_king_guess_user_header_my_rank" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#F8F8F7">
+
+    <View
+        android:id="@+id/view_king_guess_item_bg"
+        android:layout_width="0dp"
+        android:layout_height="175dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginEnd="9dp"
+        android:background="@drawable/king_guess_shape_user_bg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_result"
+        android:layout_width="72.5dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/king_guess_shape_item_result_bg_gray"
+        android:gravity="center"
+        android:text="猜错-5万"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_result_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="17dp"
+        android:layout_marginEnd="19dp"
+        android:gravity="end"
+        android:text="未投注"
+        android:textColor="#AAAAAA"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="19dp"
+        android:layout_marginTop="15dp"
+        android:maxLength="18"
+        android:singleLine="true"
+        android:text="第二节哪队的篮板球数更高这里十八个字？"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/view_king_guess_item_team_bg"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/king_guess_shape_item_team_bg"
+        app:layout_constraintEnd_toStartOf="@+id/view_king_guess_item_team_bg2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/tv_king_guess_item_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_king_guess_item_title" />
+
+    <View
+        android:id="@+id/view_king_guess_item_team_bg2"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/king_guess_shape_item_team_bg"
+        app:layout_constraintEnd_toEndOf="@+id/tv_king_guess_item_result_time"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintTop_toBottomOf="@+id/tv_king_guess_item_title" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_team_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="凯尔特人"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_item_team_bg" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_team_multiple_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.5dp"
+        android:text="1.5倍"
+        android:textColor="#AAAAAA"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_king_guess_item_team_left"
+        app:layout_constraintTop_toBottomOf="@+id/tv_king_guess_item_team_left" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_team_pea_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="+100万"
+        android:textColor="#ffaa1b"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_item_team_bg" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_item_team_win_left"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_item_team_bg"
+        app:srcCompat="@drawable/king_guess_icon_team_win" />
+
+    <ProgressBar
+        android:id="@+id/pb_king_guess_item_left"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="6dp"
+        android:max="100"
+        android:progress="60"
+        android:progressDrawable="@drawable/king_guess_progress_orange"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintTop_toBottomOf="@+id/view_king_guess_item_team_bg" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_progress_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="9999万"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pb_king_guess_item_left"
+        app:layout_constraintStart_toStartOf="@+id/pb_king_guess_item_left"
+        app:layout_constraintTop_toTopOf="@+id/pb_king_guess_item_left" />
+
+    <!-- 右边队伍信息-->
+    <TextView
+        android:id="@+id/tv_king_guess_item_team_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:text="金州勇士"
+        android:textColor="#333333"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_item_team_bg2"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_item_team_bg2" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_team_multiple_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.5dp"
+        android:text="2.5倍"
+        android:textColor="#AAAAAA"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/tv_king_guess_item_team_right"
+        app:layout_constraintTop_toBottomOf="@+id/tv_king_guess_item_team_right" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_team_pea_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="+500"
+        android:textColor="#7486FF"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_team_bg2"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_item_team_bg2" />
+
+    <ImageView
+        android:id="@+id/iv_king_guess_item_team_win_right"
+        android:layout_width="31dp"
+        android:layout_height="31dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_team_bg2"
+        app:layout_constraintTop_toTopOf="@+id/view_king_guess_item_team_bg2"
+        app:srcCompat="@drawable/king_guess_icon_team_win" />
+
+    <ProgressBar
+        android:id="@+id/pb_king_guess_item_right"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="6dp"
+        android:max="100"
+        android:progress="30"
+        android:progressDrawable="@drawable/king_guess_progress_blue"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_team_bg2"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_item_team_bg2"
+        app:layout_constraintTop_toBottomOf="@+id/view_king_guess_item_team_bg2" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_progress_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="200"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintBottom_toBottomOf="@+id/pb_king_guess_item_right"
+        app:layout_constraintStart_toStartOf="@+id/pb_king_guess_item_right"
+        app:layout_constraintTop_toTopOf="@+id/pb_king_guess_item_right" />
+
+    <TextView
+        android:id="@+id/tv_king_guess_item_tips"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="99999人参与，投入最多：六环张耀扬啊（100万）"
+        android:textColor="#AAAAAA"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/view_king_guess_item_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_king_guess_item_team_bg"
+        app:layout_constraintTop_toBottomOf="@+id/pb_king_guess_item_left" />
+</androidx.constraintlayout.widget.ConstraintLayout>

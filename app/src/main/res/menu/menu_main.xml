@@ -52,5 +52,10 @@
         android:orderInCategory="9"
         android:title="@string/coordinator"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/guess"
+        android:orderInCategory="9"
+        android:title="@string/guess"
+        app:showAsAction="never" />
 </menu>
 
