@@ -9,6 +9,7 @@
     <string name="scrollbar">Scrollbar</string>
     <string name="coordinator">Coordinator</string>
     <string name="guess">Guess</string>
+    <string name="ViewPagerGallery">ViewPagerGallery</string>
     <string name="expand_item">ExpandableItem</string>
     <string name="section_item">SectionItem</string>
     <string name="red_packet_show">演示效果</string>
@@ -24,6 +25,10 @@
     <string name="record">AudioRecord</string>
     <string name="camera">Camera</string>
     <string name="opengl">OpenGL</string>
+
+    <!--gallery-->
+    <string name="viewpager">ViewPager</string>
+    <string name="recyclerview">recyclerview</string>
 
     <string name="picture">Picture</string>
     <string name="description_info">Info</string>

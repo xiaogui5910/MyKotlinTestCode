@@ -21,7 +21,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.CoordinatorActivity"></activity>
+        <activity android:name=".activity.ViewPagerGalleryActivity"></activity>
+        <activity android:name=".activity.CoordinatorActivity" />
         <activity android:name=".activity.TestScrollbarActivity" />
         <activity android:name=".di.TestDaggerActivity" />
         <activity android:name=".activity.MainActivity">

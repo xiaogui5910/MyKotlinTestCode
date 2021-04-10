@@ -57,5 +57,10 @@
         android:orderInCategory="9"
         android:title="@string/guess"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/viewPagerGallery"
+        android:orderInCategory="10"
+        android:title="@string/ViewPagerGallery"
+        app:showAsAction="never" />
 </menu>
 

@@ -62,6 +62,9 @@ class MainActivity : AppCompatActivity() {
             R.id.guess->{
                 GuessListDialog().show(supportFragmentManager,"GuessListDialog")
             }
+            R.id.viewPagerGallery->{
+                startActivity(Intent(this, ViewPagerGalleryActivity::class.java))
+            }
         }
         return super.onOptionsItemSelected(item)
     }
