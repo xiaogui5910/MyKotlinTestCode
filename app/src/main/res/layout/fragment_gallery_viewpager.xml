@@ -7,10 +7,10 @@
     <androidx.viewpager.widget.ViewPager
         android:layout_width="match_parent"
         android:id="@+id/viewpager"
-        android:paddingStart="50dp"
-        android:paddingEnd="50dp"
+        android:paddingStart="72dp"
+        android:paddingEnd="72dp"
         android:clipToPadding="false"
-        android:layout_height="250dp"
+        android:layout_height="130dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

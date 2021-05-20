@@ -29,7 +29,7 @@ class GalleryViewPagerFragment : Fragment() {
         }
 
         val pagerAdapter = GalleryPagerAdapter()
-        viewpager.pageMargin = dp2px(context!!, 10f).toInt()
+        viewpager.pageMargin = dp2px(context!!, 21f).toInt()
         viewpager.adapter = pagerAdapter
     }
 
