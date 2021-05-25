@@ -9,7 +9,11 @@
     <string name="scrollbar">Scrollbar</string>
     <string name="coordinator">Coordinator</string>
     <string name="guess">Guess</string>
-    <string name="ViewPagerGallery">ViewPagerGallery</string>
+    <string name="view_pager_gallery">ViewPagerGallery</string>
+    <string name="item_count_4">item_count_4</string>
+    <string name="item_count_6">item_count_6</string>
+    <string name="item_count_8">item_count_8</string>
+    <string name="voice_chat">VoiceChat</string>
     <string name="expand_item">ExpandableItem</string>
     <string name="section_item">SectionItem</string>
     <string name="red_packet_show">演示效果</string>

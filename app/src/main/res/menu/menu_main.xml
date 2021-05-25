@@ -60,7 +60,12 @@
     <item
         android:id="@+id/viewPagerGallery"
         android:orderInCategory="10"
-        android:title="@string/ViewPagerGallery"
+        android:title="@string/view_pager_gallery"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/voiceChat"
+        android:orderInCategory="11"
+        android:title="@string/voice_chat"
         app:showAsAction="never" />
 </menu>
 

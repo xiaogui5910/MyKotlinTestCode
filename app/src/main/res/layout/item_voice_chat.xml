@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+    <!--互动表情底层-->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/iv_voice_chat_face_bottom"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true" />
+
+    <!--用户头像-->
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_item_voice_chat_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/shape_voice_chat_default_bg_yellow"
+        android:padding="1dp"
+        app:actualImageScaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom"
+        app:placeholderImage="@drawable/img_viewstub_test2"
+        app:roundAsCircle="true" />
+
+    <!--位置状态-->
+    <ImageView
+        android:id="@+id/iv_item_voice_chat_status"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/icon_guest_add"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom" />
+
+    <!--用户状态-->
+    <TextView
+        android:id="@+id/tv_item_voice_chat_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/icon_guest_add"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom" />
+
+    <!--位置标签-->
+    <ImageView
+        android:id="@+id/iv_item_voice_chat_num"
+        android:layout_width="27dp"
+        android:layout_height="15dp"
+        android:layout_marginBottom="1dp"
+        android:src="@drawable/icon_guest_tag_1_yellow"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_item_voice_chat_img"
+        app:layout_constraintEnd_toEndOf="@+id/iv_item_voice_chat_img"
+        app:layout_constraintStart_toStartOf="@+id/iv_item_voice_chat_img" />
+
+    <!--互动表情顶层-->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/iv_voice_chat_face_top"
+        android:layout_width="94dp"
+        android:layout_height="94dp"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true" />
+    <!--昵称-->
+    <TextView
+        android:id="@+id/tv_item_voice_chat_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:maxWidth="60dp"
+        android:singleLine="true"
+        android:text="不要钱的昵称"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_item_voice_chat_img"
+        app:layout_constraintStart_toStartOf="@+id/iv_item_voice_chat_img"
+        app:layout_constraintTop_toBottomOf="@+id/iv_item_voice_chat_img" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

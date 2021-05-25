@@ -7,4 +7,18 @@
     <color name="noble_yellow_caa869">#CAA869</color>
     <color name="noble_progress_bg">#26454546</color>
     <color name="noble_progress">#BA9D67</color>
+
+    <color name="voice_chat_yellow">#FFE125</color>
+
+    <color name="color_white_percent_10">#1aFFFFFF</color>
+    <color name="color_white_percent_15">#26FFFFFF</color>
+    <color name="color_white_percent_20">#33FFFFFF</color>
+    <color name="color_white_percent_30">#4dffffff</color>
+    <color name="color_white_percent_40">#66ffffff</color>
+    <color name="color_white_percent_50">#80ffffff</color>
+    <color name="color_white_percent_60">#99ffffff</color>
+    <color name="color_white_percent_70">#b3ffffff</color>
+    <color name="color_white_percent_80">#ccffffff</color>
+
+    <color name="color_black_percent_50">#80000000</color>
 </resources>

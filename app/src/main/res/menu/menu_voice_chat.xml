@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        android:id="@+id/item_count_4"
+        android:orderInCategory="1"
+        android:title="@string/item_count_4"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/item_count_6"
+        android:orderInCategory="2"
+        android:title="@string/item_count_6"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/item_count_8"
+        android:orderInCategory="2"
+        android:title="@string/item_count_8"
+        app:showAsAction="never" />
+</menu>
+
