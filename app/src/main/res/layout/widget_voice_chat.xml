@@ -55,6 +55,7 @@
         app:layout_constraintStart_toEndOf="@+id/btn_send_gift_all" />
 
     <Button
+        android:layout_marginBottom="10dp"
         android:id="@+id/btn_marquee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -69,7 +70,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text="爆灯等效果"
-        app:layout_constraintBottom_toTopOf="@+id/btn_send_gift_position"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_marquee"
         app:layout_constraintStart_toEndOf="@+id/btn_marquee" />
 
     <TextView

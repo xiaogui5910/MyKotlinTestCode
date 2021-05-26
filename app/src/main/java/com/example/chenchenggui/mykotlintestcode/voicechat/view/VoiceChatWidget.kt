@@ -5,6 +5,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Color
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
@@ -22,6 +23,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.dp2px
+import com.example.chenchenggui.mykotlintestcode.log
 import com.example.chenchenggui.mykotlintestcode.voicechat.bean.AnimationBean
 import kotlinx.android.synthetic.main.widget_voice_chat.view.*
 import java.lang.ref.WeakReference
@@ -59,6 +61,9 @@ class VoiceChatWidget @JvmOverloads constructor(
     private val handler = MyHandler(this)
 
     private var hostBean: AnimationBean? = null
+    private var fastTime: Double = 0.0
+    private var slowTime: Double = 0.0
+    private var stayTime: Double = 0.0
 
     companion object {
         /**
@@ -70,12 +75,22 @@ class VoiceChatWidget @JvmOverloads constructor(
          * 清除礼物
          */
         const val HANDLER_WHAT_GIFT_CLEAR = 1
+
+        const val FAST_INTERVAL = 0.1f
+        const val SLOW_INTERVAL = 0.3f
+        const val SLOW_ROUND = 1
+        const val STAY_INTERVAL = 2f
+
+//        const val FAST_INTERVAL = 1f
+//        const val SLOW_INTERVAL = 3f
+//        const val SLOW_ROUND = 1
+//        const val STAY_INTERVAL = 2f
     }
 
     private class MyHandler constructor(widget: VoiceChatWidget) : Handler() {
         private val weakReference: WeakReference<VoiceChatWidget> = WeakReference<VoiceChatWidget>(widget)
         override fun handleMessage(msg: Message) {
-            if (msg.what == 1) {
+            if (msg.what == HANDLER_WHAT_GIFT_CLEAR) {
                 val widget: VoiceChatWidget? = weakReference.get()
                 widget?.clearGiftAndAddNewGift()
             }
@@ -168,30 +183,86 @@ class VoiceChatWidget @JvmOverloads constructor(
     }
 
     private fun startMarqueeAnim() {
-        val fastDuration = 0.1f
-        val slowDuration = 0.3f
-        val slowRound = 1
-        val stayDuration = 2f
-        val guestNum = 8
-
         //TODO 跑马灯测试 8人上麦 第6中奖
         val testTime = 6.5f
+        val guestNum = 8
         val selectedIndex = 5
 
         //慢速时长
-        val slowTime = slowDuration * guestNum * (slowRound - 1) + slowDuration * (selectedIndex + 1)
+        slowTime = (SLOW_INTERVAL * guestNum * (SLOW_ROUND - 1) + SLOW_INTERVAL * (selectedIndex + 1)).toDouble()
         //快速剩余可用时长
-        val fastDeltaTime = testTime - stayDuration - slowTime
+        val fastDeltaTime = testTime - STAY_INTERVAL - slowTime
         //快速一轮时长
-        val fastRoundTime = fastDuration * guestNum
+        val fastRoundTime = FAST_INTERVAL * guestNum
         //快速剩余可用时长最多可以走轮数
-        val maxRoundNum = floor((fastDeltaTime / fastRoundTime).toDouble())
+        val maxRoundNum = floor((fastDeltaTime / fastRoundTime))
         //快速时长
-        val fastTime = maxRoundNum * fastRoundTime
+        fastTime = maxRoundNum * fastRoundTime
         //快速时长完整轮数后剩余时长
         val deltaTime = fastDeltaTime - fastTime
         //最后爆灯停留时长
-        val stayTime = stayDuration + deltaTime
+        stayTime = STAY_INTERVAL + deltaTime
+
+        //快速跑马灯定时器
+        startFastCountDownTimer(fastTime, FAST_INTERVAL, false)
+        log("countdowntimer---------初始化:fastTime=${fastTime}---slowTime=${slowTime}----stayTime=${stayTime}")
+    }
+
+    private var fastCountDownTimer: CountDownTimer? = null
+    private var marqueeIndex = 0
+
+    private fun startFastCountDownTimer(totalTime: Double, interval: Float, stopCountDown: Boolean) {
+        marqueeIndex = 0
+        updateMarqueeItem(marqueeIndex)
+        fastCountDownTimer = object : CountDownTimer((totalTime * 1000).toLong(), (interval * 1000).toLong()) {
+            override fun onTick(millisUntilFinished: Long) {
+                updateMarqueeItem(marqueeIndex)
+                marqueeIndex++
+                log("countdowntimer------剩余时间:${millisUntilFinished}------------marqueeIndex=$marqueeIndex")
+            }
+
+            override fun onFinish() {
+                log("countdowntimer---------------------结束:stopCountDown=${stopCountDown}")
+                if (!stopCountDown) {
+                    startFastCountDownTimer(slowTime, SLOW_INTERVAL, true)
+                } else {
+                    showMarqueeAnim(stayTime, marqueeIndex)
+                }
+            }
+        }
+        fastCountDownTimer?.start()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        fastCountDownTimer?.cancel()
+        fastCountDownTimer = null
+    }
+
+    private fun updateMarqueeItem(marqueeIndex: Int) {
+        var index = marqueeIndex
+        if (marqueeIndex > 7) {
+            index = marqueeIndex % 8
+        }
+        log("countdowntimer------展示索引index=${index}")
+        for (i in 0 until rv_guest.childCount) {
+            val childView = rv_guest.getChildAt(i)
+            val itemView = childView.findViewById<VoiceChatItemView>(R.id.item_view)
+            itemView.updateMarqueeBg(i == index)
+        }
+    }
+
+    private fun showMarqueeAnim(stayTime: Double, marqueeIndex: Int) {
+        var index = marqueeIndex - 1
+        if (marqueeIndex > 7) {
+            index = marqueeIndex % 8
+        }
+        log("countdowntimer--------------爆灯索引index=${index}")
+        val childView = rv_guest.getChildAt(index)
+        val itemView = childView.findViewById<VoiceChatItemView>(R.id.item_view)
+        itemView.updateMarqueeBg(false)
+        itemView.showMarqueeAnim(stayTime)
+
     }
 
     private fun initData() {
@@ -200,17 +271,18 @@ class VoiceChatWidget @JvmOverloads constructor(
             isHasUse = true
             isHasGift = true
         }
+        view_main.updateIcon(hostBean!!)
 
         val dataList = ArrayList<AnimationBean>()
         for (i in 0..7) {
             val bean = AnimationBean()
             bean.type = i
             bean.position = i + 1
-            if (i <= 3) {
-                bean.isHasUse = true
-                bean.isShowPlay = true
-                bean.isHasGift = true
-            }
+//            if (i <= 3) {
+            bean.isHasUse = true
+            bean.isShowPlay = true
+            bean.isHasGift = true
+//            }
             bean.isMicClose = i == 3
             bean.isLock = i == 7
             bean.name = "嘉宾${i + 1}号"
@@ -265,16 +337,25 @@ class VoiceChatWidget @JvmOverloads constructor(
             rl_gift_animation_container.addView(giftView)
 
             //礼物出现后放大动画
-            val scaleInAnimatorX = ObjectAnimator.ofFloat(giftView, "scaleX", 0f, 1f, 1f)
-            val scaleInAnimatorY = ObjectAnimator.ofFloat(giftView, "scaleY", 0f, 1f, 1f)
-            scaleInAnimatorX.duration = 1200
-            scaleInAnimatorX.interpolator = OvershootInterpolator()
-            scaleInAnimatorY.duration = 1200
-            scaleInAnimatorY.interpolator = OvershootInterpolator()
+            val scaleInAnimatorX = ObjectAnimator.ofFloat(giftView, "scaleX", 0f, 1f)
+            val scaleInAnimatorY = ObjectAnimator.ofFloat(giftView, "scaleY", 0f, 1f)
+            scaleInAnimatorX.duration = 200
+            scaleInAnimatorX.interpolator = OvershootInterpolator(3.0f)
+            scaleInAnimatorY.duration = 200
+            scaleInAnimatorY.interpolator = OvershootInterpolator(3.0f)
+
+            //停留动画
+            val scaleStayAnimatorX = ObjectAnimator.ofFloat(giftView, "scaleX", 1f, 1f)
+            val scaleStayAnimatorY = ObjectAnimator.ofFloat(giftView, "scaleY", 1f, 1f)
+            scaleStayAnimatorX.duration = 500
+            scaleStayAnimatorY.duration = 500
+
             //放大动画
             animatorSet.play(scaleInAnimatorX).with(scaleInAnimatorY)
+            //停留
+            animatorSet.play(scaleStayAnimatorX).with(scaleStayAnimatorY).after(scaleInAnimatorX)
 
-            scaleInAnimatorX.addListener(object : Animator.AnimatorListener {
+            animatorSet.addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator?) {
                 }
 
@@ -325,8 +406,8 @@ class VoiceChatWidget @JvmOverloads constructor(
 
         val scaleOutAnimatorX = ObjectAnimator.ofFloat(animView, "scaleX", scaleRate, scaleRate, 0f)
         val scaleOutAnimatorY = ObjectAnimator.ofFloat(animView, "scaleY", scaleRate, scaleRate, 0f)
-        scaleOutAnimatorX.duration = 1500
-        scaleOutAnimatorY.duration = 1500
+        scaleOutAnimatorX.duration = 1000
+        scaleOutAnimatorY.duration = 1000
 
         val animatorSet = AnimatorSet()
         //先平移和缩小,后缩小消失

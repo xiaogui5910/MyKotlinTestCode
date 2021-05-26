@@ -1,6 +1,8 @@
 package com.example.chenchenggui.mykotlintestcode.voicechat.view
 
 import android.content.Context
+import android.os.Handler
+import android.os.Message
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.FrameLayout
@@ -10,6 +12,7 @@ import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.voicechat.bean.AnimationBean
 import com.facebook.drawee.view.SimpleDraweeView
 import kotlinx.android.synthetic.main.item_voice_chat.view.*
+import java.lang.ref.WeakReference
 
 /**
  * @description ：嘉宾ItemView
@@ -23,6 +26,25 @@ class VoiceChatItemView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.item_voice_chat, this)
         initView()
         initData()
+    }
+
+    companion object {
+        /**
+         * 清除跑马灯动画
+         */
+        const val HANDLER_WHAT_MARQUEE_ANIM_CLEAR = 1
+    }
+
+    private val handler = MyHandler(this)
+
+    private class MyHandler constructor(widget: VoiceChatItemView) : Handler() {
+        private val weakReference: WeakReference<VoiceChatItemView> = WeakReference<VoiceChatItemView>(widget)
+        override fun handleMessage(msg: Message) {
+            if (msg.what == HANDLER_WHAT_MARQUEE_ANIM_CLEAR) {
+                val widget: VoiceChatItemView? = weakReference.get()
+                widget?.clearAnim()
+            }
+        }
     }
 
     private fun initView() {
@@ -79,6 +101,29 @@ class VoiceChatItemView @JvmOverloads constructor(
         return resources.getIdentifier(resIdName, "drawable", context.packageName)
     }
 
+    fun updateMarqueeBg(isShow: Boolean) {
+        iv_item_voice_chat_marquee_bg.visibility = if (isShow) VISIBLE else GONE
+    }
+
+    fun showMarqueeAnim(stayTime: Double) {
+        val bean = AnimationBean()
+        bean.isHasUse = true
+        bean.isShowPlay = true
+        bean.type = 4
+        updateFaceViewAnim(bean)
+        handler.sendEmptyMessageDelayed(HANDLER_WHAT_MARQUEE_ANIM_CLEAR, (stayTime * 1000).toLong())
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        clearAnim()
+    }
+    fun clearAnim(){
+        hideFaceView(iv_voice_chat_face_bottom)
+        hideFaceView(iv_voice_chat_face_top)
+        handler.removeCallbacksAndMessages(null)
+    }
+
     private fun updateFaceViewAnim(bean: AnimationBean) {
         //互动表情
         val faceView = getFaceAnimView(bean.type)
@@ -92,6 +137,7 @@ class VoiceChatItemView @JvmOverloads constructor(
         } else {
             hideFaceView(iv_voice_chat_face_bottom)
             hideFaceView(iv_voice_chat_face_top)
+
         }
 
     }
