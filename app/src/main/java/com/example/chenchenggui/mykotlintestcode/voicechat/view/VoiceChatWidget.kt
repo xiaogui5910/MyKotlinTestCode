@@ -28,6 +28,7 @@ import java.lang.ref.WeakReference
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.timerTask
+import kotlin.math.floor
 
 
 /**
@@ -167,16 +168,30 @@ class VoiceChatWidget @JvmOverloads constructor(
     }
 
     private fun startMarqueeAnim() {
-        val fastDuration = 0.1
-        val slowDuration = 0.3
+        val fastDuration = 0.1f
+        val slowDuration = 0.3f
         val slowRound = 1
-        val stayDuration = 2
+        val stayDuration = 2f
+        val guestNum = 8
 
         //TODO 跑马灯测试 8人上麦 第6中奖
-        val testTime = 6.5
-        val selectedPosition = 5
+        val testTime = 6.5f
+        val selectedIndex = 5
 
-        val slowTime = slowDuration
+        //慢速时长
+        val slowTime = slowDuration * guestNum * (slowRound - 1) + slowDuration * (selectedIndex + 1)
+        //快速剩余可用时长
+        val fastDeltaTime = testTime - stayDuration - slowTime
+        //快速一轮时长
+        val fastRoundTime = fastDuration * guestNum
+        //快速剩余可用时长最多可以走轮数
+        val maxRoundNum = floor((fastDeltaTime / fastRoundTime).toDouble())
+        //快速时长
+        val fastTime = maxRoundNum * fastRoundTime
+        //快速时长完整轮数后剩余时长
+        val deltaTime = fastDeltaTime - fastTime
+        //最后爆灯停留时长
+        val stayTime = stayDuration + deltaTime
     }
 
     private fun initData() {
