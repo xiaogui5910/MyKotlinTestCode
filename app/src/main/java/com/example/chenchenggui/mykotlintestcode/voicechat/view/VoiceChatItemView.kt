@@ -4,11 +4,15 @@ import android.content.Context
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.widget.FrameLayout
+import android.widget.PopupWindow
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.airbnb.lottie.LottieAnimationView
 import com.example.chenchenggui.mykotlintestcode.R
+import com.example.chenchenggui.mykotlintestcode.dp2px
 import com.example.chenchenggui.mykotlintestcode.voicechat.bean.AnimationBean
 import com.facebook.drawee.view.SimpleDraweeView
 import kotlinx.android.synthetic.main.item_voice_chat.view.*
@@ -33,6 +37,11 @@ class VoiceChatItemView @JvmOverloads constructor(
          * 清除跑马灯动画
          */
         const val HANDLER_WHAT_MARQUEE_ANIM_CLEAR = 1
+
+        /**
+         * 气泡消失
+         */
+        const val HANDLER_WHAT_POPUP_WINDOW_DISMISS = 2
     }
 
     private val handler = MyHandler(this)
@@ -59,7 +68,7 @@ class VoiceChatItemView @JvmOverloads constructor(
         updateFaceViewAnim(bean)
         //item图片/背景
         updateIcon(bean)
-        //昵称
+        //TODO 贵族 昵称
         tv_item_voice_chat_name.text = bean.name
 
         //标签页
@@ -81,6 +90,10 @@ class VoiceChatItemView @JvmOverloads constructor(
         } else {
             iv_item_voice_chat_status.setImageResource(R.drawable.icon_guest_add)
         }
+
+        //用户状态
+        tv_item_voice_chat_status.text = if (bean.type == 2) "申请中..." else "暂离"
+        tv_item_voice_chat_status.visibility = if (bean.type == 2) VISIBLE else GONE
     }
 
     fun updateIcon(bean: AnimationBean) {
@@ -102,7 +115,7 @@ class VoiceChatItemView @JvmOverloads constructor(
     }
 
     fun updateMarqueeBg(isShow: Boolean) {
-        iv_item_voice_chat_marquee_bg.visibility = if (isShow) VISIBLE else GONE
+        iv_item_voice_chat_marquee_shade.visibility = if (isShow) VISIBLE else GONE
     }
 
     fun showMarqueeAnim(stayTime: Double) {
@@ -118,7 +131,8 @@ class VoiceChatItemView @JvmOverloads constructor(
         super.onDetachedFromWindow()
         clearAnim()
     }
-    fun clearAnim(){
+
+    fun clearAnim() {
         hideFaceView(iv_voice_chat_face_bottom)
         hideFaceView(iv_voice_chat_face_top)
         handler.removeCallbacksAndMessages(null)
@@ -127,6 +141,9 @@ class VoiceChatItemView @JvmOverloads constructor(
     private fun updateFaceViewAnim(bean: AnimationBean) {
         //互动表情
         val faceView = getFaceAnimView(bean.type)
+        //遮罩层
+        iv_item_voice_chat_shade.visibility = if (bean.type == 3 || bean.type == 2) VISIBLE else GONE
+
         //TODO 获取玩法表情json
         faceView.clearAnimation()
         if (bean.isHasUse && bean.isShowPlay) {
@@ -137,7 +154,6 @@ class VoiceChatItemView @JvmOverloads constructor(
         } else {
             hideFaceView(iv_voice_chat_face_bottom)
             hideFaceView(iv_voice_chat_face_top)
-
         }
 
     }
@@ -196,5 +212,25 @@ class VoiceChatItemView @JvmOverloads constructor(
         animView.pauseAnimation()
         animView.cancelAnimation()
         animView.frame = 0
+    }
+
+    fun showGuestChatWords(words: String?) {
+        val contentView = LayoutInflater.from(context).inflate(R.layout.voice_chat_pop_window, null)
+        val tvWords = contentView.findViewById<TextView>(R.id.tv_voice_chat_pop_window)
+        tvWords.text = words
+        val popupWindow = PopupWindow(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+        popupWindow.contentView = contentView
+        popupWindow.isFocusable = true
+        popupWindow.isOutsideTouchable = true
+        contentView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+        val popupWidth: Int = contentView.measuredWidth
+        val popupHeight: Int = contentView.measuredHeight
+        val location = IntArray(2)
+        val v = iv_item_voice_chat_img
+        v.getLocationInWindow(location)
+        popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, (location[0] + v.width / 2) - popupWidth / 2,
+                location[1] - popupHeight + dp2px(context, 6f).toInt())
+
+        handler.sendEmptyMessageDelayed(HANDLER_WHAT_POPUP_WINDOW_DISMISS, 4 * 1000)
     }
 }

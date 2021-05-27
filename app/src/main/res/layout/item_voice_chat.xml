@@ -41,6 +41,17 @@
         app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
         app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom" />
 
+    <!--蒙层遮罩-->
+    <ImageView
+        android:id="@+id/iv_item_voice_chat_shade"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/shape_voice_chat_default_bg_gray_50"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom" />
+
     <!--用户状态-->
     <TextView
         android:id="@+id/tv_item_voice_chat_status"
@@ -50,15 +61,6 @@
         android:textColor="@android:color/white"
         android:textSize="10sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
-        app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
-        app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
-        app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom" />
-    <ImageView
-        android:id="@+id/iv_item_voice_chat_cover"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/shape_voice_chat_default_bg_gray_50"
         app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
         app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
         app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
@@ -87,8 +89,9 @@
         app:lottie_autoPlay="true"
         app:lottie_loop="true" />
 
+    <!--跑马灯遮罩-->
     <ImageView
-        android:id="@+id/iv_item_voice_chat_marquee_bg"
+        android:id="@+id/iv_item_voice_chat_marquee_shade"
         android:layout_width="66dp"
         android:layout_height="66dp"
         android:src="@drawable/icon_voice_chat_marquee_bg"

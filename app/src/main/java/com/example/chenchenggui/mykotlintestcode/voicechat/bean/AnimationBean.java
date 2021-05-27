@@ -15,6 +15,15 @@ public class AnimationBean {
     private boolean micClose;
     private boolean lock;
     private boolean showPlay;
+    private int status;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public boolean isShowPlay() {
         return showPlay;

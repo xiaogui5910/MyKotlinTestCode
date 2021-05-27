@@ -21,4 +21,7 @@
     <color name="color_white_percent_80">#ccffffff</color>
 
     <color name="color_black_percent_50">#80000000</color>
+    <color name="color_black_percent_60">#99000000</color>
+    <color name="color_black_percent_70">#b3000000</color>
+    <color name="color_black_percent_80">#cc000000</color>
 </resources>

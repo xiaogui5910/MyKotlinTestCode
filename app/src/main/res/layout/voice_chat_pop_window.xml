@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tv_voice_chat_pop_window"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:text="我就是想说说话没啥意思懂不懂啊"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp"
+        android:maxWidth="78dp"
+        android:maxLines="2"
+        android:minWidth="35dp"
+        android:background="@drawable/shape_voice_chat_pop_window_bg"
+        android:paddingStart="6dp"
+        android:paddingTop="9dp"
+        android:paddingEnd="6dp"
+        android:paddingBottom="9dp"
+        android:textColor="@android:color/white"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toTopOf="@+id/iv_triangle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_triangle"
+        android:layout_width="12dp"
+        android:layout_height="6dp"
+        android:background="@drawable/icon_voice_chat_triangle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

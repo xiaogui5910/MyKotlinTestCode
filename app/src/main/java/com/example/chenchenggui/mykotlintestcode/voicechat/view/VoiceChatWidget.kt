@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Message
+import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -15,6 +16,7 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -25,6 +27,7 @@ import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.dp2px
 import com.example.chenchenggui.mykotlintestcode.log
 import com.example.chenchenggui.mykotlintestcode.voicechat.bean.AnimationBean
+import kotlinx.android.synthetic.main.item_voice_chat.view.*
 import kotlinx.android.synthetic.main.widget_voice_chat.view.*
 import java.lang.ref.WeakReference
 import java.util.*
@@ -81,10 +84,6 @@ class VoiceChatWidget @JvmOverloads constructor(
         const val SLOW_ROUND = 1
         const val STAY_INTERVAL = 2f
 
-//        const val FAST_INTERVAL = 1f
-//        const val SLOW_INTERVAL = 3f
-//        const val SLOW_ROUND = 1
-//        const val STAY_INTERVAL = 2f
     }
 
     private class MyHandler constructor(widget: VoiceChatWidget) : Handler() {
@@ -180,6 +179,15 @@ class VoiceChatWidget @JvmOverloads constructor(
                 adapter!!.notifyDataSetChanged()
             }
         }
+        btn_guest_chat.setOnClickListener {
+            showGuestChatPopupWindow()
+        }
+    }
+
+    private fun showGuestChatPopupWindow() {
+        val childView = rv_guest.getChildAt(1) as VoiceChatItemView
+        var words = et_guest_words.text.toString().trim()
+        childView.showGuestChatWords(words)
     }
 
     private fun startMarqueeAnim() {
@@ -246,8 +254,7 @@ class VoiceChatWidget @JvmOverloads constructor(
         }
         log("countdowntimer------展示索引index=${index}")
         for (i in 0 until rv_guest.childCount) {
-            val childView = rv_guest.getChildAt(i)
-            val itemView = childView.findViewById<VoiceChatItemView>(R.id.item_view)
+            val itemView = rv_guest.getChildAt(i) as VoiceChatItemView
             itemView.updateMarqueeBg(i == index)
         }
     }
@@ -258,8 +265,7 @@ class VoiceChatWidget @JvmOverloads constructor(
             index = marqueeIndex % 8
         }
         log("countdowntimer--------------爆灯索引index=${index}")
-        val childView = rv_guest.getChildAt(index)
-        val itemView = childView.findViewById<VoiceChatItemView>(R.id.item_view)
+        val itemView = rv_guest.getChildAt(index) as VoiceChatItemView
         itemView.updateMarqueeBg(false)
         itemView.showMarqueeAnim(stayTime)
 
@@ -278,11 +284,11 @@ class VoiceChatWidget @JvmOverloads constructor(
             val bean = AnimationBean()
             bean.type = i
             bean.position = i + 1
-//            if (i <= 3) {
-            bean.isHasUse = true
-            bean.isShowPlay = true
-            bean.isHasGift = true
-//            }
+            if (i <= 5) {
+                bean.isHasUse = true
+                bean.isShowPlay = true
+                bean.isHasGift = true
+            }
             bean.isMicClose = i == 3
             bean.isLock = i == 7
             bean.name = "嘉宾${i + 1}号"
