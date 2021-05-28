@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="10dp"
-        android:hint="请输入聊天内容"
+        android:hint="请输入气泡聊天内容"
         android:textColor="@android:color/black"
         app:layout_constraintBottom_toTopOf="@+id/btn_marquee"
         app:layout_constraintStart_toStartOf="parent" />
@@ -68,7 +68,7 @@
         android:id="@+id/btn_marquee"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:layout_marginBottom="10dp"
         android:text="轮盘"
         app:layout_constraintBottom_toTopOf="@+id/btn_send_gift_position"
@@ -78,8 +78,7 @@
         android:id="@+id/btn_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="爆灯等效果"
+        android:text="爆灯等"
         app:layout_constraintBottom_toBottomOf="@+id/btn_marquee"
         app:layout_constraintStart_toEndOf="@+id/btn_marquee" />
 
@@ -87,10 +86,16 @@
         android:id="@+id/btn_guest_chat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="嘉宾气泡"
+        android:text="气泡"
         app:layout_constraintBottom_toBottomOf="@+id/btn_marquee"
         app:layout_constraintStart_toEndOf="@+id/btn_light" />
+    <Button
+        android:id="@+id/btn_guest_dice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="骰子"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_marquee"
+        app:layout_constraintStart_toEndOf="@+id/btn_guest_chat" />
 
     <TextView
         android:id="@+id/btn_send_gift_position"

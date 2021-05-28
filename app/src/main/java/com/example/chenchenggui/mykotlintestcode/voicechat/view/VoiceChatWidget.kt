@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Message
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -16,7 +15,6 @@ import android.view.View
 import android.view.animation.OvershootInterpolator
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -27,7 +25,6 @@ import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.dp2px
 import com.example.chenchenggui.mykotlintestcode.log
 import com.example.chenchenggui.mykotlintestcode.voicechat.bean.AnimationBean
-import kotlinx.android.synthetic.main.item_voice_chat.view.*
 import kotlinx.android.synthetic.main.widget_voice_chat.view.*
 import java.lang.ref.WeakReference
 import java.util.*
@@ -67,6 +64,9 @@ class VoiceChatWidget @JvmOverloads constructor(
     private var fastTime: Double = 0.0
     private var slowTime: Double = 0.0
     private var stayTime: Double = 0.0
+
+    private var fastCountDownTimer: CountDownTimer? = null
+    private var marqueeIndex = 0
 
     companion object {
         /**
@@ -182,12 +182,20 @@ class VoiceChatWidget @JvmOverloads constructor(
         btn_guest_chat.setOnClickListener {
             showGuestChatPopupWindow()
         }
+        btn_guest_dice.setOnClickListener {
+            showGuestDiceAnim()
+        }
     }
 
     private fun showGuestChatPopupWindow() {
         val childView = rv_guest.getChildAt(1) as VoiceChatItemView
-        var words = et_guest_words.text.toString().trim()
+        val words = et_guest_words.text.toString().trim()
         childView.showGuestChatWords(words)
+    }
+
+    private fun showGuestDiceAnim() {
+        val childView = rv_guest.getChildAt(5) as VoiceChatItemView
+        childView.showDiceAnim()
     }
 
     private fun startMarqueeAnim() {
@@ -215,9 +223,6 @@ class VoiceChatWidget @JvmOverloads constructor(
         startFastCountDownTimer(fastTime, FAST_INTERVAL, false)
         log("countdowntimer---------初始化:fastTime=${fastTime}---slowTime=${slowTime}----stayTime=${stayTime}")
     }
-
-    private var fastCountDownTimer: CountDownTimer? = null
-    private var marqueeIndex = 0
 
     private fun startFastCountDownTimer(totalTime: Double, interval: Float, stopCountDown: Boolean) {
         marqueeIndex = 0

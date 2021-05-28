@@ -77,6 +77,17 @@
         app:layout_constraintEnd_toEndOf="@+id/iv_item_voice_chat_img"
         app:layout_constraintStart_toStartOf="@+id/iv_item_voice_chat_img" />
 
+    <!--骰子-->
+    <ImageView
+        android:id="@+id/iv_item_voice_chat_dice"
+        android:layout_width="50dp"
+        android:background="@drawable/voice_chat_dice_anim"
+        android:layout_height="50dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintEnd_toEndOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintStart_toStartOf="@+id/iv_voice_chat_face_bottom"
+        app:layout_constraintTop_toTopOf="@+id/iv_voice_chat_face_bottom" />
     <!--互动表情顶层-->
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/iv_voice_chat_face_top"

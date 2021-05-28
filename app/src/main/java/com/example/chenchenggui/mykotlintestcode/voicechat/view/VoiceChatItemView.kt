@@ -1,6 +1,7 @@
 package com.example.chenchenggui.mykotlintestcode.voicechat.view
 
 import android.content.Context
+import android.graphics.drawable.AnimationDrawable
 import android.os.Handler
 import android.os.Message
 import android.util.AttributeSet
@@ -16,6 +17,7 @@ import com.example.chenchenggui.mykotlintestcode.dp2px
 import com.example.chenchenggui.mykotlintestcode.voicechat.bean.AnimationBean
 import com.facebook.drawee.view.SimpleDraweeView
 import kotlinx.android.synthetic.main.item_voice_chat.view.*
+import org.jetbrains.anko.backgroundResource
 import java.lang.ref.WeakReference
 
 /**
@@ -26,11 +28,6 @@ import java.lang.ref.WeakReference
 class VoiceChatItemView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
-    init {
-        LayoutInflater.from(context).inflate(R.layout.item_voice_chat, this)
-        initView()
-        initData()
-    }
 
     companion object {
         /**
@@ -42,18 +39,47 @@ class VoiceChatItemView @JvmOverloads constructor(
          * 气泡消失
          */
         const val HANDLER_WHAT_POPUP_WINDOW_DISMISS = 2
+
+        /**
+         * 展示骰子结果
+         */
+        const val HANDLER_WHAT_SHOW_DICE_RESULT = 3
+
+        /**
+         * 隐藏骰子结果
+         */
+        const val HANDLER_WHAT_HIDE_DICE_RESULT = 4
     }
 
+    private var popupWindow: PopupWindow? = null
+    private var animationDrawable: AnimationDrawable? = null
     private val handler = MyHandler(this)
 
     private class MyHandler constructor(widget: VoiceChatItemView) : Handler() {
         private val weakReference: WeakReference<VoiceChatItemView> = WeakReference<VoiceChatItemView>(widget)
         override fun handleMessage(msg: Message) {
-            if (msg.what == HANDLER_WHAT_MARQUEE_ANIM_CLEAR) {
-                val widget: VoiceChatItemView? = weakReference.get()
-                widget?.clearAnim()
+            val widget: VoiceChatItemView? = weakReference.get()
+            when (msg.what) {
+                HANDLER_WHAT_MARQUEE_ANIM_CLEAR -> {
+                    widget?.clearAnim()
+                }
+                HANDLER_WHAT_POPUP_WINDOW_DISMISS -> {
+                    widget?.hideGuestChatWords()
+                }
+                HANDLER_WHAT_SHOW_DICE_RESULT -> {
+                    widget?.showDiceResult()
+                }
+                HANDLER_WHAT_HIDE_DICE_RESULT -> {
+                    widget?.hideDiceResult()
+                }
             }
         }
+    }
+
+    init {
+        LayoutInflater.from(context).inflate(R.layout.item_voice_chat, this)
+        initView()
+        initData()
     }
 
     private fun initView() {
@@ -130,6 +156,7 @@ class VoiceChatItemView @JvmOverloads constructor(
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
         clearAnim()
+        clearDice()
     }
 
     fun clearAnim() {
@@ -214,23 +241,66 @@ class VoiceChatItemView @JvmOverloads constructor(
         animView.frame = 0
     }
 
+    /**
+     * 展示嘉宾发言气泡
+     */
     fun showGuestChatWords(words: String?) {
-        val contentView = LayoutInflater.from(context).inflate(R.layout.voice_chat_pop_window, null)
-        val tvWords = contentView.findViewById<TextView>(R.id.tv_voice_chat_pop_window)
+        if (popupWindow != null && popupWindow!!.isShowing) {
+            handler.removeMessages(HANDLER_WHAT_POPUP_WINDOW_DISMISS)
+            popupWindow?.dismiss()
+        }
+
+        val voiceContentView = LayoutInflater.from(context).inflate(R.layout.voice_chat_pop_window, null)
+        val tvWords = voiceContentView.findViewById<TextView>(R.id.tv_voice_chat_pop_window)
         tvWords.text = words
-        val popupWindow = PopupWindow(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
-        popupWindow.contentView = contentView
-        popupWindow.isFocusable = true
-        popupWindow.isOutsideTouchable = true
-        contentView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
-        val popupWidth: Int = contentView.measuredWidth
-        val popupHeight: Int = contentView.measuredHeight
+        popupWindow = PopupWindow(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT).apply {
+            contentView = voiceContentView
+            isFocusable = true
+            isOutsideTouchable = true
+        }
+
+        voiceContentView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED)
+        val popupWidth: Int = voiceContentView.measuredWidth
+        val popupHeight: Int = voiceContentView.measuredHeight
         val location = IntArray(2)
         val v = iv_item_voice_chat_img
         v.getLocationInWindow(location)
-        popupWindow.showAtLocation(v, Gravity.NO_GRAVITY, (location[0] + v.width / 2) - popupWidth / 2,
+        popupWindow?.showAtLocation(v, Gravity.NO_GRAVITY, (location[0] + v.width / 2) - popupWidth / 2,
                 location[1] - popupHeight + dp2px(context, 6f).toInt())
 
         handler.sendEmptyMessageDelayed(HANDLER_WHAT_POPUP_WINDOW_DISMISS, 4 * 1000)
+    }
+
+    private fun hideGuestChatWords() {
+        popupWindow?.dismiss()
+        popupWindow = null
+    }
+
+    fun showDiceAnim() {
+        iv_item_voice_chat_dice.visibility = VISIBLE
+        iv_item_voice_chat_dice.backgroundResource = R.drawable.voice_chat_dice_anim
+        animationDrawable = iv_item_voice_chat_dice.background as AnimationDrawable
+        animationDrawable?.start()
+        handler.sendEmptyMessageDelayed(HANDLER_WHAT_SHOW_DICE_RESULT, 3 * 1000)
+    }
+
+    fun showDiceResult() {
+        if (animationDrawable != null && animationDrawable!!.isRunning) {
+            animationDrawable!!.stop()
+        }
+        //TODO 结果传递
+        iv_item_voice_chat_dice.backgroundResource = R.drawable.dice_3
+        handler.sendEmptyMessageDelayed(HANDLER_WHAT_HIDE_DICE_RESULT, 3 * 1000)
+    }
+
+    fun hideDiceResult() {
+        iv_item_voice_chat_dice.visibility = GONE
+    }
+
+    fun clearDice() {
+        if (animationDrawable != null && animationDrawable!!.isRunning) {
+            animationDrawable!!.stop()
+        }
+        iv_item_voice_chat_dice.visibility = GONE
     }
 }
