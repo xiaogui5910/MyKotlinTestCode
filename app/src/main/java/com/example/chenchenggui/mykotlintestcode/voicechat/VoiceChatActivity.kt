@@ -2,6 +2,7 @@ package com.example.chenchenggui.mykotlintestcode.voicechat
 
 import android.view.Menu
 import android.view.MenuItem
+import androidx.fragment.app.FragmentActivity
 import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.activity.BaseActivity
 
@@ -19,6 +20,7 @@ class VoiceChatActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.item_count_4 -> {
+                AnchorLevelUpgradeDialog.newInstance(26).show(supportFragmentManager,"AnchorLevelUpgradeDialog")
             }
             R.id.item_count_6 -> {
             }
