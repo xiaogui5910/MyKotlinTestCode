@@ -65,6 +65,9 @@ class MainActivity : AppCompatActivity() {
             R.id.voiceChat->{
                 startActivity(Intent(this, VoiceChatActivity::class.java))
             }
+            R.id.function_test->{
+                startActivity(Intent(this, FunctionTestActivity::class.java))
+            }
         }
         return super.onOptionsItemSelected(item)
     }

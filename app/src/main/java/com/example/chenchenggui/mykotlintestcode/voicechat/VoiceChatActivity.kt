@@ -20,7 +20,6 @@ class VoiceChatActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when (item?.itemId) {
             R.id.item_count_4 -> {
-                AnchorLevelUpgradeDialog.newInstance(26).show(supportFragmentManager,"AnchorLevelUpgradeDialog")
             }
             R.id.item_count_6 -> {
             }
