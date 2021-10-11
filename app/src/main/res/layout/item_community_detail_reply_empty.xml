@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp">
+    <TextView
+        android:drawableTop="@drawable/safa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:id="@+id/click_to_comment"
+        android:text="暂无评论，说说我的看法"
+        android:textColor="@color/color_black_999999"
+        android:textSize="12sp"/>
+</RelativeLayout>

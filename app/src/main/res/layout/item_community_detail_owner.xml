@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_marginTop="18dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_height="wrap_content">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_community_detail_header_avatar"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderImage="@drawable/img_viewstub_test1"
+        app:roundAsCircle="true" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="我就是大聪明"
+        android:textColor="@color/color_black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_community_detail_header_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_community_detail_header_avatar" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="06-10 05:00"
+        android:textColor="@color/color_black_999999"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_community_detail_header_avatar"
+        app:layout_constraintStart_toEndOf="@+id/iv_community_detail_header_avatar" />
+
+    <ImageView
+        android:id="@+id/iv_community_detail_header_anchor_tag"
+        android:layout_width="24dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="3dp"
+        android:src="@drawable/icon_anchor_tag"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_community_detail_header_nickname"
+        app:layout_constraintStart_toEndOf="@+id/tv_community_detail_header_nickname"
+        app:layout_constraintTop_toTopOf="@+id/tv_community_detail_header_nickname" />
+</androidx.constraintlayout.widget.ConstraintLayout>

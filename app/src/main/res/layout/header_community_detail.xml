@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingStart="15dp"
+    android:paddingEnd="15dp">
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:letterSpacing="0.05"
+        android:lineSpacingExtra="6dp"
+        android:text="分手快乐！詹姆斯欧文各自闪耀释放最真实自己"
+        android:textColor="@color/color_black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_community_detail_header_avatar"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        android:layout_marginTop="18dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_community_detail_header_title"
+        app:placeholderImage="@drawable/img_viewstub_test1"
+        app:roundAsCircle="true" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="我就是大聪明"
+        android:textColor="@color/color_black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_community_detail_header_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_community_detail_header_avatar" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="06-10 05:00"
+        android:textColor="@color/color_black_999999"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_community_detail_header_avatar"
+        app:layout_constraintStart_toEndOf="@+id/iv_community_detail_header_avatar" />
+
+    <ImageView
+        android:id="@+id/iv_community_detail_header_anchor_tag"
+        android:layout_width="24dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="3dp"
+        android:src="@drawable/icon_anchor_tag"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_community_detail_header_nickname"
+        app:layout_constraintStart_toEndOf="@+id/tv_community_detail_header_nickname"
+        app:layout_constraintTop_toTopOf="@+id/tv_community_detail_header_nickname" />
+
+    <!--文本容器-->
+    <LinearLayout
+        android:id="@+id/ll_community_detail_header_text_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_community_detail_header_avatar" />
+
+    <!--图片容器-->
+    <LinearLayout
+        android:id="@+id/ll_community_detail_header_img_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_community_detail_header_text_container" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="编辑"
+        android:textColor="@color/color_black_999999"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_community_detail_header_img_container"
+        app:layout_goneMarginTop="24dp" />
+
+    <View
+        android:id="@+id/view_divider"
+        android:layout_width="0.5dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="9dp"
+        android:background="@color/color_black_999999"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_community_detail_header_edit"
+        app:layout_constraintStart_toEndOf="@+id/tv_community_detail_header_edit"
+        app:layout_constraintTop_toTopOf="@+id/tv_community_detail_header_edit" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="删除"
+        android:textColor="@color/color_black_999999"
+        android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/view_divider"
+        app:layout_constraintTop_toTopOf="@+id/tv_community_detail_header_edit" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_report"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="举报"
+        android:textColor="@color/color_black_999999"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tv_community_detail_header_edit" />
+
+    <TextView
+        android:id="@+id/tv_community_detail_header_all_reply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="全部回复"
+        android:textStyle="bold"
+        android:textColor="@color/color_black"
+        android:textSize="15sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_community_detail_header_edit"
+        app:layout_goneMarginTop="30dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>

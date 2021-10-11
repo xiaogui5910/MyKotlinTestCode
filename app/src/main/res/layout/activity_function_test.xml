@@ -23,4 +23,22 @@
         android:text="anchor_level"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+        android:id="@+id/btn_community_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="community_detail"
+        app:layout_constraintTop_toBottomOf="@+id/btn_anchor_level"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <Button
+        android:id="@+id/btn_community_detail_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
+        android:text="community_detail_header"
+        app:layout_constraintTop_toBottomOf="@+id/btn_community_detail"
+        app:layout_constraintStart_toStartOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

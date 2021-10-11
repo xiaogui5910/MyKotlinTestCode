@@ -24,4 +24,8 @@
     <color name="color_black_percent_60">#99000000</color>
     <color name="color_black_percent_70">#b3000000</color>
     <color name="color_black_percent_80">#cc000000</color>
+    <color name="color_black">#333333</color>
+    <color name="color_black_999999">#999999</color>
+    <color name="color_black_666666">#666666</color>
+    <color name="color_blue_reply">#5BA4F0</color>
 </resources>

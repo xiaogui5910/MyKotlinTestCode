@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.chenchenggui.mykotlintestcode">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -20,8 +21,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activity.FunctionTestActivity"></activity>
+        <activity android:name=".activity.community.CommunityDetailHeaderActivity"></activity>
+        <activity android:name=".activity.community.CommunityDetailActivity" />
+        <activity android:name=".activity.FunctionTestActivity" />
         <activity android:name=".activity.ViewPagerGalleryActivity" />
         <activity android:name=".voicechat.VoiceChatActivity" />
         <activity android:name=".activity.CoordinatorActivity" />

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="18dp"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:background="@android:color/white">
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/iv_item_community_detail_avatar"
+        android:layout_width="37dp"
+        android:layout_height="37dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderImage="@drawable/img_viewstub_test1"
+        app:roundAsCircle="true" />
+
+    <TextView
+        android:id="@+id/tv_item_community_detail_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="我就是大聪明"
+        android:textColor="@color/color_black"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_item_community_detail_avatar"
+        app:layout_constraintTop_toTopOf="@+id/iv_item_community_detail_avatar" />
+
+    <TextView
+        android:id="@+id/tv_item_community_detail_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:text="06-10 05:00"
+        android:textColor="@color/color_black_999999"
+        android:textSize="11sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_item_community_detail_avatar"
+        app:layout_constraintStart_toEndOf="@+id/iv_item_community_detail_avatar" />
+
+    <ImageView
+        android:id="@+id/iv_item_community_detail_owner_tag"
+        android:layout_width="24dp"
+        android:layout_height="13dp"
+        android:layout_marginStart="3dp"
+        android:src="@drawable/icon_owner_tag"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_community_detail_nickname"
+        app:layout_constraintStart_toEndOf="@+id/tv_item_community_detail_nickname"
+        app:layout_constraintTop_toTopOf="@+id/tv_item_community_detail_nickname" />
+
+    <ImageView
+        android:id="@+id/iv_item_community_detail_like"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginEnd="3dp"
+        android:src="@drawable/icon_like"
+        app:layout_constraintEnd_toStartOf="@+id/tv_item_community_detail_like_count"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_item_community_detail_like_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:text="9999"
+        android:textColor="@color/color_black_666666"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_item_community_detail_content"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="C罗号召人们不喝可乐喝白水，引发了不小的风波有人专门挖了他的黑历史，发现"
+        android:textColor="@color/color_black"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_item_community_detail_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_community_detail_time" />
+
+    <View
+        android:id="@+id/view_item_community_detail_reply_bg"
+        android:layout_width="0dp"
+        android:layout_height="34.5dp"
+        android:layout_marginTop="6dp"
+        android:background="@drawable/shape_community_item_text_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_item_community_detail_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_community_detail_content" />
+
+    <TextView
+        android:id="@+id/tv_item_community_detail_replies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:drawableEnd="@drawable/icon_more_reply"
+        android:text="9999条回复"
+        android:textColor="@color/color_blue_reply"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_item_community_detail_reply_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_item_community_detail_reply_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_item_community_detail_reply_bg" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

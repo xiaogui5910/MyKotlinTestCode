@@ -49,4 +49,7 @@
     <string name="show_upgrade_text">在充值 %1$s 鹅肝，即可升级为 %2$s</string>
     <string name="show_text">进来参与 %1$s 局游戏，即可领取 %2$s</string>
     <string name="show_privilege_text">大家都有 %1$s </string>
+    <string name="community_detail_text_default">葡萄牙足球巨星C罗在本周一欧洲杯匈葡一役的赛前发布会上，拒绝与可口可乐“同框”，一度导致可口可乐股价急跌，市值蒸发近40亿美元。而如今，这一事件的余波似乎仍在发酵，更多球星效仿起了足坛偶像C罗的举动梅开二度的意大利中场球员洛卡特利</string>
+    <string name="community_detail_text_default1">就在北京时间今日凌晨，意大利队在欧洲杯小组赛A组第二轮的比赛中，以3比0大胜瑞士队。此役发挥出色、梅开二度的意大利中场球员洛卡特利被评选为全场最佳球员，并出席了赛后发布会</string>
+    <string name="community_detail_text_default2">葡萄牙足球巨星C罗在本周一欧洲杯匈葡一役的赛前发布会上，拒绝与可口可乐“同框”，一度导致可口可乐股价急跌，市值蒸发近40亿美元。而如今，这一事件的余波似乎仍在发酵，更多球星效仿起了足坛偶像C罗。</string>
 </resources>
