@@ -10,6 +10,7 @@ import com.example.chenchenggui.mykotlintestcode.R
 import com.example.chenchenggui.mykotlintestcode.TestFragment
 import com.example.chenchenggui.mykotlintestcode.avdev.AudioVideoDevActivity
 import com.example.chenchenggui.mykotlintestcode.di.TestDaggerActivity
+import com.example.chenchenggui.mykotlintestcode.dialog.EggDialog
 import com.example.chenchenggui.mykotlintestcode.dialog.GuessListDialog
 import com.example.chenchenggui.mykotlintestcode.voicechat.VoiceChatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -67,6 +68,9 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.function_test->{
                 startActivity(Intent(this, FunctionTestActivity::class.java))
+            }
+            R.id.egg_video->{
+                EggDialog().show(supportFragmentManager,"EggDialog")
             }
         }
         return super.onOptionsItemSelected(item)

@@ -28,4 +28,5 @@
     <color name="color_black_999999">#999999</color>
     <color name="color_black_666666">#666666</color>
     <color name="color_blue_reply">#5BA4F0</color>
+    <color name="color_background">#F8F8F7</color>
 </resources>

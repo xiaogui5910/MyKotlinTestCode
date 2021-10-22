@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/tv_title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="领鹅蛋"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="50dp" />
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:scaleType="center"
+        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/king_guess_icon_close" />
+
+    <!--    top-->
+    <View
+        android:id="@+id/view_gray_bg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/color_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/view_top_bg"
+        android:layout_width="match_parent"
+        android:layout_height="81dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/shape_egg_bg_7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/guideline2" />
+
+    <ImageView
+        android:id="@+id/iv_egg_video"
+        android:layout_width="43.5dp"
+        android:layout_height="43.5dp"
+        android:layout_marginStart="15dp"
+        android:src="@drawable/icon_egg_video"
+        app:layout_constraintBottom_toBottomOf="@+id/view_top_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_top_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_top_bg" />
+
+    <TextView
+        android:textStyle="bold"
+        android:id="@+id/tv_egg_video"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="看视频领鹅蛋"
+        android:textColor="#333333"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@+id/iv_egg_video"
+        app:layout_constraintTop_toTopOf="@+id/iv_egg_video" />
+
+    <TextView
+        android:id="@+id/tv_egg_video_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="11dp"
+        android:text="观看广告视频后自动领取"
+        android:textColor="#7A7A7A"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_egg_video"
+        app:layout_constraintStart_toEndOf="@+id/iv_egg_video" />
+
+    <ImageView
+        android:id="@+id/iv_egg_get"
+        android:layout_width="83dp"
+        android:layout_height="35.5dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_egg_get"
+        app:layout_constraintBottom_toBottomOf="@+id/view_top_bg"
+        app:layout_constraintEnd_toEndOf="@+id/view_top_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_top_bg" />
+    <!--    bottom-->
+    <View
+        android:id="@+id/view_bottom_bg"
+        android:layout_width="match_parent"
+        android:layout_height="164dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/shape_egg_bg_7"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view_top_bg" />
+
+    <ImageView
+        android:id="@+id/iv_egg_1"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="21dp"
+        android:src="@drawable/icon_egg"
+        app:layout_constraintEnd_toStartOf="@+id/iv_egg_2"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="@+id/view_bottom_bg"
+        app:layout_constraintTop_toTopOf="@+id/view_bottom_bg" />
+
+    <ImageView
+        android:id="@+id/iv_egg_2"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="21dp"
+        android:src="@drawable/icon_egg"
+        app:layout_constraintEnd_toStartOf="@+id/iv_egg_3"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/iv_egg_1"
+        app:layout_constraintTop_toTopOf="@+id/view_bottom_bg" />
+
+    <ImageView
+        android:id="@+id/iv_egg_3"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="21dp"
+        android:src="@drawable/icon_egg"
+        app:layout_constraintEnd_toStartOf="@+id/iv_egg_4"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/iv_egg_2"
+        app:layout_constraintTop_toTopOf="@+id/view_bottom_bg" />
+
+    <ImageView
+        android:id="@+id/iv_egg_4"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/icon_egg"
+        app:layout_constraintEnd_toEndOf="@+id/view_bottom_bg"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toEndOf="@+id/iv_egg_3"
+        app:layout_constraintTop_toTopOf="@+id/view_bottom_bg" />
+
+    <TextView
+        android:id="@+id/tv_egg_1"
+        android:layout_width="55dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_egg_bg_10"
+        android:gravity="center"
+        android:text="x200"
+        android:textColor="#333333"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_egg_1"
+        app:layout_constraintStart_toStartOf="@+id/iv_egg_1"
+        app:layout_constraintTop_toBottomOf="@+id/iv_egg_1" />
+
+    <TextView
+        android:id="@+id/tv_egg_2"
+        android:layout_width="55dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_egg_bg_10"
+        android:gravity="center"
+        android:text="x200"
+        android:textColor="#333333"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_egg_2"
+        app:layout_constraintStart_toStartOf="@+id/iv_egg_2"
+        app:layout_constraintTop_toBottomOf="@+id/iv_egg_2" />
+
+    <TextView
+        android:id="@+id/tv_egg_3"
+        android:layout_width="55dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_egg_bg_10"
+        android:gravity="center"
+        android:text="x200"
+        android:textColor="#333333"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_egg_3"
+        app:layout_constraintStart_toStartOf="@+id/iv_egg_3"
+        app:layout_constraintTop_toBottomOf="@+id/iv_egg_3" />
+
+    <TextView
+        android:id="@+id/tv_egg_4"
+        android:layout_width="55dp"
+        android:layout_height="21dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_egg_bg_10"
+        android:gravity="center"
+        android:text="x200"
+        android:textColor="#333333"
+        android:textSize="11sp"
+        app:layout_constraintEnd_toEndOf="@+id/iv_egg_4"
+        app:layout_constraintStart_toStartOf="@+id/iv_egg_4"
+        app:layout_constraintTop_toBottomOf="@+id/iv_egg_4" />
+
+    <TextView
+        android:id="@+id/tv_egg_tips"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="（观看直播达到指定时长，可以领取鹅蛋奖励）"
+        android:textColor="#999999"
+        android:textSize="13sp"
+        app:layout_constraintBottom_toBottomOf="@+id/view_bottom_bg"
+        app:layout_constraintEnd_toEndOf="@+id/view_bottom_bg"
+        app:layout_constraintStart_toStartOf="@+id/view_bottom_bg"
+        app:layout_constraintTop_toBottomOf="@+id/tv_egg_1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

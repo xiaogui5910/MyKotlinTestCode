@@ -72,5 +72,10 @@
         android:orderInCategory="12"
         android:title="@string/function_test"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/egg_video"
+        android:orderInCategory="13"
+        android:title="@string/egg_video"
+        app:showAsAction="never" />
 </menu>
 
